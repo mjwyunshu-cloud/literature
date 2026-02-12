@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文学原型测试 | 灵魂手稿</title>
+    <!-- 基础库 CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: #f2f0e9;
+            color: #3a3833;
+            -webkit-font-smoothing: antialiased;
+        }
+        .animate-fade-in {
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 移动端点击态 */
+        .option-button:active { transform: scale(0.98); background-color: rgba(255,255,255,1); }
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // 手绘风格图标库 - 采用内嵌SVG路径，彻底解决 CDN 加载导致的 forwardRef 错误
+        const Icon = ({ name, size = 24, className = "" }) => {
+            const paths = {
+                ChevronRight: "M9 18l6-6-6-6",
+                RefreshCw: "M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15",
+                Quote: "M3 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2H3c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2 0 4-1 6-2 6zm11 0c3 0 7-1 7-8V5c0-1.25-.75-2-2-2h-5c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2 0 4-1 6-2 6z",
+                ArrowLeft: "M19 12H5M12 19l-7-7 7-7",
+                ArrowRight: "M5 12h14M12 5l7 7-7 7",
+                PenTool: "M12 19l7-7 3 3-7 7-3-3z M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z M2 2l5 5",
+                ChevronDown: "M6 9l6 6 6-6",
+                ChevronUp: "M18 15l-6-6-6 6",
+                Star: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+                Bookmark: "M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z",
+                BookOpen: "M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z",
+                Layers: "M12 2L2 7l10 5 10-5-10-5z M2 17l10 5 10-5 M2 12l10 5 10-5",
+                Zap: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
+                Download: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4 M7 10l5 5 5-5 M12 15V3"
+            };
+
+            return (
+                <svg 
+                    width={size} 
+                    height={size} 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className={className}
+                >
+                    <path d={paths[name] || ""} />
+                </svg>
+            );
+        };
+
+        const COLORS = {
+            bg: "#f2f0e9", textMain: "#3a3833", textSecondary: "#6d6b64",
+            accentYellow: "#e8ed2a", accentBlue: "#35afcb", accentGreen: "#a4c29b", border: "#dcd8cf"
+        };
+
+        const ARCHETYPES = {
+            REBEL: {
+                name: "反叛者", sub: "超越秩序的火焰", chars: "孙悟空 / 普罗米修斯",
+                desc: "你拒绝平庸的规则，骨子里燃烧着永恒的叛逆。你是火，是划破黑夜的闪电，在废墟中建立秩序。",
+                longDesc: "你的精神内核根植于对‘现成品’的生理性反感。你认为文学的本质不在于记录美，而在于摧毁虚伪的和平。你对应的创作冲动是‘图标破坏’，即在那片焦土上种出更真实、更具主体性的生命。你终身都在逃离那个试图定义你的‘上帝’。",
+                quote: "我要这天，再遮不住我眼；要这地，再埋不了我心。",
+                quoteSource: "出自 今何在《悟空传》",
+                advice: "在打破枷锁的同时，记得寻找值得守护的净土。",
+                stats: [95, 40, 85, 45, 70],
+                books: [
+                    { title: "《性的辩证法》", author: "舒拉姆斯·费尔斯通", desc: "以彻底的基进视角拆解社会结构，适合渴望通过思辨摧毁陈腐认知的你。" },
+                    { title: "《局外人》", author: "阿尔贝·加缪", desc: "用冷峻的诚实抗击世界的荒谬，完成一场不妥协的精神反叛。" }
+                ]
+            },
+            SAGE: {
+                name: "智者", sub: "洞察真理的慧眼", chars: "诸葛亮 / 福尔摩斯",
+                desc: "世界在你眼中是一局宏大的棋。你追求真理与逻辑，以冷静的目光洞察万物的流向与隐秘的联系。",
+                longDesc: "你倾向于结构主义。你眼中的世界是一套由符号、权力和因果编织而成的网络。文学对你而言是手术刀，是用来解剖社会真相和心理机理的工具。你迷恋秩序背后的逻辑，因为看透本质意味着某种程度上的掌控与超脱。",
+                quote: "排除掉所有不可能，剩下的，不管多难以置信，都是真相。",
+                quoteSource: "出自 阿瑟·柯南·道尔《四签名》",
+                advice: "偶尔让情感胜过逻辑，你会发现世界更感性的一面。",
+                stats: [35, 98, 30, 80, 55],
+                books: [
+                    { title: "《符号学原理》", author: "罗兰·巴特", desc: "掌握拆解大众文化背后含义的密钥，将你的洞察力系统化。" },
+                    { title: "《追寻逝去的时光》", author: "马塞尔·普鲁斯特", desc: "在时间与记忆的精密迷宫中，观察生命运行的宏大逻辑。" }
+                ]
+            },
+            IDEALIST: {
+                name: "理想主义者", sub: "守望纯粹的诗意", chars: "林黛玉 / 堂吉诃德",
+                desc: "你拥有一颗纯粹透明的心，始终守护着那份脆弱而高贵的梦与审美。",
+                longDesc: "你对应着浪漫主义或唯美主义。你坚信‘美即是真’，文学是你逃离平庸日常的诺亚方舟。你认为语言应创造一个比现实更神性的精神空间。你的痛苦源于世界的不完美，而你的力量源于对完美的拒绝妥协。你更在意月光的色泽而非月球的密度。",
+                quote: "质本洁来还洁去，强于污淖陷渠沟。",
+                quoteSource: "出自 曹雪芹《红楼梦》",
+                advice: "你的敏感是天赋而非负担，请继续温柔地看待这个世界。",
+                stats: [30, 55, 45, 45, 95],
+                books: [
+                    { title: "《致狄奥提玛的诗》", author: "荷尔德林", desc: "在德意志浪漫派的巅峰，寻找那份纯粹到近乎神圣的诗性理想。" },
+                    { title: "《唯美主义》", author: "沃尔特·帕特", desc: "探索如何将生命本身作为一种艺术品来经营，捕捉那火焰般的感觉。" }
+                ]
+            },
+            WANDERER: {
+                name: "流浪者", sub: "追逐风的自由灵魂", chars: "三毛 / 奥德修斯",
+                desc: "远方对你有着致命的吸引力。你在乎的是风吹过发梢的自由与自我的完整。",
+                longDesc: "你对应着存在主义。你认为‘存在先于本质’，身份是在不断的行走中被创造的。文学对你而言不是家园，而是通向异乡的地图。你迷恋漂泊，是因为你深知任何定居点都可能是自我的牢笼。你最好的作品永远写在下一站的驿站墙壁上。",
+                quote: "如果你给我的，和你给别人的是一样的，那我就不要了。",
+                quoteSource: "出自 三毛《撒哈拉的故事》",
+                advice: "漂泊久了，别忘了内心深处那个可以随时停靠的港湾。",
+                stats: [60, 45, 75, 98, 40],
+                books: [
+                    { title: "《在路上》", author: "杰克·凯鲁亚克", desc: "对灵魂自由最赤裸的呼唤，适合永远在寻找下一个精神出口的你。" },
+                    { title: "《流浪者之歌》", author: "赫尔曼·黑塞", desc: "一场关于寻找自我的终极修行，在流浪中完成精神的涅槃。" }
+                ]
+            },
+            HERO: {
+                name: "悲剧英雄", sub: "宿命中的尊严抗争", chars: "项羽 / 哈姆雷特",
+                desc: "你明知不可为而为之。你在与宿命的搏斗中展现人的尊严与悲悯。",
+                longDesc: "你深受古典悲剧美学影响。你理解世界的残酷与荒谬，但你选择在必然的‘毁灭’中确立人的主体性。文学对你而言是祭坛，是勇气的最终见证。你并不畏惧结局的失败，你只畏惧过程的怯懦。你的高贵在于你明知会输，却依然穿上最重的铠甲。",
+                quote: "生存还是毁灭，这是一个值得考虑的问题。",
+                quoteSource: "出自 莎士比亚《哈姆雷特》",
+                advice: "接受自己的局限，也是一种最高级的勇敢。",
+                stats: [85, 70, 55, 50, 90],
+                books: [
+                    { title: "《西绪福斯神话》", author: "阿尔贝·加缪", desc: "如何推着那块永远会掉下来的巨石，却依然称自己是幸福的英雄？" },
+                    { title: "《悲剧的诞生》", author: "尼采", desc: "深入酒神与日神的角力，理解在自我毁灭中重获强韧生命冲动的本质。" }
+                ]
+            }
+        };
+
+        const LITERARY_ENCYCLOPEDIA = [
+            { type: "浪漫主义", core: "情感高于理性，主观经验的绝对性。", figures: "卢梭、雨果、波德莱尔", views: "认为想象力是认知世界最高级的途径。", connection: "这是【理想主义者】和【反叛者】的情感原点。" },
+            { type: "存在主义", core: "存在先于本质。意义由个体通过行动去‘发明’。", figures: "萨特、加缪、波伏娃", views: "人必须对自己的选择负绝对责任。", connection: "它是【流浪者】和【悲剧英雄】的行为哲学。" },
+            { type: "结构主义", core: "整体性。关注系统内部的深层逻辑。", figures: "索绪尔、福柯、列维-斯特劳斯", views: "‘个体’是被语言和社会结构编织出来的节点。", connection: "这是【智者】解构世界的显微镜。" }
+        ];
+
+        const QUESTIONS = [
+            { id: 1, text: "深夜，你发现笔下的主角正试图逃出书页。你的第一反应是：", options: [
+                { text: "帮他推开封底的门，去往那个没有作者定义的旷野", type: "WANDERER" },
+                { text: "重新拿起笔，在终章为他画上一道必死的壮烈关口", type: "HERO" },
+                { text: "冷眼分析他逃跑的路径，看看叙事逻辑在哪出了漏洞", type: "SAGE" },
+                { text: "将书页浸入月光，让他在墨色晕染的幻梦里获得永恒", type: "IDEALIST" }
+            ]},
+            { id: 2, text: "你在迷雾森林发现一间没有锁的图书馆，里面只有一种书：", options: [
+                { text: "记录着所有神灵陨落时刻的血色史书", type: "REBEL" },
+                { text: "将世界万物拆解成0与1的符号索引系统", type: "SAGE" },
+                { text: "辞藻华丽到让人窒息，却没有任何实际意义的残诗", type: "IDEALIST" },
+                { text: "被风吹得残缺不全，每一页都通向不同异乡的游记", type: "WANDERER" }
+            ]},
+            { id: 3, text: "一个老巫师要你用“一半灵魂”交换文字的魔力。你的回击是：", options: [
+                { text: "直接烧了他的扫帚：自由的文字不需要肮脏的契约", type: "REBEL" },
+                { text: "用剩下的半个灵魂，写一首祭奠这份牺牲的悲歌", type: "IDEALIST" },
+                { text: "询问他灵魂交换的能量守恒公式，试图反向操控他", type: "SAGE" },
+                { text: "“我早已将灵魂挥洒在路上，他来晚了”", type: "WANDERER" }
+            ]},
+            { id: 4, text: "如果你不幸被囚禁在哥特式地牢，你会在墙上刻下：", options: [
+                { text: "一串隐晦的坐标，指引后人找到通往真相的秘道", type: "SAGE" },
+                { text: "一句对这暴虐王权的永恒诅咒，即便化为白骨", type: "REBEL" },
+                { text: "一朵正在凋零的玫瑰，守护这暗室里最后的美学", type: "IDEALIST" },
+                { text: "“此地不留行”，记录灵魂曾在此短暂停驻的痕迹", type: "WANDERER" }
+            ]},
+            { id: 5, text: "在一场虚构的酒会上，死神向你敬酒。你会：", options: [
+                { text: "与他碰杯，谈论这场宏大戏剧终结时的美学价值", type: "SAGE" },
+                { text: "把酒泼在他脸上：这场戏的落幕由我说了算", type: "REBEL" },
+                { text: "喝下苦酒，为那些还没来得及绽放的角色流一滴泪", type: "IDEALIST" },
+                { text: "推开杯子，翻窗离去，死亡也不过是另一场漂泊", type: "WANDERER" }
+            ]},
+            { id: 6, text: "你发现一个完美的角色其实是一个毫无思想的提线木偶。你选择：", options: [
+                { text: "剪断所有的线，让他哪怕散架也要获得一秒的自由", type: "REBEL" },
+                { text: "通过他作为媒介，去观察背后那双操纵一切的‘手’", type: "SAGE" },
+                { text: "用珠宝装饰他，让他成为废墟里最精美的装饰品", type: "IDEALIST" },
+                { text: "离开剧场，你更喜欢旷野里那些丑陋但真实的野狗", type: "WANDERER" }
+            ]},
+            { id: 7, text: "文字如果有温度，你希望你的叙事是：", options: [
+                { text: "绝对的零度：冷峻、透彻，冻结一切虚假的感伤", type: "SAGE" },
+                { text: "灼烧的岩浆：愤怒、原始，烧毁所有陈腐的屏障", type: "REBEL" },
+                { text: "恒温的晚霞：柔和、忧郁，在光影交替中守望纯粹", type: "IDEALIST" },
+                { text: "自由的风温：随季节迁徙，从不为任何温度停留", type: "WANDERER" }
+            ]},
+            { id: 8, text: "你在文本深处遇到了一面“预知镜”，镜子里是你的死期。你：", options: [
+                { text: "记下精确的时间，在倒计时中完成最有逻辑的收尾", type: "SAGE" },
+                { text: "打碎镜子：即便宿命已定，也要在碎裂中起舞", type: "HERO" },
+                { text: "在镜面上画满花朵，用唯美的谎言覆盖真实", type: "IDEALIST" },
+                { text: "背对镜子继续前行：终点在哪里，我真的不在乎", type: "WANDERER" }
+            ]},
+            { id: 9, text: "文学里的“风景”对你而言，最好的状态是：", options: [
+                { text: "荆棘荒原，是试炼英雄骨骼的绝佳战道", type: "HERO" },
+                { text: "数学隐喻森林，每个细节都藏着线索", type: "SAGE" },
+                { text: "半梦半醒间的江南烟雨，是灵魂唯一的避难所", type: "IDEALIST" },
+                { text: "没有边际的海，呼唤着流浪的帆", type: "WANDERER" }
+            ]},
+            { id: 10, text: "如果生活是文学的影子，你认为其最根本的矛盾在于：", options: [
+                { text: "权力的操纵系统与觉醒的反抗意志之间的博弈", type: "REBEL" },
+                { text: "偶然现象与背后必然的因果逻辑之间的拉锯", type: "SAGE" },
+                { text: "平庸生存与高远审美理想之间的鸿沟", type: "IDEALIST" },
+                { text: "个体的自由选择与冷酷客观环境之间的冲突", type: "WANDERER" }
+            ]},
+            { id: 11, text: "你在文本中遇到了一个完美的“精神家园”。你的直觉是：", options: [
+                { text: "“这一定是幻觉，真正的灵魂应当永远在路上”", type: "WANDERER" },
+                { text: "“它是我一直守护的旧梦，是我所有创作的归宿”", type: "IDEALIST" },
+                { text: "“分析它的构成条件，试图在现实中复刻其逻辑”", type: "SAGE" },
+                { text: "“家园是温床，也是坟墓。我必须亲手摧毁它以求自由”", type: "REBEL" }
+            ]},
+            { id: 12, text: "叙事中出现了长久的“沉默”。你认为这沉默的质感应当是：", options: [
+                { text: "像一段加密的电报，等待着理性的解码", type: "SAGE" },
+                { text: "像深渊前的屏息，预示着英雄最后的慷慨悲歌", type: "HERO" },
+                { text: "像即将引爆的炸弹，沉默只是为了更猛烈的反叛", type: "REBEL" },
+                { text: "像爱人的一声叹息，是语言无法承载的纯粹感性", type: "IDEALIST" }
+            ]},
+            { id: 13, text: "如果你的对手是你亲手创造的角色，你希望他：", options: [
+                { text: "拥有更坚定的反抗精神，甚至能反过来审判我", type: "REBEL" },
+                { text: "成为我智性的镜像，在逻辑的巅峰与我博弈", type: "SAGE" },
+                { text: "成为理想人格的载体，替我在文字里完成纯洁救赎", type: "IDEALIST" },
+                { text: "成为命运的对照，在毁灭中映照主体性尊严", type: "HERO" }
+            ]},
+            { id: 14, text: "文字世界里出现一面“照见真实”的镜子。你看见了：", options: [
+                { text: "无数细碎的逻辑线条，构成了一个精密的因果网络", type: "SAGE" },
+                { text: "一个伤痕累累、拒绝下跪的英雄剪影", type: "HERO" },
+                { text: "一个正在淡化的幻影，镜子空无一物，只有风", type: "WANDERER" },
+                { text: "一面破碎的镜子，折射出我不愿对俗世展示的梦", type: "IDEALIST" }
+            ]},
+            { id: 15, text: "面对沉重的“传统文化”，你笔下的主角会选择：", options: [
+                { text: "“背负它，在沉重行走中完成古典精神的最后守望”", type: "HERO" },
+                { text: "“拆解它，将腐朽符号转化为现代叙事的砖石”", type: "SAGE" },
+                { text: "“烧毁它，废墟才是自由灵魂最广阔的操场”", type: "REBEL" },
+                { text: "“美化它，在墨色与词藻中重构一个从未存在的盛世”", type: "IDEALIST" }
+            ]},
+            { id: 16, text: "当叙事推向“胜利”的一刻，你内心感到的却是：", options: [
+                { text: "由于洞察了胜利背后的荒谬而感到的虚无", type: "WANDERER" },
+                { text: "由于胜利必须付出的惨烈牺牲带来的神圣悲情", type: "HERO" },
+                { text: "由于摧毁了压迫者而感到的、带有复仇色彩的快慰", type: "REBEL" },
+                { text: "由于达成了一次智性的闭环而感到的平静", type: "SAGE" }
+            ]},
+            { id: 17, text: "关于“叙述者”的语气，你更倾向于：", options: [
+                { text: "绝对客观的旁观者，像上帝一样冷静记录所有参数", type: "SAGE" },
+                { text: "充满激情的参与者，文字里流淌着血与泪的冲突", type: "HERO" },
+                { text: "喃喃自语的梦游者，游走在现实与幻觉的边缘", type: "IDEALIST" },
+                { text: "不打招呼的闯入者，时刻准备着跳出叙事冒犯读者", type: "REBEL" }
+            ]},
+            { id: 18, text: "你如何处理文学中的“自然景观”？", options: [
+                { text: "它是神性的投影，是灵魂唯一能获得安宁的圣地", type: "IDEALIST" },
+                { text: "它是流浪者的伙伴，路边的野花比图书馆的书更亲切", type: "WANDERER" },
+                { text: "它是人类意志的磨刀石，狂风暴雨才能试炼英雄", type: "HERO" },
+                { text: "它是待开采资源池，每个隐喻都可以被理性工具捕捉", type: "SAGE" }
+            ]},
+            { id: 19, text: "对于“神秘主义”和“不可知论”，你的态度是：", options: [
+                { text: "“神秘是审美的温床，解释清楚了，美也就凋谢了”", type: "IDEALIST" },
+                { text: "“神秘是理性的边疆，总有一天迷雾会被逻辑穿透”", type: "SAGE" },
+                { text: "“神秘是真理的掩体，我们要用反叛将真相逼出来”", type: "REBEL" },
+                { text: "“神秘是地平线，我们永远在追逐，但从未真正抵达”", type: "WANDERER" }
+            ]},
+            { id: 20, text: "如果世界将在五分钟后毁灭，你会：", options: [
+                { text: "喝完最后一口苦涩的咖啡，看夕阳沉入地平线", type: "WANDERER" },
+                { text: "紧紧抱住那个不完美的自己，在遗憾中谢幕", type: "HERO" },
+                { text: "记录下毁灭的精确数据，作为文明最后的存证", type: "SAGE" },
+                { text: "大笑三声，嘲讽这荒唐的世界终于迎来了剧终", type: "REBEL" }
+            ]},
+            { id: 21, text: "一个叙事黑洞正在吞噬你的结局。你会：", options: [
+                { text: "站在黑洞边缘，记录引力对逻辑符号的扭曲率", type: "SAGE" },
+                { text: "在被吞噬前，对着虚无发出最后一声狂笑", type: "REBEL" },
+                { text: "纵身一跃，看看黑洞另一端的未知宇宙是否自由", type: "WANDERER" },
+                { text: "用华丽形容词修饰这场崩塌，让陨落也显得高贵", type: "IDEALIST" }
+            ]},
+            { id: 22, text: "你发现一朵永不凋零的“塑料花”。你：", options: [
+                { text: "分析它的高分子结构，思考它如何欺骗人类感官", type: "SAGE" },
+                { text: "愤怒于这种廉价的永恒，亲手将它埋入沙土深处", type: "REBEL" },
+                { text: "把它带走，作为对失落工业文明的一次怀旧洗礼", type: "IDEALIST" },
+                { text: "看一眼就走，假的东西即便永恒也毫无重量", type: "WANDERER" }
+            ]},
+            { id: 23, text: "如果你的文字有气味，那应当是：", options: [
+                { text: "福尔马林：冷静、洁净、具有解剖质感的理性", type: "SAGE" },
+                { text: "火药与泥土：粗砺、带有破坏秩序后的灰烬感", type: "REBEL" },
+                { text: "旧报纸与丁香花：怀旧、敏感且脆弱的诗意", type: "IDEALIST" },
+                { text: "咸涩的海风：自由、广阔且带着孤独的野性", type: "WANDERER" }
+            ]},
+            { id: 24, text: "你在页边距里发现了一个“微型国家”。你认为：", options: [
+                { text: "这是叙事之外的非法寄生，应当被正文逻辑肃清", type: "REBEL" },
+                { text: "这是主体性的一块自留地，是抗衡宏大叙事的堡垒", type: "HERO" },
+                { text: "这是文本的偶然溢出，体现了语言的不稳定性", type: "SAGE" },
+                { text: "这是我一直寻找的乌托邦，在这里我不再被叙述", type: "IDEALIST" }
+            ]},
+            { id: 25, text: "如果时间可以作为一种“纸张”，你会在上面涂抹：", options: [
+                { text: "无数个向后连接的箭头，编织一张庞大的网", type: "SAGE" },
+                { text: "一道道深邃的划痕，记录对抗衰老的疤痕", type: "HERO" },
+                { text: "漫无目的的潦草线条，随风飘向空白处", type: "WANDERER" },
+                { text: "一层又一层半透明彩墨，构建虚幻的厚度", type: "IDEALIST" }
+            ]},
+            { id: 26, text: "最后，如果你可以决定文字最终的形态，那应当是：", options: [
+                { text: "一把火炬，点燃读者的同时也毁灭自己", type: "REBEL" },
+                { text: "完美的圆环，首尾相接，逻辑自闭且神圣", type: "SAGE" },
+                { text: "一条延伸至地平线尽头的模糊直线", type: "WANDERER" },
+                { text: "一片散落在虚空中的、发光的羽毛", type: "IDEALIST" }
+            ]},
+            { id: 27, text: "你笔下的主角面对神灵的沉默，他的回答是：", options: [
+                { text: "拔出剑，向那沉默的苍穹发起必败的挑战", type: "HERO" },
+                { text: "笑出声，意识到神灵不过是人类逻辑的伪命题", type: "SAGE" },
+                { text: "转身走入沙漠，在那神灵不曾触及的沙丘中流浪", type: "WANDERER" },
+                { text: "用诗篇去填满神灵的空位，创造自己的神圣瞬间", type: "IDEALIST" }
+            ]},
+            { id: 28, text: "文字世界坍塌了，只剩下一个词。你希望那个词是：", options: [
+                { text: "“但是”，永远代表反抗与转折的可能", type: "REBEL" },
+                { text: "“因为”，即便毁灭也要守住因果的底线", type: "SAGE" },
+                { text: "“也许”，保留审美中那种朦胧的余地", type: "IDEALIST" },
+                { text: "“再会”，预示着下一场未知的启程", type: "WANDERER" }
+            ]},
+            { id: 29, text: "你被要求为历史写一段注脚。你选择：", options: [
+                { text: "拆解那些辉煌词藻下的权力本质，揭穿谎言", type: "REBEL" },
+                { text: "总结文明演变的公理，让规律在文字中永存", type: "SAGE" },
+                { text: "为每一个被遗忘的个体写一首葬歌，守护温柔", type: "IDEALIST" },
+                { text: "告诉后人，除了所谓的历史，旷野还有自由", type: "WANDERER" }
+            ]},
+            { id: 30, text: "如果你的灵魂是一件文学圣器，它应该是：", options: [
+                { text: "一把能剖开一切伪善的利刃", type: "REBEL" },
+                { text: "一架能观测星体运行轨迹的望远镜", type: "SAGE" },
+                { text: "一个能装下整片晚霞的墨水瓶", type: "IDEALIST" },
+                { text: "一张永远折叠不完的远行地图", type: "WANDERER" }
+            ]}
+        ];
+
+        // 首页瓮中思想者核心插画组件
+        const JarIllustration = () => (
+            <svg viewBox="0 0 400 350" className="w-full h-full drop-shadow-sm">
+                <path d="M150 100 L250 100 L265 135 Q 310 160 310 250 Q 310 310 200 310 Q 90 310 90 250 Q 90 160 135 135 Z" 
+                      fill="none" stroke={COLORS.textMain} strokeWidth="1.5" />
+                <path d="M160 110 L240 110" stroke={COLORS.textMain} strokeWidth="1" />
+                <g transform="translate(180, 210)">
+                    <circle cx="20" cy="20" r="8" fill="none" stroke={COLORS.textMain} strokeWidth="1.2" />
+                    <path d="M20 28 Q 20 55 10 75 M20 28 Q 20 55 30 75" fill="none" stroke={COLORS.textMain} strokeWidth="1.2" />
+                    <path d="M12 45 Q 20 40 28 45" fill="none" stroke={COLORS.textMain} strokeWidth="1.2" />
+                </g>
+                <circle cx="330" cy="110" r="4" fill={COLORS.textMain} />
+                <circle cx="350" cy="140" r="2" fill={COLORS.textMain} />
+                <path d="M265 135 Q 360 70 390 110" stroke={COLORS.textMain} strokeWidth="0.6" strokeDasharray="5 3" />
+                <g transform="translate(35, 45) rotate(-6)">
+                    <rect x="0" y="0" width="85" height="32" rx="4" fill="white" stroke={COLORS.border} strokeWidth="1" />
+                    <text x="42" y="21" textAnchor="middle" fontSize="9" fill={COLORS.textSecondary} style={{fontWeight: 'bold'}}>存稿编号：零壹</text>
+                </g>
+                <g transform="translate(285, 275) rotate(12)">
+                    <path d="M0 20 Q 25 -5 55 20" fill="none" stroke={COLORS.accentBlue} strokeWidth="1.8" />
+                    <text x="0" y="48" fontSize="8.5" fill={COLORS.accentBlue} style={{fontWeight: 'bold'}}>文学主体性存证 →</text>
+                </g>
+                <circle cx="350" cy="55" r="28" fill={COLORS.accentYellow} opacity="0.35" />
+                <rect x="45" y="245" width="45" height="45" rx="22" fill={COLORS.accentGreen} opacity="0.25" />
+            </svg>
+        );
+
+        function App() {
+            const [step, setStep] = useState('welcome');
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [scores, setScores] = useState({ REBEL: 0, SAGE: 0, IDEALIST: 0, WANDERER: 0, HERO: 0 });
+            const [history, setHistory] = useState([]);
+            const [result, setResult] = useState(null);
+            const [showEncy, setShowEncy] = useState(false);
+            const [isSaving, setIsSaving] = useState(false);
+            
+            const radarCanvas = useRef(null);
+            const captureRef = useRef(null);
+            const chartRef = useRef(null);
+
+            const handleAnswer = (type) => {
+                const currentScores = { ...scores };
+                setHistory([...history, { scores: { ...currentScores }, currentQuestion }]);
+                const newScores = { ...currentScores, [type]: (currentScores[type] || 0) + 1 };
+                setScores(newScores);
+                
+                if (currentQuestion < QUESTIONS.length - 1) {
+                    setCurrentQuestion(currentQuestion + 1);
+                } else {
+                    const topType = Object.keys(newScores).reduce((a, b) => newScores[a] > newScores[b] ? a : b);
+                    setResult(ARCHETYPES[topType]);
+                    setStep('result');
+                    window.scrollTo(0, 0);
+                }
+            };
+
+            const handleBack = () => {
+                if (history.length > 0) {
+                    const lastState = history[history.length - 1];
+                    setScores(lastState.scores);
+                    setCurrentQuestion(lastState.currentQuestion);
+                    setHistory(history.slice(0, -1));
+                } else { setStep('welcome'); }
+            };
+
+            const handleRestart = () => {
+                setStep('welcome');
+                setCurrentQuestion(0);
+                setScores({ REBEL: 0, SAGE: 0, IDEALIST: 0, WANDERER: 0, HERO: 0 });
+                setHistory([]);
+                setResult(null);
+                setShowEncy(false);
+                window.scrollTo(0, 0);
+            };
+
+            const saveAsImage = async () => {
+                if (typeof html2canvas === 'undefined') return;
+                setIsSaving(true);
+                try {
+                    const canvas = await html2canvas(captureRef.current, {
+                        scale: 2,
+                        backgroundColor: COLORS.bg,
+                        useCORS: true,
+                        logging: false
+                    });
+                    const link = document.createElement('a');
+                    link.download = `文学原型报告-${result.name}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                } catch (err) {
+                    console.error("保存失败", err);
+                }
+                setIsSaving(false);
+            };
+
+            useEffect(() => {
+                if (step === 'result' && result && radarCanvas.current) {
+                    if (chartRef.current) chartRef.current.destroy();
+                    const ctx = radarCanvas.current.getContext('2d');
+                    chartRef.current = new Chart(ctx, {
+                        type: 'radar',
+                        data: {
+                            labels: ['反叛力', '理性度', '审美欲', '漂泊感', '英雄性'],
+                            datasets: [{
+                                data: result.stats,
+                                backgroundColor: 'rgba(53, 175, 203, 0.15)',
+                                borderColor: COLORS.accentBlue,
+                                borderWidth: 2,
+                                pointBackgroundColor: COLORS.accentBlue,
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                r: {
+                                    angleLines: { color: 'rgba(0,0,0,0.05)' },
+                                    grid: { color: 'rgba(0,0,0,0.05)' },
+                                    pointLabels: { font: { size: 10, family: 'Noto Serif SC' }, color: COLORS.textSecondary },
+                                    ticks: { display: false },
+                                    min: 0, max: 100
+                                }
+                            },
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                }
+            }, [step, result]);
+
+            return (
+                <div className="max-w-xl mx-auto px-4 py-8">
+                    {step === 'welcome' && (
+                        <div className="animate-fade-in text-center space-y-12">
+                            <div className="text-left pt-6">
+                                <div className="inline-block px-3 py-1 bg-[#35afcb] text-white text-[9px] tracking-widest font-sans mb-4 transform -rotate-2">
+                                    Psychographic Assessment
+                                </div>
+                                <h1 className="text-4xl md:text-5xl font-light leading-tight tracking-widest text-[#3a3833] relative z-10">寻找你的<br /><span className="font-bold border-b-4 border-[#e8ed2a]">文学原型</span></h1>
+                            </div>
+                            <div className="w-full max-w-[340px] mx-auto aspect-[4/3.5] relative">
+                                <JarIllustration />
+                                <div className="absolute top-[20%] right-[-10px] bg-white px-3 py-2 rounded-2xl shadow-sm border border-[#dcd8cf] transform rotate-3 max-w-[120px]">
+                                    <p className="text-[10px] text-[#6d6b64] leading-tight italic">“在叙事中，<br/>发明你自己”</p>
+                                </div>
+                            </div>
+                            <div className="space-y-10">
+                                <p className="text-xs text-[#6d6b64] leading-relaxed tracking-wider px-6 font-light">
+                                    基于叙事逻辑、审美倾向与批判意识，在 30 组跨越时空的文学情境中，勾勒出你灵魂深处的回响。
+                                </p>
+                                <button onClick={() => setStep('quiz')} className="w-full py-6 bg-[#3a3833] text-white text-[11px] tracking-[0.8em] uppercase hover:bg-black transition-all shadow-2xl active:scale-95 font-bold flex items-center justify-center gap-4">
+                                    开启漫游 / LAUNCH <Icon name="ArrowRight" size={16} className="text-[#e8ed2a]" />
+                                </button>
+                                <div className="text-[10px] text-gray-400 tracking-[0.3em] font-sans">Curated by @云树cloudtree</div>
+                            </div>
+                        </div>
+                    )}
+
+                    {step === 'quiz' && (
+                        <div className="animate-fade-in space-y-8 text-center">
+                            <div className="flex justify-between items-center border-b border-[#dcd8cf] pb-4">
+                                <button onClick={handleBack} className="flex items-center gap-1 text-[10px] tracking-widest uppercase opacity-40 hover:opacity-100 transition-all text-[#3a3833]">
+                                    <Icon name="ArrowLeft" size={14} /> BACK
+                                </button>
+                                <span className="text-[9px] tracking-[0.6em] uppercase text-[#6d6b64] font-bold">Step {String(currentQuestion + 1).padStart(2, '0')} / 30</span>
+                                <div className="w-10"></div>
+                            </div>
+                            <h2 className="text-xl md:text-2xl font-normal leading-relaxed text-[#3a3833] min-h-[140px] flex items-center justify-center italic px-4">
+                                {QUESTIONS[currentQuestion].text}
+                            </h2>
+                            <div className="space-y-4 text-left">
+                                {QUESTIONS[currentQuestion].options.map((option, idx) => (
+                                    <button key={idx} onClick={() => handleAnswer(option.type)} className="w-full p-6 bg-white bg-opacity-70 rounded-[12px] border border-[#dcd8cf] hover:border-[#3a3833] transition-all group flex items-center justify-between shadow-sm active:bg-opacity-100">
+                                        <span className="text-[14px] text-[#6d6b64] group-hover:text-[#3a3833] tracking-wide leading-relaxed pr-4">{option.text}</span>
+                                        <Icon name="ChevronRight" size={14} className="opacity-0 group-hover:opacity-100 transition-all text-[#35afcb]" />
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="pt-10 flex justify-center items-center gap-4">
+                                <div className="h-[0.5px] w-48 bg-[#dcd8cf] relative"><div className="h-full bg-[#3a3833] transition-all duration-700" style={{width: `${((currentQuestion+1)/30)*100}%`}}></div></div>
+                            </div>
+                        </div>
+                    )}
+
+                    {step === 'result' && result && (
+                        <div className="animate-fade-in space-y-8">
+                            <div ref={captureRef} className="p-1 space-y-12 bg-[#f2f0e9]">
+                                <div className="text-center space-y-6 py-10 bg-white border border-[#dcd8cf] rounded-sm shadow-sm relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#e8ed2a] opacity-10 rounded-bl-full"></div>
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-[#35afcb]">Literature Archetype Profile</span>
+                                    <h2 className="text-6xl font-bold text-[#3a3833] tracking-widest">{result.name}</h2>
+                                    <p className="text-sm text-[#35afcb] italic font-light tracking-[0.4em]">{result.sub}</p>
+                                    <div className="flex justify-center gap-4 pt-4">
+                                        <span className="px-3 py-1 border border-[#3a3833] text-[9px] font-bold uppercase tracking-widest">思辨觉醒度 98%</span>
+                                        <span className="px-3 py-1 bg-[#3a3833] text-white text-[9px] font-bold uppercase tracking-widest">主体性存证</span>
+                                    </div>
+                                </div>
+
+                                <div className="p-8 bg-white border border-[#dcd8cf] rounded-sm shadow-sm text-center space-y-6">
+                                    <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#3a3833] border-b border-[#f2f0e9] pb-4">文学基因多维分析 / GENE ANALYSIS</h4>
+                                    <div className="aspect-square w-full max-w-[280px] mx-auto">
+                                        <canvas ref={radarCanvas}></canvas>
+                                    </div>
+                                </div>
+
+                                <div className="relative p-12 bg-white bg-opacity-90 border border-[#dcd8cf] text-center shadow-sm rounded-sm">
+                                    <Icon name="Quote" size={40} className="text-[#35afcb] mb-6 opacity-20 mx-auto" />
+                                    <p className="text-2xl md:text-3xl leading-[2] text-[#3a3833] font-medium italic mb-4">{result.quote}</p>
+                                    <div className="text-[10px] text-[#a4c29b] tracking-widest uppercase font-bold">— {result.quoteSource} —</div>
+                                </div>
+
+                                <div className="space-y-10 px-2">
+                                    <section className="space-y-4">
+                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] text-[#3a3833] flex items-center gap-3 border-b border-[#dcd8cf] pb-2">
+                                            <Icon name="Layers" size={14} className="text-[#35afcb]" /> 灵魂本色 / THE SELF
+                                        </h4>
+                                        <p className="text-[#3a3833] text-sm font-bold tracking-widest border-l-4 border-[#35afcb] pl-4 italic">{result.desc}</p>
+                                        <p className="text-[#6d6b64] leading-[2.2] text-sm tracking-widest font-light">{result.longDesc}</p>
+                                    </section>
+                                    <section className="space-y-4">
+                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] text-[#3a3833] flex items-center gap-3 border-b border-[#dcd8cf] pb-2">
+                                            <Icon name="Zap" size={14} className="text-[#e8ed2a]" /> 命运寄语 / ADVICE
+                                        </h4>
+                                        <div className="bg-[#e8ed2a] bg-opacity-15 p-6 border-l-4 border-[#e8ed2a] rounded-sm italic leading-loose text-sm tracking-widest">“{result.advice}”</div>
+                                    </section>
+                                    <section className="space-y-6">
+                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] text-[#3a3833] flex items-center gap-3 border-b border-[#dcd8cf] pb-2">
+                                            <Icon name="BookOpen" size={14} className="text-[#a4c29b]" /> 思想进阶书单 / READING
+                                        </h4>
+                                        <div className="grid gap-4 text-left">
+                                            {result.books.map((book, idx) => (
+                                                <div key={idx} className="bg-white p-6 border border-[#dcd8cf] shadow-sm relative overflow-hidden group">
+                                                    <div className="absolute top-0 right-0 p-2 opacity-5"><Icon name="Bookmark" size={24} /></div>
+                                                    <h5 className="text-[15px] font-bold tracking-widest mb-1">{book.title}</h5>
+                                                    <p className="text-[10px] text-[#a4c29b] font-bold uppercase tracking-widest mb-3">作者: {book.author}</p>
+                                                    <p className="text-xs text-[#6d6b64] leading-relaxed italic opacity-80">{book.desc}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                    <section className="bg-white border border-[#dcd8cf] rounded-sm overflow-hidden text-left">
+                                        <button onClick={() => setShowEncy(!showEncy)} className="w-full p-6 flex justify-between items-center text-[#3a3833] hover:bg-[#fafafa] transition-colors">
+                                            <span className="text-[11px] font-bold tracking-[0.5em] uppercase">文学思潮多维对照 / ENCYCLOPEDIA</span>
+                                            {showEncy ? <Icon name="ChevronUp" size={16} /> : <Icon name="ChevronDown" size={16} />}
+                                        </button>
+                                        {showEncy && (
+                                            <div className="px-6 pb-10 space-y-10 divide-y divide-[#dcd8cf] animate-fade-in">
+                                                {LITERARY_ENCYCLOPEDIA.map((item, i) => (
+                                                    <div key={i} className="pt-8 space-y-4">
+                                                        <h6 className="text-[14px] font-bold tracking-widest text-[#3a3833]">{item.type}</h6>
+                                                        <div className="space-y-3 text-xs leading-relaxed text-[#6d6b64]">
+                                                            <p><span className="font-bold text-[#3a3833] mr-2">核心主张：</span>{item.core}</p>
+                                                            <p className="italic"><span className="font-bold text-[#3a3833] not-italic mr-2">常见观点：</span>“{item.views}”</p>
+                                                            <div className="p-4 bg-[#f2f0e9] border-l-2 border-[#a4c29b] text-[11px] font-bold text-[#3a3833]">
+                                                                与你倾向的关联：{item.connection}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </section>
+                                </div>
+                            </div>
+
+                            <div className="pt-8 space-y-4 text-center">
+                                <button onClick={saveAsImage} disabled={isSaving} className="w-full py-5 bg-black text-white text-[11px] font-bold uppercase tracking-[0.5em] flex items-center justify-center gap-3 shadow-xl active:bg-gray-800 transition-all disabled:opacity-50">
+                                    {isSaving ? "生成报告图片中..." : <><Icon name="Download" size={16} /> 保存手稿报告 / SAVE REPORT</>}
+                                </button>
+                                <button onClick={handleRestart} className="w-full py-5 border border-[#3a3833] text-[#3a3833] text-[11px] font-bold uppercase tracking-[0.5em] hover:bg-[#3a3833] hover:text-white transition-all active:scale-95">
+                                    <Icon name="RefreshCw" size={14} className="inline mr-2" /> 再次重塑原型
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    <footer className="mt-16 pt-16 border-t border-[#dcd8cf] text-center space-y-4">
+                        <p className="text-[10px] tracking-[0.6em] uppercase text-[#3a3833] font-bold opacity-60">© 2026 CURATED BY @云树CLOUDTREE</p>
+                        <p className="text-[9px] tracking-[0.3em] uppercase text-[#6d6b64] opacity-30 italic">为精神生长提供坐标 / Mapping Mental Growth</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
