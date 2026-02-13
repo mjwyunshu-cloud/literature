@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文学原型测试 | 灵魂手稿验证</title>
+    <title>文学原型测试 | 世界作家人格分析</title>
     <!-- 基础库 CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -59,7 +59,263 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // 图标组件 - 内嵌SVG路径确保稳定性
+        // 1. 配置常量
+        const COLORS = { 
+            bg: "#f2f0e9", 
+            textMain: "#3a3833", 
+            textSecondary: "#6d6b64", 
+            accentYellow: "#e8ed2a", 
+            accentBlue: "#35afcb", 
+            accentGreen: "#a4c29b", 
+            border: "#dcd8cf" 
+        };
+
+        const ARCHETYPES = {
+            REBEL: {
+                name: "弗朗茨·卡夫卡", sub: "异化与反叛的审判官",
+                identity: "倾向于在荒诞的规则中进行无止尽的个人突围。",
+                anxiety: "害怕被庞大的、不可见的力量彻底异化。",
+                shadow: "过度自我封闭可能陷入永恒的、无法抵达目的地的焦虑。",
+                resonance: { mate: "黑塞", rival: "博尔赫斯" },
+                quote: "在这个荒谬的世界，即便变成甲虫，也要保持思考的尊严。",
+                quoteSource: "卡夫卡《变形记》",
+                stats: [95, 45, 80, 50, 75],
+                longDesc: "你的精神内核与卡夫卡同频。你对生活中的‘理所当然’持有生理性的警惕。文学对你而言不是避风港，而是揭露真实荒诞性的手术刀。你在文字中不断重复着推墙的动作，虽然墙未必会塌，但推墙本身确立了你的主体性。",
+                books: [{ title: "《变形记》", author: "卡夫卡", desc: "关于人如何被异化以及在异化中寻找自我的终极寓言。" }, { title: "《审判》", author: "卡夫卡", desc: "在不可理喻的生存处境中面对命运的非法指控。" }]
+            },
+            SAGE: {
+                name: "豪尔赫·博尔赫斯", sub: "逻辑迷宫的筑造者",
+                identity: "视世界为一座由符号、典籍和无限分岔路口构成的图书馆。",
+                anxiety: "害怕叙事逻辑的坍塌，害怕面对那些无法被理性和百科全书解释的混沌。",
+                shadow: "容易陷入极度的智性傲慢，用逻辑的精微来掩盖情感的荒芜。",
+                resonance: { mate: "海明威", rival: "伍尔夫" },
+                quote: "我心里一直都在暗暗设想，天堂应该是图书馆的模样。",
+                quoteSource: "博尔赫斯《关于天赐之诗》",
+                stats: [40, 98, 35, 85, 60],
+                longDesc: "你倾向于博尔赫斯式的智性审美。在你眼中万物皆是隐喻。你迷恋精密的结构、镜子与迷宫，因为看透本质带来的超脱感是你最核心的驱动力。文学对你而言是一场博弈，是你构建宇宙秩序的智力游戏。",
+                books: [{ title: "《小径分岔的花园》", author: "博尔赫斯", desc: "在文字的时空折叠中，体验无限可能的交汇与错失。" }, { title: "《虚构集》", author: "博尔赫斯", desc: "彻底打破现实与幻想的边界，用思想实验解构世界。" }]
+            },
+            IDEALIST: {
+                name: "弗吉尼亚·伍尔夫", sub: "内在意识的流浪诗人",
+                identity: "捕捉那些转瞬即逝的颤动，在时间的切片中寻找神性。",
+                anxiety: "感到外部世界的粗鄙与吵闹，害怕灵魂的敏感被生活琐碎所玷污。",
+                shadow: "沉溺于精神的潮汐，可能由于无法在现实落脚而走向脆弱的毁灭。",
+                resonance: { mate: "黑塞", rival: "博尔赫斯" },
+                quote: "不必行色匆匆，不必闪耀光芒，不必成为任何人，只需做你自己。",
+                quoteSource: "伍尔夫《一间自己的房间》",
+                stats: [35, 60, 50, 45, 98],
+                longDesc: "你具有伍尔夫式的细腻敏锐。你坚信‘美即是真’，文学是你逃离平庸日常的诺亚方舟。你不仅记录生活，你更在词藻中重构一个比现实更纯粹、更神性的精神空间。你的力量源于对每一个瞬间之美的极致守护。",
+                books: [{ title: "《到灯塔去》", author: "伍尔夫", desc: "在情感的涟漪与时间的流逝中，完成一场对永恒的试探。" }, { title: "《达洛维夫人》", author: "伍尔夫", desc: "于平凡的一天中，剖析灵魂深处如群星般闪耀的瞬间。" }]
+            },
+            WANDERER: {
+                name: "赫尔曼·黑塞", sub: "归乡途中的永恒流浪者",
+                identity: "身份是在不断的行走与试错中被‘发明’出来的。",
+                anxiety: "害怕任何形式的定居与安稳，认为每一个终点都可能是自我的枷锁。",
+                shadow: "缺乏深度的世俗联结，可能由于过度的精神自由而感到彻骨的寒冷。",
+                resonance: { mate: "卡夫卡", rival: "海明威" },
+                quote: "我不是一个说故事的人。我只是一个探索者，一个流浪者。",
+                quoteSource: "黑塞《德米安》",
+                stats: [65, 50, 75, 98, 45],
+                longDesc: "你对应着黑塞式的苦行与漫游。你不在乎目的地，你在乎的是风吹过发梢时那份自我的完整。你认为文学不是家园，而是通向地平线的地图。你最好的作品，永远写在前往下一个驿站的路上。",
+                books: [{ title: "《悉达多》", author: "黑塞", desc: "一场关于寻找自我、超越轮回的终极精神修行。" }, { title: "《荒原狼》", author: "黑塞", desc: "在文明的废墟与人性的挣扎中，寻找灵魂的平衡点。" }]
+            },
+            HERO: {
+                name: "欧内斯特·海明威", sub: "宿命重压下的尊严硬汉",
+                identity: "在明知结局会‘陨落’的前提下，选择挺身而出完成使命。",
+                anxiety: "害怕意志的枯竭，害怕在那场必败的战争中显露出哪怕一秒的怯懦。",
+                shadow: "容易被壮烈的崇高感所绑架，从而忽视了平凡生活中温情与柔弱的价值。",
+                resonance: { mate: "博尔赫斯", rival: "黑塞" },
+                quote: "一个人可以被毁灭，但不能被击败。",
+                quoteSource: "海明威《老人与海》",
+                stats: [85, 70, 55, 55, 90],
+                longDesc: "你对应着海明威式的生命意志。你理解世界的残酷与荒谬，但你选择在必然的‘毁灭’中确立人的尊严。文学对你而言是祭坛，是勇气的最终见证。你并不畏惧失败，你只畏惧过程的怯懦与平庸。",
+                books: [{ title: "《老人与海》", author: "海明威", desc: "人可以被打死，但不能被打败——生命尊严的终极赞歌。" }, { title: "《太阳照常升起》", author: "海明威", desc: "在幻灭感肆虐的迷惘时代，寻找行动的意义与风度。" }]
+            }
+        };
+
+        const QUESTIONS = [
+            { id: 1, text: "在卡夫卡的《法门前》，你面对那扇为你而开却从未进入的门，你会：", options: [
+                { text: "一直坐着等到老死，直到看清守门人的虚妄", type: "REBEL" },
+                { text: "起身离开，不再寻求那个被预设的“法”", type: "WANDERER" },
+                { text: "研究守门人的衣褶和语速，试图推演其逻辑", type: "SAGE" },
+                { text: "向守门人祈祷，为那份不可及的秩序写一首哀歌", type: "IDEALIST" }
+            ]},
+            { id: 2, text: "你进入博尔赫斯的《巴别图书馆》，在无限的书架中，你寻找：", options: [
+                { text: "那本包含所有书目索引的、被称为“总目录”的神书", type: "SAGE" },
+                { text: "撕碎那些毫无意义的乱码，在废墟中确立自我的语言", type: "REBEL" },
+                { text: "每一页都通向不同时空的、随风翻动的旅行日志", type: "WANDERER" },
+                { text: "辞藻华丽到近乎透明、能映照出我灵魂初心的残页", type: "IDEALIST" }
+            ]},
+            { id: 3, text: "海明威的圣地亚哥正面对夺走马林鱼的鲨鱼群，此时你笔下的角色会：", options: [
+                { text: "握紧带有锈迹的鱼叉，在必败的宿命里刺出最后一击", type: "HERO" },
+                { text: "冷眼观察鲨鱼的咬痕，记录下这场关于弱肉强食的闭环", type: "SAGE" },
+                { text: "割断绳索，将残骨留给大海，空手驶向未知的地平线", type: "WANDERER" },
+                { text: "闭上眼，在脑海中重现马林鱼跃出水面时的神性之美", type: "IDEALIST" }
+            ]},
+            { id: 4, text: "伍尔夫的达洛维夫人正在准备晚宴，而你作为其中的一位客人，你感到：", options: [
+                { text: "每一个寒暄的间隙，都是意识在时间的切片中剧烈颤动", type: "IDEALIST" },
+                { text: "这不过是一场权力的戏仿，你随时准备推窗跳入黑夜", type: "REBEL" },
+                { text: "分析宾客们的微表情，试图解开社交符号背后的深意", type: "SAGE" },
+                { text: "厌倦了华丽的丝绸，你渴望明天就启程前往远方的塔楼", type: "WANDERER" }
+            ]},
+            { id: 5, text: "在黑塞的西达多身旁，你凝视着那条流动的河。你听到了：", options: [
+                { text: "千万个自我的声音在河流中交汇，终归于无差别的宁静", type: "WANDERER" },
+                { text: "一条由于因果律不断重复、毫无自由可言的循环系统", type: "SAGE" },
+                { text: "那是对岸英雄战斗的鼓角，在宿命的波浪里发出回响", type: "HERO" },
+                { text: "一朵从未存在过的、纯净到让人心颤的倒影之花", type: "IDEALIST" }
+            ]},
+            { id: 6, text: "当你发现自己身处《城堡》之中，那位从未露面的伯爵命令你顺从：", options: [
+                { text: "在官僚主义的泥淖里反复纠缠，直到将其荒诞性推向极致", type: "REBEL" },
+                { text: "把这当成一场复杂的解码游戏，寻找进入权力的逻辑漏洞", type: "SAGE" },
+                { text: "直接背过身去，城堡只是你漫长旅途中的一个偶然参照", type: "WANDERER" },
+                { text: "即使宿命不可更改，也要在寒冷的雪地里守住人的尊严", type: "HERO" }
+            ]},
+            { id: 7, text: "一个老巫师在《地狱之季》的入口处要你交出“一半灵魂”换取灵感：", options: [
+                { text: "“我的灵魂早已属于荒原，你没有任何可以交换的东西”", type: "WANDERER" },
+                { text: "分析契约的风险与回报率，试图寻找交易背后的公理", type: "SAGE" },
+                { text: "直接烧了契约：反叛者的创造力来源于痛苦而非交换", type: "REBEL" },
+                { text: "用剩下的灵魂写一首祭奠这份牺牲的唯美挽歌", type: "IDEALIST" }
+            ]},
+            { id: 8, text: "博尔赫斯的《阿莱夫》就在你眼前，一个包含宇宙所有角落的点：", options: [
+                { text: "盯着它直到双眼酸痛，试图建立一套全知全能的索引系统", type: "SAGE" },
+                { text: "意识到这种绝对的真相是一种禁锢，转身去寻找局部的自由", type: "WANDERER" },
+                { text: "打碎它：这种神的视角是对人类主体性的傲慢挑衅", type: "REBEL" },
+                { text: "迷恋它瞬间折射出的、如晚霞般消逝的感官涟漪", type: "IDEALIST" }
+            ]},
+            { id: 9, text: "如果你被囚禁在哥特式地牢，而明天就要面对必死的审判，你会：", options: [
+                { text: "在石壁上刻下对这腐朽法治的最后一记响亮的耳光", type: "REBEL" },
+                { text: "整理思绪，在脑海里完成最后一次逻辑自洽的思想实验", type: "SAGE" },
+                { text: "在墙角画一朵从未见过的、带着露水的诗意玫瑰", type: "IDEALIST" },
+                { text: "坦然穿上最重的甲胄，向那个必将到来的终点致敬", type: "HERO" }
+            ]},
+            { id: 10, text: "你正在创作《到灯塔去》，但灯塔似乎永远无法抵达。你的态度是：", options: [
+                { text: "“灯塔是否抵达不重要，重要的是此时此刻意识的流淌”", type: "IDEALIST" },
+                { text: "“只要船舵还在我手里，我就从未在暴雨中落败过”", type: "HERO" },
+                { text: "“灯塔只是一个虚假的符号，其背后逻辑值得被拆解”", type: "SAGE" },
+                { text: "“我已经习惯了永远在路上，灯塔只是一个临时驿站”", type: "WANDERER" }
+            ]},
+            { id: 11, text: "在卡夫卡的法庭里，你从未被告知罪名。你的辩护策略是：", options: [
+                { text: "以最大的疯狂反诉这法治本身的非法性", type: "REBEL" },
+                { text: "试图从繁琐的案卷中理清一套根本不存在的运作规律", type: "SAGE" },
+                { text: "沉默，因为在这个荒诞处境里，任何语言都是亵渎", type: "WANDERER" },
+                { text: "在冰冷的审判席上，回忆起童年一个纯真到近乎神性的午后", type: "IDEALIST" }
+            ]},
+            { id: 12, text: "黑塞的“魔幻剧场”门上写着：仅供疯子。你会：", options: [
+                { text: "笑着走进去，因为你深知正常的灵魂都是一潭死水", type: "WANDERER" },
+                { text: "在门口分析这种标签化的心理机制，寻找进入的算法", type: "SAGE" },
+                { text: "撕掉那个告示，没人有权定义谁是“疯子”", type: "REBEL" },
+                { text: "带上一面镜子，去观看灵魂内部那场唯美而忧郁的潮汐", type: "IDEALIST" }
+            ]},
+            { id: 13, text: "如果你的文学对手是海明威笔下的斗牛士，你希望他：", options: [
+                { text: "在牛角刺入胸膛的一刻，依然保持着最冷静的风度", type: "HERO" },
+                { text: "成为我智性的镜像，在逻辑的巅峰与我进行零和博弈", type: "SAGE" },
+                { text: "突然扔下长剑，在那场充满血腥的表演中完成一次突围", type: "REBEL" },
+                { text: "成为我理想人格的化身，替我在尘埃中寻找纯洁感", type: "IDEALIST" }
+            ]},
+            { id: 14, text: "在一本博尔赫斯的神秘典籍中，你发现自己的人生已被写死：", options: [
+                { text: "这说明宿命是一个闭环，这套系统具有极致的稳定美", type: "SAGE" },
+                { text: "哪怕只有最后一页，我也要亲手改写最后那一个字", type: "REBEL" },
+                { text: "合上书，既然结局已定，过程的流浪就变得更加自由", type: "WANDERER" },
+                { text: "在字里行间撒下彩色的墨水，模糊掉那个冷酷的句号", type: "IDEALIST" }
+            ]},
+            { id: 15, text: "伍尔夫的“一间自己的房间”里，最重要的陈设应当是：", options: [
+                { text: "一扇永远敞向花园、能听见潮汐声的透明窗户", type: "IDEALIST" },
+                { text: "一张总是装满草稿、随时准备拎走的破旧写字台", type: "WANDERER" },
+                { text: "一台精确运行、毫无情感偏私的打字机", type: "SAGE" },
+                { text: "一把拒绝任何人坐下的、带刺且具有攻击性的铁椅", type: "REBEL" }
+            ]},
+            { id: 16, text: "海明威式的“胜利”在一场惨烈的战争中降临，你内心的感受是：", options: [
+                { text: "“人可以被毁灭，但不能被击败”，这是一种神圣悲情", type: "HERO" },
+                { text: "看透了胜利背后的荒谬，由于彻底洞察而感到一阵虚无", type: "WANDERER" },
+                { text: "这就是摧毁旧秩序、粉碎虚伪秩序后的极致快慰", type: "REBEL" },
+                { text: "胜利只是一个参数的闭环，并不意味着感性的终结", type: "SAGE" }
+            ]},
+            { id: 17, text: "关于“叙述者”的语气，你更倾向于模仿：", options: [
+                { text: "海明威式的电报体：简练、克制，文字里流淌着血迹", type: "HERO" },
+                { text: "卡夫卡式的冷峻调子：像法官在记录一场非法的梦境", type: "REBEL" },
+                { text: "伍尔夫式的碎碎念：意识在时空的切片中喃喃自语", type: "IDEALIST" },
+                { text: "博尔赫斯式的百科全书：冷静地引用着不存在的典籍", type: "SAGE" }
+            ]},
+            { id: 18, text: "在黑塞笔下的荒原中，你遇到一只濒死的老狼：", options: [
+                { text: "它是你孤独意志的对照，你蹲下身，与它共度最后一晚", type: "WANDERER" },
+                { text: "解剖它的本能，看看这种野性在社会化进程中如何枯萎", type: "SAGE" },
+                { text: "由于这种生理性的异化感到了极大的羞辱，向天咒骂", type: "REBEL" },
+                { text: "将其安葬，并摘下一朵野花，记录这唯美而残酷的消亡", type: "IDEALIST" }
+            ]},
+            { id: 19, text: "对于文学中的“神秘主义”和“不可知论”，你的态度是：", options: [
+                { text: "“神秘是审美的温床，解释清楚了，美也就凋谢了”", type: "IDEALIST" },
+                { text: "“神秘只是理性的边疆，总有一天所有迷雾都会被穿透”", type: "SAGE" },
+                { text: "“神秘是真理的掩体，我们要用反叛的手法逼出真相”", type: "REBEL" },
+                { text: "“神秘是地平线，我们永远在追逐，但从未真正抵达”", type: "WANDERER" }
+            ]},
+            { id: 20, text: "最后，如果你必须在《巴黎是一场流动的盛宴》中离开，你会选择：", options: [
+                { text: "喝完那口苦涩的黑咖啡，头也不回地走向下一个异乡", type: "WANDERER" },
+                { text: "紧紧抱住那个在这个时代显得不完美的自己，悄然谢幕", type: "HERO" },
+                { text: "记录下所有宾客的数据，作为这个文明最后消逝的存证", type: "SAGE" },
+                { text: "大笑三声，嘲讽这所谓的盛宴终究只是一场荒唐的剧终", type: "REBEL" }
+            ]},
+            { id: 21, text: "一个博尔赫斯式的“叙事黑洞”正在吞噬你的结局：", options: [
+                { text: "站在引力边缘，冷静记录逻辑符号的扭曲率", type: "SAGE" },
+                { text: "在被吞噬前，对着虚无发出最后一声狂笑", type: "REBEL" },
+                { text: "纵身一跃，看看黑洞另一端的未知宇宙是否自由", type: "WANDERER" },
+                { text: "用华丽的词藻修饰这场崩塌，让陨落也显得高贵", type: "IDEALIST" }
+            ]},
+            { id: 22, text: "你在文本荒漠中发现一朵永不凋零的“塑料花”：", options: [
+                { text: "分析它的分子结构，思考它如何欺骗了人类的感官", type: "SAGE" },
+                { text: "愤怒于这种廉价的永恒，亲手将其埋入沙土深处", type: "REBEL" },
+                { text: "把它带走，作为对失落工业文明的一次唯美怀旧", type: "IDEALIST" },
+                { text: "看一眼就走，假的东西即便永恒也毫无重量", type: "WANDERER" }
+            ]},
+            { id: 23, text: "如果文字有气味，你笔下的叙事更接近：", options: [
+                { text: "福尔马林：冷静、洁净、具有解剖质感的理性", type: "SAGE" },
+                { text: "火药与灰烬：带有破坏秩序后的余温", type: "REBEL" },
+                { text: "旧报纸与丁香：一种极其细腻且忧郁的感官记忆", type: "IDEALIST" },
+                { text: "咸涩的海风：自由、广阔且带着孤独的野性", type: "WANDERER" }
+            ]},
+            { id: 24, text: "你在页边距里发现了一个“微型国家”，你认为：", options: [
+                { text: "这是正文逻辑之外的非法寄生，应当被肃清", type: "REBEL" },
+                { text: "这是主体性的一块自留地，是抗衡宏大的堡垒", type: "HERO" },
+                { text: "这是文本的偶然溢出，体现了语言的不稳定性", type: "SAGE" },
+                { text: "这是我一直寻找的乌托邦，在这里我不再是被叙述的人", type: "IDEALIST" }
+            ]},
+            { id: 25, text: "如果时间可以作为一种纸张，你会在上面涂抹：", options: [
+                { text: "无数个向后连接的箭头，编织一张庞大的逻辑网", type: "SAGE" },
+                { text: "一道道深邃的划痕，记录对抗衰老的尊严疤痕", type: "HERO" },
+                { text: "漫无目的的线条，随风飘向空白处", type: "WANDERER" },
+                { text: "一层又一层半透明的彩墨，构建虚幻的厚度", type: "IDEALIST" }
+            ]},
+            { id: 26, text: "文字最终的形态应当是：", options: [
+                { text: "一把燃烧的火炬，点燃读者的同时也毁灭自己", type: "REBEL" },
+                { text: "一个完美的圆环，首尾相接，逻辑自闭且神圣", type: "SAGE" },
+                { text: "一条延伸至地平线尽头的、模糊的直线", type: "WANDERER" },
+                { text: "一片散落在虚空中的、发光的羽毛", type: "IDEALIST" }
+            ]},
+            { id: 27, text: "你笔下的主角面对神灵的沉默，他的回答是：", options: [
+                { text: "拔出剑，向那沉默的苍穹发起必败的挑战", type: "HERO" },
+                { text: "笑出声，意识到神灵只是逻辑的伪命题", type: "SAGE" },
+                { text: "转身走入沙漠，在那神灵不曾触及的沙丘中流浪", type: "WANDERER" },
+                { text: "用诗篇去填满神灵的空位，创造自己的神圣瞬间", type: "IDEALIST" }
+            ]},
+            { id: 28, text: "如果文字世界坍塌了，只剩下一个词，你希望是：", options: [
+                { text: "“但是”，永远代表反抗与转折的可能", type: "REBEL" },
+                { text: "“因为”，即使毁灭也要守住因果的底线", type: "SAGE" },
+                { text: "“也许”，保留审美中那种朦胧的余地", type: "IDEALIST" },
+                { text: "“再会”，预示着下一场未知的启程", type: "WANDERER" }
+            ]},
+            { id: 29, text: "你被要求为历史写一段注脚，你选择：", options: [
+                { text: "拆解那些辉煌词藻下的权力本质，揭穿谎言", type: "REBEL" },
+                { text: "总结文明演变的公理，让规律在文字中永存", type: "SAGE" },
+                { text: "为每一个被遗忘的个体写一首葬歌，守护温柔", type: "IDEALIST" },
+                { text: "告诉后人，除了所谓的历史，旷野还有自由", type: "WANDERER" }
+            ]},
+            { id: 30, text: "如果你灵魂是一件文学圣器，它应该是：", options: [
+                { text: "一把能剖开一切伪善的利刃", type: "REBEL" },
+                { text: "一架能观测星体运行轨迹的望远镜", type: "SAGE" },
+                { text: "一个能装下整片晚霞的墨水瓶", type: "IDEALIST" },
+                { text: "一张永远折叠不完的远行地图", type: "WANDERER" }
+            ]}
+        ];
+
         const Icon = ({ name, size = 24, className = "" }) => {
             const paths = {
                 ChevronRight: "M9 18l6-6-6-6",
@@ -85,105 +341,6 @@
             );
         };
 
-        const COLORS = { bg: "#f2f0e9", textMain: "#3a3833", textSecondary: "#6d6b64", accentYellow: "#e8ed2a", accentBlue: "#35afcb", accentGreen: "#a4c29b", border: "#dcd8cf" };
-
-        const ARCHETYPES = {
-            REBEL: {
-                name: "反叛者", sub: "超越秩序的火焰",
-                identity: "骨子里燃烧着对平庸规则的生理性反感。",
-                anxiety: "害怕被平庸的人群淹没，害怕自我的‘独特性’被体制稀释。",
-                shadow: "过度追求破坏带来的快感，有时会由于缺乏支点而陷入虚无。",
-                resonance: { mate: "流浪者", rival: "智者" },
-                quote: "我要这天，再遮不住我眼；要这地，再埋不了我心。",
-                quoteSource: "今何在《悟空传》",
-                stats: [95, 40, 85, 45, 70],
-                longDesc: "你的精神内核根植于对‘现成品’的生理性反感。你认为文学的本质不在于记录美，而在于摧毁虚伪的和平。你对应的创作冲动是‘图标破坏’。",
-                books: [{ title: "《性的辩证法》", author: "舒拉姆斯·费尔斯通", desc: "以彻底的基进视角拆解社会结构。" }, { title: "《局外人》", author: "阿尔贝·加缪", desc: "用诚实抗击荒谬，完成精神反叛。" }]
-            },
-            SAGE: {
-                name: "智者", sub: "洞察真理的慧眼",
-                identity: "倾向于将世界视为一套由符号和因果编织而成的网络。",
-                anxiety: "害怕逻辑的断裂，害怕面对那些无法被理性和知识解释的纯粹偶然。",
-                shadow: "可能陷入极度的冷漠，将生命的美感简化为冰冷的解剖数据。",
-                resonance: { mate: "悲剧英雄", rival: "理想主义者" },
-                quote: "排除掉所有不可能，剩下的，不管多难以置信，都是真相。",
-                quoteSource: "阿瑟·柯南·道尔《四签名》",
-                stats: [35, 98, 30, 80, 55],
-                longDesc: "你倾向于结构主义。你眼中的世界是一套由符号、权力和因果编织而成的网络。文学对你而言是手术刀。",
-                books: [{ title: "《符号学原理》", author: "罗兰·巴特", desc: "掌握拆解文化背后含义的密钥。" }, { title: "《追寻逝去的时光》", author: "马塞尔·普鲁斯特", desc: "在时间迷宫中观察生命逻辑。" }]
-            },
-            IDEALIST: {
-                name: "理想主义者", sub: "守望纯粹的诗意",
-                identity: "坚信‘美即是真’，拒绝承认这个物质世界的唯一性。",
-                anxiety: "由于过高的审美期待，常感到现实生活的异化与‘玷污’。",
-                shadow: "脆弱的内心可能使其在残酷的冲突面前选择病态的自我放逐。",
-                resonance: { mate: "流浪者", rival: "智者" },
-                quote: "质本洁来还洁去，强于污淖陷渠沟。",
-                quoteSource: "曹雪芹《红楼梦》",
-                stats: [30, 55, 45, 45, 95],
-                longDesc: "你对应着浪漫主义或唯美主义。你坚信‘美即是真’，文学是你逃离平庸日常、对抗异化的诺亚方舟。",
-                books: [{ title: "《致狄奥提玛的诗》", author: "荷尔德林", desc: "寻找那份纯粹到近乎神圣的诗性理想。" }, { title: "《唯美主义》", author: "沃尔特·帕特", desc: "将生命本身作为一种艺术品来经营。" }]
-            },
-            WANDERER: {
-                name: "流浪者", sub: "追逐风的自由灵魂",
-                identity: "身份是在不断的试错与行走中被‘发明’出来的。",
-                anxiety: "害怕任何形式的定居（包括精神上的），认为‘家园’即‘牢笼’。",
-                shadow: "缺乏深度的情感联结，可能由于过度的自由而感到彻骨的寒冷。",
-                resonance: { mate: "反叛者", rival: "悲剧英雄" },
-                quote: "如果你给我的，和你给别人的是一样的，那我就不要了。",
-                quoteSource: "三毛《撒哈拉的故事》",
-                stats: [60, 45, 75, 98, 40],
-                longDesc: "你对应着存在主义。你认为‘存在先于本质’，身份是在不断的行走中被创造的。文学对你而言是通向异乡的地图。",
-                books: [{ title: "《在路上》", author: "杰克·凯鲁亚克", desc: "对灵魂自由最赤裸的呼唤。" }, { title: "《流浪者之歌》", author: "赫尔曼·黑塞", desc: "一场关于寻找自我的终极修行。" }]
-            },
-            HERO: {
-                name: "悲剧英雄", sub: "宿命中的尊严抗争",
-                identity: "在明知结局会‘陨落’的前提下，选择挺身而出完成使命。",
-                anxiety: "害怕勇气的枯竭，害怕在那场必败的战争中显露出哪怕一秒的怯懦。",
-                shadow: "容易被壮烈的自我崇高感所绑架，从而忽视了平凡生活的真实价值。",
-                resonance: { mate: "智者", rival: "流浪者" },
-                quote: "生存还是毁灭，这是一个值得考虑的问题。",
-                quoteSource: "莎士比亚《哈姆雷特》",
-                stats: [80, 65, 55, 50, 90],
-                longDesc: "你深受古典悲剧美学影响。你理解世界的残酷与荒谬，但你选择在必然的‘毁灭’中确立人的主体性。",
-                books: [{ title: "《西绪福斯神话》", author: "阿尔贝·加缪", desc: "如何推着巨石却依然称自己幸福。" }, { title: "《悲剧的诞生》", author: "尼采", desc: "理解自我毁灭中那股强韧生命冲动。" }]
-            }
-        };
-
-        const QUESTIONS = [
-            { id: 1, text: "深夜，你发现笔下的主角正试图逃出书页。你的第一反应是：", options: [{ text: "帮他推开封底的门，去往没有定义的旷野", type: "WANDERER" }, { text: "重新拿起笔，为他画上一道必死的壮烈关口", type: "HERO" }, { text: "冷眼分析他逃跑的路径，看看逻辑在哪出了漏洞", type: "SAGE" }, { text: "将书页浸入月光，在墨色幻梦里获得永恒", type: "IDEALIST" }]},
-            { id: 2, text: "你在迷雾森林发现一间没有锁的图书馆，里面只有一种书：", options: [{ text: "记录所有神灵陨落时刻的血色史书", type: "REBEL" }, { text: "将万物拆解成符号索引的理性系统", type: "SAGE" }, { text: "辞藻华丽到让人窒息的残诗", type: "IDEALIST" }, { text: "每一页都通向不同异乡的游记", type: "WANDERER" }]},
-            { id: 3, text: "一个老巫师要你用“一半灵魂”交换文字的魔力。你的回击是：", options: [{ text: "烧了他的扫帚：自由的文字不需要肮脏的契约", type: "REBEL" }, { text: "用剩下的灵魂，写一首祭奠牺牲的悲歌", type: "IDEALIST" }, { text: "询问他能量守恒公式，试图反向操控他", type: "SAGE" }, { text: "“我早已将灵魂挥洒在路上，他来晚了”", type: "WANDERER" }]},
-            { id: 4, text: "如果你不幸被囚禁在哥特式地牢，你会在墙上刻下：", options: [{ text: "一串隐晦的坐标，指引后人找到真相", type: "SAGE" }, { text: "一句对这暴虐王权的永恒诅咒", type: "REBEL" }, { text: "一多正在凋零的玫瑰，守护最后的美学", type: "IDEALIST" }, { text: "“此地不留行”，记录曾在此驻足的痕迹", type: "WANDERER" }]},
-            { id: 5, text: "在一场虚构的酒会上，死神向你敬酒。你会：", options: [{ text: "与他碰杯，谈论戏剧终结时的美学价值", type: "SAGE" }, { text: "泼在他脸上：落幕由我说了算", type: "REBEL" }, { text: "喝下苦酒，为没来得及绽放的角色流一滴泪", type: "IDEALIST" }, { text: "翻窗离去，死亡也不过是另一场漂泊", type: "WANDERER" }]},
-            { id: 6, text: "你发现一个完美的角色其实是提线木偶。你选择：", options: [{ text: "剪断所有的线，让他获得一秒的自由", type: "REBEL" }, { text: "通过他去观察背后那双操纵一切的手", type: "SAGE" }, { text: "用丝绸装饰他，让他成为最精美的艺术品", type: "IDEALIST" }, { text: "离开剧场，你更喜欢旷野里的真实野狗", type: "WANDERER" }]},
-            { id: 7, text: "文字如果有温度，你希望你的叙事是：", options: [{ text: "绝对的零度：冷峻、透彻，冻结虚假感伤", type: "SAGE" }, { text: "灼烧的岩浆：愤怒、原始，烧毁所有屏障", type: "REBEL" }, { text: "恒温的晚霞：柔和、忧郁，在光影中守望", type: "IDEALIST" }, { text: "自由的风温：随季节迁徙，从不停留", type: "WANDERER" }]},
-            { id: 8, text: "你在文本深处遇到“预知镜”，镜子里是你的死期：", options: [{ text: "记下精确时间，完成最有逻辑的收尾", type: "SAGE" }, { text: "打碎镜子：即便宿命已定，也要在碎裂中起舞", type: "HERO" }, { text: "在镜面画满花朵，用谎言覆盖冷酷真实", type: "IDEALIST" }, { text: "背对镜子继续前行：终点在哪里，我不在乎", type: "WANDERER" }]},
-            { id: 9, text: "文学里的“风景”对你而言，最好的状态是：", options: [{ text: "荆棘荒原，试炼英雄骨骼的战道", type: "HERO" }, { text: "充满数学隐喻的森林，每个细节藏着线索", type: "SAGE" }, { text: "半梦半醒间的江南烟雨，灵魂的避难所", type: "IDEALIST" }, { text: "没有边际的海，呼唤着流浪的帆", type: "WANDERER" }]},
-            { id: 10, text: "如果生活是文学的影子，最根本的矛盾在于：", options: [{ text: "权力系统与觉醒反抗意志之间的博弈", type: "REBEL" }, { text: "混乱现象与必然因果逻辑之间的拉锯", type: "SAGE" }, { text: "平庸生存与高远审美理想之间的鸿沟", type: "IDEALIST" }, { text: "自由选择与冷酷客观环境之间的冲突", type: "WANDERER" }]},
-            { id: 11, text: "遇到一个完美的“精神家园”：", options: [{ text: "“真正的灵魂应当永远在路上”", type: "WANDERER" }, { text: "“它是我创作一直守望的归宿”", type: "IDEALIST" }, { text: "“分析它的构成逻辑，试图复刻”", type: "SAGE" }, { text: "“家园是温床也是坟墓，我必须摧毁它”", type: "REBEL" }]},
-            { id: 12, text: "叙事中出现了长久的“沉默”：", options: [{ text: "像加密电报，等待理性的解码", type: "SAGE" }, { text: "英雄最后的慷慨悲歌", type: "HERO" }, { text: "为了更猛烈的反叛", type: "REBEL" }, { text: "语言无法承载的纯粹感性", type: "IDEALIST" }]},
-            { id: 13, text: "对手是你亲手创造的角色：", options: [{ text: "拥有比我更坚定的反抗精神", type: "REBEL" }, { text: "在逻辑巅峰与我博弈", type: "SAGE" }, { text: "替我完成纯洁的救赎", type: "IDEALIST" }, { text: "映照出人的主体性尊严", type: "HERO" }]},
-            { id: 14, text: "镜子里“照见真实”：", options: [{ text: "精密的因果网络", type: "SAGE" }, { text: "拒绝下跪的英雄剪影", type: "HERO" }, { text: "空无一物，只有远方的风", type: "WANDERER" }, { text: "折射出我不愿展示的梦", type: "IDEALIST" }]},
-            { id: 15, text: "面对“传统文化”，主角选：", options: [{ text: "背负它在沉重行走中守望", type: "HERO" }, { text: "将腐朽符号转化为叙事砖石", type: "SAGE" }, { text: "烧毁它，废墟才是自由的操场", type: "REBEL" }, { text: "词藻中重构从未存在的盛世", type: "IDEALIST" }]},
-            { id: 16, text: "“胜利”的一刻，感到：", options: [{ text: "洞察背后荒谬的虚无", type: "WANDERER" }, { text: "惨烈牺牲带来的神圣悲情", type: "HERO" }, { text: "复仇色彩的快慰", type: "REBEL" }, { text: "达成智性闭环的平静", type: "SAGE" }]},
-            { id: 17, text: "关于“叙述者”的语气：", options: [{ text: "上帝一样冷静记录", type: "SAGE" }, { text: "文字里流淌血与泪的参与", type: "HERO" }, { text: "游走在现实与幻觉边缘的梦游", type: "IDEALIST" }, { text: "时刻准备冒犯读者的闯入", type: "REBEL" }]},
-            { id: 18, text: "你如何处理文学中的“自然”？", options: [{ text: "灵魂唯一能安宁的神圣圣地", type: "IDEALIST" }, { text: "路边的野花比图书馆亲切", type: "WANDERER" }, { text: "试炼英雄骨骼的磨刀石", type: "HERO" }, { text: "可被捕捉的资源池", type: "SAGE" }]},
-            { id: 19, text: "对于“神秘主义”的态度：", options: [{ text: "审美的温床，解释清楚了美就凋谢了", type: "IDEALIST" }, { text: "总有一天迷雾会被穿透", type: "SAGE" }, { text: "我们要用反叛逼出真相", type: "REBEL" }, { text: "永远在追逐，但从未抵达", type: "WANDERER" }]},
-            { id: 20, text: "如果世界将在五分钟后毁灭：", options: [{ text: "喝最后一口苦咖啡看夕阳", type: "WANDERER" }, { text: "紧抱不完美的自己谢幕", type: "HERO" }, { text: "记录数据，作为文明存证", type: "SAGE" }, { text: "嘲讽这荒唐的世界终剧", type: "REBEL" }]},
-            { id: 21, text: "叙事黑洞正在吞噬结局：", options: [{ text: "记录引力对逻辑的扭曲率", type: "SAGE" }, { text: "对着虚无发出最后狂笑", type: "REBEL" }, { text: "看看另一端是否自由", type: "WANDERER" }, { text: "华丽修饰这场崩塌", type: "IDEALIST" }]},
-            { id: 22, text: "发现一朵不凋零的“塑料花”：", options: [{ text: "思考它如何欺骗感官", type: "SAGE" }, { text: "愤怒于廉价，将其埋葬", type: "REBEL" }, { text: "作为对失落文明的怀旧", type: "IDEALIST" }, { text: "假的东西即便永恒也无重量", type: "WANDERER" }]},
-            { id: 23, text: "如果文字有气味，那是：", options: [{ text: "福尔马林：冷静解剖质感", type: "SAGE" }, { text: "火药与灰烬：带有破坏秩序后的余温", type: "REBEL" }, { text: "旧报纸与丁香：诗意的忧郁", type: "IDEALIST" }, { text: "咸涩的海风：孤独野性", type: "WANDERER" }]},
-            { id: 24, text: "页边距里的“微型国家”：", options: [{ text: "非法寄生，应被逻辑肃清", type: "REBEL" }, { text: "抗衡宏大叙事的堡垒", type: "HERO" }, { text: "体现了语言的不稳定性", type: "SAGE" }, { text: "在这里我不再是被叙述的人", type: "IDEALIST" }]},
-            { id: 25, text: "如果时间是纸张，你会涂抹：", options: [{ text: "向后连接编织的逻辑网", type: "SAGE" }, { text: "记录对抗衰老的疤痕", type: "HERO" }, { text: "漫无目的飘向空白", type: "WANDERER" }, { text: "半透明彩墨，虚幻厚度", type: "IDEALIST" }]},
-            { id: 26, text: "文字最终的形态应当是：", options: [{ text: "点燃读者也毁灭自己的火炬", type: "REBEL" }, { text: "完美的智性圆环", type: "SAGE" }, { text: "延伸至地平线的模糊直线", type: "WANDERER" }, { text: "散落在虚空的羽毛", type: "IDEALIST" }]},
-            { id: 27, text: "主角面对神灵的沉默：", options: [{ text: "发起必败的挑战", type: "HERO" }, { text: "意识到神灵是伪命题", type: "SAGE" }, { text: "转身走入沙漠流浪", type: "WANDERER" }, { text: "创造自己的神圣瞬间", type: "IDEALIST" }]},
-            { id: 28, text: "世界坍塌，剩下一个词：", options: [{ text: "“但是”，代表反抗可能", type: "REBEL" }, { text: "“因为”，守住因果底线", type: "SAGE" }, { text: "“也许”，保留审美余地", type: "IDEALIST" }, { text: "“再会”，预示下一场启程", type: "WANDERER" }]},
-            { id: 29, text: "为历史写注脚，你选：", options: [{ text: "揭穿华丽词藻下的权力", type: "REBEL" }, { text: "总结文明演变公理", type: "SAGE" }, { text: "为被遗忘个体写葬歌", type: "IDEALIST" }, { text: "旷野还有自由", type: "WANDERER" }]},
-            { id: 30, text: "你的灵魂是一件圣器：", options: [{ text: "剖开伪善的利刃", type: "REBEL" }, { text: "观测轨迹的望远镜", type: "SAGE" }, { text: "装下晚霞的墨水瓶", type: "IDEALIST" }, { text: "折叠不完的地图", type: "WANDERER" }]}
-        ];
-
-        // 重新定义首页核心插画
         const JarIllustration = () => (
             <svg viewBox="0 0 400 350" className="w-full h-full drop-shadow-sm">
                 <path d="M150 100 L250 100 L265 135 Q 310 160 310 250 Q 310 310 200 310 Q 90 310 90 250 Q 90 160 135 135 Z" fill="none" stroke={COLORS.textMain} strokeWidth="1.5" />
@@ -202,7 +359,7 @@
                 </g>
                 <g transform="translate(285, 275) rotate(12)">
                     <path d="M0 20 Q 25 -5 55 20" fill="none" stroke={COLORS.accentBlue} strokeWidth="1.8" />
-                    <text x="0" y="48" fontSize="8.5" fill={COLORS.accentBlue} style={{fontWeight: 'bold'}}>文学主体性存证 →</text>
+                    <text x="0" y="48" fontSize="8.5" fill={COLORS.accentBlue} style={{fontWeight: 'bold'}}>精神底色投射 →</text>
                 </g>
                 <circle cx="350" cy="55" r="28" fill={COLORS.accentYellow} opacity="0.35" />
                 <rect x="45" y="245" width="45" height="45" rx="22" fill={COLORS.accentGreen} opacity="0.25" />
@@ -271,7 +428,7 @@
                         <div className="animate-fade-in text-center space-y-12">
                             <div className="text-left pt-6">
                                 <div className="inline-block px-3 py-1 bg-[#35afcb] text-white text-[9px] tracking-widest mb-4 transform -rotate-2">Psychographic Assessment</div>
-                                <h1 className="text-4xl md:text-5xl font-light leading-tight tracking-widest text-[#3a3833]">寻找你的<br /><span className="font-bold border-b-4 border-[#e8ed2a]">文学原型</span></h1>
+                                <h1 className="text-4xl md:text-5xl font-light leading-tight tracking-widest text-[#3a3833]">寻找你的<br /><span className="font-bold border-b-4 border-[#e8ed2a]">作家人格</span></h1>
                             </div>
                             <div className="w-full max-w-[340px] mx-auto aspect-[4/3.5] relative">
                                 <JarIllustration />
@@ -280,11 +437,17 @@
                                 </div>
                             </div>
                             <div className="space-y-10">
-                                <p className="text-xs text-[#6d6b64] leading-relaxed tracking-wider px-6 font-light">基于 30 组跨越时空的文学幻境，勾勒灵魂深处的回响。</p>
+                                <p className="text-xs text-[#6d6b64] leading-relaxed tracking-wider px-6 font-light">基于 30 组跨越时空的文学幻境，勾勒你灵魂深处的回响。</p>
                                 <div className={`space-y-4 ${showError ? 'shake' : ''}`}>
                                     <div className="flex flex-col items-center gap-2">
                                         <span className="text-[10px] uppercase tracking-[0.3em] opacity-40">文学通行码认证</span>
-                                        <input type="text" value={code} onChange={(e) => setCode(e.target.value)} className="redeem-input w-48 py-2 text-sm" placeholder="请在此输入码" />
+                                        <input 
+                                            type="text" 
+                                            value={code} 
+                                            onChange={(e) => setCode(e.target.value)} 
+                                            className="redeem-input w-48 py-2 text-sm" 
+                                            placeholder="请输入通行码" 
+                                        />
                                         {showError && <span className="text-[9px] text-red-400">认证失败，请核对。</span>}
                                     </div>
                                 </div>
@@ -320,7 +483,8 @@
                                 <div className="text-center space-y-6 py-12 bg-white border border-[#dcd8cf] rounded-sm shadow-sm relative overflow-hidden">
                                     <div className="absolute top-4 left-4"><Icon name="Fingerprint" size={32} className="opacity-10" /></div>
                                     <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-[#35afcb]">Literature Archetype Profile</span>
-                                    <h2 className="text-6xl font-bold text-[#3a3833] tracking-widest">{result.name}</h2>
+                                    {/* 核心改动：减小名字字体大小 text-5xl md:text-6xl -> text-4xl md:text-5xl */}
+                                    <h2 className="text-4xl md:text-5xl font-bold text-[#3a3833] tracking-widest">{result.name}</h2>
                                     <p className="text-sm text-[#35afcb] italic tracking-[0.4em]">{result.sub}</p>
                                     <div className="flex justify-center gap-4 pt-4">
                                         <span className="px-3 py-1 border border-[#3a3833] text-[9px] font-bold uppercase">思辨觉醒度 98%</span>
@@ -330,14 +494,14 @@
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white p-8 border border-[#dcd8cf] relative">
                                     <div className="absolute -top-3 -right-3 px-3 py-1 bg-white border border-[#3a3833] text-[10px] font-bold transform rotate-3">NO. 2026-Soul</div>
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 text-left">
                                         <h4 className="text-[11px] font-bold border-b pb-2">叙事基因分析报告</h4>
                                         <div className="space-y-3">
                                             <div className="flex justify-between items-center text-[10px]"><span>感性驱动</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-[#e8ed2a]" style={{width:'85%'}}></div></div></div>
                                             <div className="flex justify-between items-center text-[10px]"><span>理性逻辑</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-[#35afcb]" style={{width:'40%'}}></div></div></div>
                                             <div className="flex justify-between items-center text-[10px]"><span>反叛意志</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-black" style={{width:'70%'}}></div></div></div>
                                         </div>
-                                        <div className="handwritten-note mt-4">* 核心观察：存在强烈的审美自觉</div>
+                                        <div className="handwritten-note mt-4 text-left">* 核心观察：存在强烈的审美自觉</div>
                                     </div>
                                     <div className="aspect-square w-full max-w-[200px] mx-auto">
                                         <canvas ref={radarCanvas}></canvas>
@@ -346,18 +510,18 @@
 
                                 <div className="relative p-12 bg-white border border-[#dcd8cf] text-center shadow-sm">
                                     <Icon name="Quote" size={32} className="text-[#35afcb] mb-6 opacity-20 mx-auto" />
-                                    <p className="text-xl leading-relaxed mb-6 font-medium">
+                                    <p className="text-xl leading-relaxed mb-6 font-medium text-center">
                                         <span className="highlight-yellow">{result.quote}</span>
                                     </p>
-                                    <div className="text-[10px] text-[#a4c29b] tracking-widest uppercase font-bold">— {result.quoteSource} —</div>
+                                    <div className="text-[10px] text-[#a4c29b] tracking-widest uppercase font-bold text-center">— {result.quoteSource} —</div>
                                 </div>
 
-                                <div className="space-y-10 px-2">
+                                <div className="space-y-10 px-2 text-left">
                                     <section className="space-y-4">
                                         <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] flex items-center gap-3 border-b border-[#dcd8cf] pb-2">
                                             <Icon name="Layers" size={14} className="text-[#35afcb]" /> 灵魂本色 / THE SELF
                                         </h4>
-                                        <div className="bg-white p-6 border-l-4 border-[#35afcb] space-y-4 text-left">
+                                        <div className="bg-white p-6 border-l-4 border-[#35afcb] space-y-4">
                                             <p className="text-[13px] leading-relaxed text-[#6d6b64] italic">“{result.identity}”</p>
                                             <p className="text-[13px] leading-relaxed font-light">{result.longDesc}</p>
                                         </div>
