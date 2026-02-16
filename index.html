@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文学原型测试 | 世界作家人格分析</title>
-    <!-- 基础库 CDN -->
+    <title>文学原型测试 | 世界十大家作家人格</title>
+    <!-- 基础库 CDN - 按照严格依赖顺序排列 -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -59,279 +59,332 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // 1. 配置常量
+        // --- [SECTION 1: 配置常量] ---
         const COLORS = { 
-            bg: "#f2f0e9", 
-            textMain: "#3a3833", 
-            textSecondary: "#6d6b64", 
-            accentYellow: "#e8ed2a", 
-            accentBlue: "#35afcb", 
-            accentGreen: "#a4c29b", 
-            border: "#dcd8cf" 
+            bg: "#f2f0e9", textMain: "#3a3833", textSecondary: "#6d6b64", 
+            accentYellow: "#e8ed2a", accentBlue: "#35afcb", accentGreen: "#a4c29b", border: "#dcd8cf" 
         };
 
         const ARCHETYPES = {
-            REBEL: {
-                name: "弗朗茨·卡夫卡", sub: "异化与反叛的审判官",
+            KAFKA: {
+                name: "弗朗茨·卡夫卡", gender: "male", sub: "异化世界的清醒者",
                 identity: "倾向于在荒诞的规则中进行无止尽的个人突围。",
-                anxiety: "害怕被庞大的、不可见的力量彻底异化。",
+                anxiety: "害怕被庞大的、不可见的力量（体制/平庸）彻底异化。",
                 shadow: "过度自我封闭可能陷入永恒的、无法抵达目的地的焦虑。",
-                resonance: { mate: "黑塞", rival: "博尔赫斯" },
+                resonance: { mate: "狄金森", rival: "海明威" },
                 quote: "在这个荒谬的世界，即便变成甲虫，也要保持思考的尊严。",
-                quoteSource: "卡夫卡《变形记》",
-                stats: [95, 45, 80, 50, 75],
-                longDesc: "你的精神内核与卡夫卡同频。你对生活中的‘理所当然’持有生理性的警惕。文学对你而言不是避风港，而是揭露真实荒诞性的手术刀。你在文字中不断重复着推墙的动作，虽然墙未必会塌，但推墙本身确立了你的主体性。",
-                books: [{ title: "《变形记》", author: "卡夫卡", desc: "关于人如何被异化以及在异化中寻找自我的终极寓言。" }, { title: "《审判》", author: "卡夫卡", desc: "在不可理喻的生存处境中面对命运的非法指控。" }]
+                quoteSource: "《变形记》",
+                stats: [95, 45, 75, 50, 80],
+                longDesc: "你的精神内核与卡夫卡同频。你对生活中的‘理所当然’持有生理性的警惕，文字是你揭露真实荒诞性的手术刀。",
+                books: [{ title: "《变形记》", author: "卡夫卡", desc: "关于人如何被异化以及在异化中寻找自我的终极寓言。" }]
             },
-            SAGE: {
-                name: "豪尔赫·博尔赫斯", sub: "逻辑迷宫的筑造者",
+            BORGES: {
+                name: "豪尔赫·博尔赫斯", gender: "male", sub: "逻辑迷宫的筑造者",
                 identity: "视世界为一座由符号、典籍和无限分岔路口构成的图书馆。",
-                anxiety: "害怕叙事逻辑的坍塌，害怕面对那些无法被理性和百科全书解释的混沌。",
+                anxiety: "害怕叙事逻辑的坍塌，害怕面对那些无法被解释的混沌。",
                 shadow: "容易陷入极度的智性傲慢，用逻辑的精微来掩盖情感的荒芜。",
-                resonance: { mate: "海明威", rival: "伍尔夫" },
+                resonance: { mate: "伍尔夫", rival: "加缪" },
                 quote: "我心里一直都在暗暗设想，天堂应该是图书馆的模样。",
-                quoteSource: "博尔赫斯《关于天赐之诗》",
-                stats: [40, 98, 35, 85, 60],
-                longDesc: "你倾向于博尔赫斯式的智性审美。在你眼中万物皆是隐喻。你迷恋精密的结构、镜子与迷宫，因为看透本质带来的超脱感是你最核心的驱动力。文学对你而言是一场博弈，是你构建宇宙秩序的智力游戏。",
-                books: [{ title: "《小径分岔的花园》", author: "博尔赫斯", desc: "在文字的时空折叠中，体验无限可能的交汇与错失。" }, { title: "《虚构集》", author: "博尔赫斯", desc: "彻底打破现实与幻想的边界，用思想实验解构世界。" }]
+                quoteSource: "《关于天赐之诗》",
+                stats: [40, 98, 40, 85, 55],
+                longDesc: "你倾向于博尔赫斯式的智性审美。在你眼中万物皆是隐喻。你迷恋精密结构，看透本质带来的超脱感是你的核心驱动力。",
+                books: [{ title: "《小径分岔的花园》", author: "博尔赫斯", desc: "在文字的时空折叠中，体验无限可能的交汇。" }]
             },
-            IDEALIST: {
-                name: "弗吉尼亚·伍尔夫", sub: "内在意识的流浪诗人",
-                identity: "捕捉那些转瞬即逝的颤动，在时间的切片中寻找神性。",
-                anxiety: "感到外部世界的粗鄙与吵闹，害怕灵魂的敏感被生活琐碎所玷污。",
-                shadow: "沉溺于精神的潮汐，可能由于无法在现实落脚而走向脆弱的毁灭。",
-                resonance: { mate: "黑塞", rival: "博尔赫斯" },
+            WOOLF: {
+                name: "弗吉尼亚·伍尔夫", gender: "female", sub: "内在意识的捕捉者",
+                identity: "捕捉转瞬即逝的颤动，在时间的切片中寻找神性。",
+                anxiety: "感到外部世界的粗鄙，害怕灵魂的敏感被生活琐碎所玷污。",
+                shadow: "沉溺于精神潮汐，可能由于无法在现实落脚而走向脆弱的毁灭。",
+                resonance: { mate: "博尔赫斯", rival: "海明威" },
                 quote: "不必行色匆匆，不必闪耀光芒，不必成为任何人，只需做你自己。",
-                quoteSource: "伍尔夫《一间自己的房间》",
-                stats: [35, 60, 50, 45, 98],
-                longDesc: "你具有伍尔夫式的细腻敏锐。你坚信‘美即是真’，文学是你逃离平庸日常的诺亚方舟。你不仅记录生活，你更在词藻中重构一个比现实更纯粹、更神性的精神空间。你的力量源于对每一个瞬间之美的极致守护。",
-                books: [{ title: "《到灯塔去》", author: "伍尔夫", desc: "在情感的涟漪与时间的流逝中，完成一场对永恒的试探。" }, { title: "《达洛维夫人》", author: "伍尔夫", desc: "于平凡的一天中，剖析灵魂深处如群星般闪耀的瞬间。" }]
+                quoteSource: "《一间自己的房间》",
+                stats: [35, 65, 95, 45, 85],
+                longDesc: "你具有伍尔夫式的敏锐。你坚信‘美即是真’，在词藻中重构一个比现实更神性的精神空间。你的力量源于对瞬间之美的极致守护。",
+                books: [{ title: "《到灯塔去》", author: "伍尔夫", desc: "在情感涟漪与时间流逝中，完成一场对永恒的试探。" }]
             },
-            WANDERER: {
-                name: "赫尔曼·黑塞", sub: "归乡途中的永恒流浪者",
+            HESSE: {
+                name: "赫尔曼·黑塞", gender: "male", sub: "灵魂深处的漫游者",
                 identity: "身份是在不断的行走与试错中被‘发明’出来的。",
-                anxiety: "害怕任何形式的定居与安稳，认为每一个终点都可能是自我的枷锁。",
-                shadow: "缺乏深度的世俗联结，可能由于过度的精神自由而感到彻骨的寒冷。",
-                resonance: { mate: "卡夫卡", rival: "海明威" },
+                anxiety: "害怕任何形式的定居与安稳，认为每一个终点都可能是枷锁。",
+                shadow: "缺乏深度的世俗联结，可能由于过度的自由而感到彻骨寒冷。",
+                resonance: { mate: "波伏娃", rival: "卡夫卡" },
                 quote: "我不是一个说故事的人。我只是一个探索者，一个流浪者。",
-                quoteSource: "黑塞《德米安》",
-                stats: [65, 50, 75, 98, 45],
-                longDesc: "你对应着黑塞式的苦行与漫游。你不在乎目的地，你在乎的是风吹过发梢时那份自我的完整。你认为文学不是家园，而是通向地平线的地图。你最好的作品，永远写在前往下一个驿站的路上。",
-                books: [{ title: "《悉达多》", author: "黑塞", desc: "一场关于寻找自我、超越轮回的终极精神修行。" }, { title: "《荒原狼》", author: "黑塞", desc: "在文明的废墟与人性的挣扎中，寻找灵魂的平衡点。" }]
+                quoteSource: "《德米安》",
+                stats: [65, 55, 75, 98, 45],
+                longDesc: "你对应着黑塞式的苦行与漫游。你不在乎目的地，你在乎的是自我的完整，最好的作品永远在路上。",
+                books: [{ title: "《悉达多》", author: "黑塞", desc: "一场寻找自我、超越轮回的终极精神修行。" }]
             },
-            HERO: {
-                name: "欧内斯特·海明威", sub: "宿命重压下的尊严硬汉",
+            HEMINGWAY: {
+                name: "欧内斯特·海明威", gender: "male", sub: "宿命重压下的尊严硬汉",
                 identity: "在明知结局会‘陨落’的前提下，选择挺身而出完成使命。",
                 anxiety: "害怕意志的枯竭，害怕在那场必败的战争中显露出哪怕一秒的怯懦。",
-                shadow: "容易被壮烈的崇高感所绑架，从而忽视了平凡生活中温情与柔弱的价值。",
-                resonance: { mate: "博尔赫斯", rival: "黑塞" },
+                shadow: "容易被壮烈的崇高感所绑架，从而忽视了平凡温情的价值。",
+                resonance: { mate: "杜拉斯", rival: "狄金森" },
                 quote: "一个人可以被毁灭，但不能被击败。",
-                quoteSource: "海明威《老人与海》",
-                stats: [85, 70, 55, 55, 90],
-                longDesc: "你对应着海明威式的生命意志。你理解世界的残酷与荒谬，但你选择在必然的‘毁灭’中确立人的尊严。文学对你而言是祭坛，是勇气的最终见证。你并不畏惧失败，你只畏惧过程的怯懦与平庸。",
-                books: [{ title: "《老人与海》", author: "海明威", desc: "人可以被打死，但不能被打败——生命尊严的终极赞歌。" }, { title: "《太阳照常升起》", author: "海明威", desc: "在幻灭感肆虐的迷惘时代，寻找行动的意义与风度。" }]
+                quoteSource: "《老人与海》",
+                stats: [85, 70, 50, 55, 95],
+                longDesc: "你对应着海明威式的意志。你在必然的‘毁灭’中确立人的尊严。文学是对勇气的最终见证。",
+                books: [{ title: "《老人与海》", author: "海明威", desc: "生命尊严的终极赞歌：人可以被打死，但不能被击败。" }]
+            },
+            BEAUVOIR: {
+                name: "西蒙娜·德·波伏娃", gender: "female", sub: "主体性的先行者",
+                identity: "拒绝接受预设的角色，致力于在选择中创造自我的本质。",
+                anxiety: "害怕被他人的眼光或社会的定义所物化，沦为某种附属品。",
+                shadow: "极度的理性和决绝，有时会显得过于冷酷，忽视了感性的依赖。",
+                resonance: { mate: "加缪", rival: "普拉斯" },
+                quote: "我绝不让我的生命荒废，我绝不让它受任何人的支配。",
+                quoteSource: "《第二性》",
+                stats: [90, 85, 50, 80, 75],
+                longDesc: "你具有波伏娃式的主体自觉。你认为自由不是礼物而是责任，文学是你解构权力、声明存在的旗帜。",
+                books: [{ title: "《第二性》", author: "波伏娃", desc: "现代女性主体意识的基石，关于自由与选择的深度解析。" }]
+            },
+            DICKINSON: {
+                name: "艾米莉·狄金森", gender: "female", sub: "内心宇宙的隐秘女皇",
+                identity: "在极小的物理空间内，构建出一个无限深邃的精神国度。",
+                anxiety: "害怕精神的喧嚣和外部的闯入，认为‘社交’是对神性的磨损。",
+                shadow: "过度的精神洁癖导致了与世界的彻底断裂，常感到无人理解的孤独。",
+                resonance: { mate: "卡夫卡", rival: "海明威" },
+                quote: "假如我不曾见过太阳，我本可以忍受黑暗。",
+                quoteSource: "《狄金森诗集》",
+                stats: [30, 92, 85, 40, 60],
+                longDesc: "你是精神的独居者，在页边距里建立国家。你不需要远行，因为你灵魂的深度足以让你在方寸之间俯瞰宇宙。",
+                books: [{ title: "《狄奥尼索斯的诗集》", author: "狄金森", desc: "极致凝练的文字，通向灵魂深处最隐秘的风景。" }]
+            },
+            CAMUS: {
+                name: "阿尔贝·加缪", gender: "male", sub: "荒诞中的反抗英雄",
+                identity: "即使面对永恒推石上山的西绪福斯式命运，也要宣告幸福。",
+                anxiety: "害怕失去行动的意义，害怕面对一个没有回音的世界而变得麻木。",
+                shadow: "对‘真实’的极致追求使其显得与社会格格不入，容易陷入局外人的困境。",
+                resonance: { mate: "波伏娃", rival: "博尔赫斯" },
+                quote: "在隆冬，我终于发现我心里有一个不可战胜的夏天。",
+                quoteSource: "《夏天集》",
+                stats: [88, 75, 55, 90, 85],
+                longDesc: "你对应着加缪式的反抗精神。你承认荒谬，但你通过创造和热爱来抗击它。你是一个脚踩大地的理想主义者。",
+                books: [{ title: "《局外人》", author: "加缪", desc: "用冷峻的诚实抗击世界的荒谬，完成一场不妥协的精神反叛。" }]
+            },
+            DURAS: {
+                name: "玛格丽特·杜拉斯", gender: "female", sub: "欲望与痛苦的叙事者",
+                identity: "将痛苦提炼为极致的美，在绝望的灰烬中寻找生命的光亮。",
+                anxiety: "害怕情感的枯竭，害怕那些狂热的、撕裂般的欲望被平庸的时间埋没。",
+                shadow: "极度的沉溺感可能使叙事陷入自恋或病态的伤痛循环，难以自拔。",
+                resonance: { mate: "海明威", rival: "伍尔夫" },
+                quote: "我爱你，我想念你。我已准备好为你毁灭。",
+                quoteSource: "《情人》",
+                stats: [75, 40, 92, 60, 80],
+                longDesc: "你是极致感性的信徒。文学对你而言是某种具有破坏性的火焰。你迷恋毁灭带来的快感，因为唯有在那一刻，生命最真实。",
+                books: [{ title: "《情人》", author: "杜拉斯", desc: "在湄公河的夕阳里，见证一段关于欲望与毁灭的永恒回忆。" }]
+            },
+            PLATH: {
+                name: "西尔维娅·普拉斯", gender: "female", sub: "真实底色的追光者",
+                identity: "剥离所有的虚假伪装，赤裸地面对灵魂最深处的风暴与真相。",
+                anxiety: "害怕被生活的琐碎、陈旧的角色所窒息，害怕自己那股原始的力量无法释放。",
+                shadow: "过于激烈的真诚可能导致自我灼烧，在极度的清醒中感到绝望的重量。",
+                resonance: { mate: "卡夫卡", rival: "波伏娃" },
+                quote: "我从灰烬中升起，我的红发，我以人类为食。",
+                quoteSource: "《爱丽儿》",
+                stats: [92, 50, 80, 45, 90],
+                longDesc: "你具有普拉斯式的激烈与真实。你拒绝任何形式的精神妥协。你的文字是带刺的，因为它承载了你对自由最赤裸的渴望。",
+                books: [{ title: "《钟形罩》", author: "普拉斯", desc: "一部关于自我追寻、异化与在窒息中寻找光亮的自传体杰作。" }]
             }
         };
 
         const QUESTIONS = [
-            { id: 1, text: "在卡夫卡的《法门前》，你面对那扇为你而开却从未进入的门，你会：", options: [
-                { text: "一直坐着等到老死，直到看清守门人的虚妄", type: "REBEL" },
-                { text: "起身离开，不再寻求那个被预设的“法”", type: "WANDERER" },
-                { text: "研究守门人的衣褶和语速，试图推演其逻辑", type: "SAGE" },
-                { text: "向守门人祈祷，为那份不可及的秩序写一首哀歌", type: "IDEALIST" }
+            { id: 1, text: "在卡夫卡的《法门前》，你面对那扇为你而开却从未进入的门：", options: [
+                { text: "一直坐到老死，直到看清守门人的虚妄", type: "KAFKA" },
+                { text: "起身离开，不再寻求那个被预设的“法”", type: "HESSE" },
+                { text: "研究守门人的衣褶，试图推演其背后的逻辑", type: "BORGES" },
+                { text: "向守门人祈祷，为那份不可及的秩序写首哀歌", type: "WOOLF" }
             ]},
-            { id: 2, text: "你进入博尔赫斯的《巴别图书馆》，在无限的书架中，你寻找：", options: [
-                { text: "那本包含所有书目索引的、被称为“总目录”的神书", type: "SAGE" },
-                { text: "撕碎那些毫无意义的乱码，在废墟中确立自我的语言", type: "REBEL" },
-                { text: "每一页都通向不同时空的、随风翻动的旅行日志", type: "WANDERER" },
-                { text: "辞藻华丽到近乎透明、能映照出我灵魂初心的残页", type: "IDEALIST" }
+            { id: 2, text: "在博尔赫斯的《巴别图书馆》里，你在无限书架中寻找：", options: [
+                { text: "那本包含所有索引的、被称为“总目录”的神书", type: "BORGES" },
+                { text: "撕碎毫无意义的乱码，确立自我的语言", type: "PLATH" },
+                { text: "通向不同时空的、随风翻动的旅行日志", type: "HESSE" },
+                { text: "词藻华丽到透明、映照出灵魂初心的残页", type: "WOOLF" }
             ]},
-            { id: 3, text: "海明威的圣地亚哥正面对夺走马林鱼的鲨鱼群，此时你笔下的角色会：", options: [
-                { text: "握紧带有锈迹的鱼叉，在必败的宿命里刺出最后一击", type: "HERO" },
-                { text: "冷眼观察鲨鱼的咬痕，记录下这场关于弱肉强食的闭环", type: "SAGE" },
-                { text: "割断绳索，将残骨留给大海，空手驶向未知的地平线", type: "WANDERER" },
-                { text: "闭上眼，在脑海中重现马林鱼跃出水面时的神性之美", type: "IDEALIST" }
+            { id: 3, text: "伍尔夫的达洛维夫人正在准备晚宴，你感到：", options: [
+                { text: "每一个寒暄间隙，意识都在切片中剧烈颤动", type: "WOOLF" },
+                { text: "这只是一场权力的戏仿，你随时准备翻窗离去", type: "BEAUVOIR" },
+                { text: "分析宾客的微表情，试图解开社交符号的深意", type: "BORGES" },
+                { text: "厌倦了华丽丝绸，你渴望明天就启程前往地平线", type: "HESSE" }
             ]},
-            { id: 4, text: "伍尔夫的达洛维夫人正在准备晚宴，而你作为其中的一位客人，你感到：", options: [
-                { text: "每一个寒暄的间隙，都是意识在时间的切片中剧烈颤动", type: "IDEALIST" },
-                { text: "这不过是一场权力的戏仿，你随时准备推窗跳入黑夜", type: "REBEL" },
-                { text: "分析宾客们的微表情，试图解开社交符号背后的深意", type: "SAGE" },
-                { text: "厌倦了华丽的丝绸，你渴望明天就启程前往远方的塔楼", type: "WANDERER" }
+            { id: 4, text: "面对西绪福斯推上山的巨石，你笔下的角色会：", options: [
+                { text: "对着众神发出一声嘲笑，然后宣告我是幸福的", type: "CAMUS" },
+                { text: "计算巨石的曲率与坡度，建立能量循环模型", type: "BORGES" },
+                { text: "在巨石滚落前，将尊严刻在山顶的岩层里", type: "HEMINGWAY" },
+                { text: "在山脚种一朵野花，美化这永无止境的苦役", type: "WOOLF" }
             ]},
-            { id: 5, text: "在黑塞的西达多身旁，你凝视着那条流动的河。你听到了：", options: [
-                { text: "千万个自我的声音在河流中交汇，终归于无差别的宁静", type: "WANDERER" },
-                { text: "一条由于因果律不断重复、毫无自由可言的循环系统", type: "SAGE" },
-                { text: "那是对岸英雄战斗的鼓角，在宿命的波浪里发出回响", type: "HERO" },
-                { text: "一朵从未存在过的、纯净到让人心颤的倒影之花", type: "IDEALIST" }
+            { id: 5, text: "一个老巫师在《地狱之季》入口要你用“一半灵魂”换文学魔力：", options: [
+                { text: "“我的灵魂早已属于荒原，你没有任何可换的”", type: "HESSE" },
+                { text: "直接烧了契约：创造力来源于痛苦而非交易", type: "PLATH" },
+                { text: "分析契约的回报率，试图反向操控巫师", type: "BEAUVOIR" },
+                { text: "用剩下的灵魂，写一首祭奠这份牺牲的挽歌", type: "DURAS" }
             ]},
-            { id: 6, text: "当你发现自己身处《城堡》之中，那位从未露面的伯爵命令你顺从：", options: [
-                { text: "在官僚主义的泥淖里反复纠缠，直到将其荒诞性推向极致", type: "REBEL" },
-                { text: "把这当成一场复杂的解码游戏，寻找进入权力的逻辑漏洞", type: "SAGE" },
-                { text: "直接背过身去，城堡只是你漫长旅途中的一个偶然参照", type: "WANDERER" },
-                { text: "即使宿命不可更改，也要在寒冷的雪地里守住人的尊严", type: "HERO" }
+            { id: 6, text: "波伏娃邀你在巴黎咖啡馆谈论自由，你会说：", options: [
+                { text: "“自由不是礼物，而是我亲手铸就的主体性”", type: "BEAUVOIR" },
+                { text: "“自由是我在逻辑迷宫中唯一的非逻辑出口”", type: "BORGES" },
+                { text: "“自由是剥离社会伪装后，那一层血淋淋的真相”", type: "PLATH" },
+                { text: "“自由只是地平线，我们永远追逐但从未抵达”", type: "CAMUS" }
             ]},
-            { id: 7, text: "一个老巫师在《地狱之季》的入口处要你交出“一半灵魂”换取灵感：", options: [
-                { text: "“我的灵魂早已属于荒原，你没有任何可以交换的东西”", type: "WANDERER" },
-                { text: "分析契约的风险与回报率，试图寻找交易背后的公理", type: "SAGE" },
-                { text: "直接烧了契约：反叛者的创造力来源于痛苦而非交换", type: "REBEL" },
-                { text: "用剩下的灵魂写一首祭奠这份牺牲的唯美挽歌", type: "IDEALIST" }
+            { id: 7, text: "你身处《城堡》之中，伯爵命令你顺从，你会：", options: [
+                { text: "在官僚泥淖中周旋，直到将荒诞推向极致", type: "KAFKA" },
+                { text: "直接背过身，城堡只是旅途的一个偶然参照", type: "HESSE" },
+                { text: "即使宿命不可更改，也要在雪地守住尊严", type: "HEMINGWAY" },
+                { text: "在寒风中捕捉冰晶的美感，忘却城堡的存在", type: "WOOLF" }
             ]},
-            { id: 8, text: "博尔赫斯的《阿莱夫》就在你眼前，一个包含宇宙所有角落的点：", options: [
-                { text: "盯着它直到双眼酸痛，试图建立一套全知全能的索引系统", type: "SAGE" },
-                { text: "意识到这种绝对的真相是一种禁锢，转身去寻找局部的自由", type: "WANDERER" },
-                { text: "打碎它：这种神的视角是对人类主体性的傲慢挑衅", type: "REBEL" },
-                { text: "迷恋它瞬间折射出的、如晚霞般消逝的感官涟漪", type: "IDEALIST" }
+            { id: 8, text: "狄金森带你进入她的卧室，窗外是一只知更鸟：", options: [
+                { text: "“这扇窗户就是我能俯瞰全宇宙的唯一疆域”", type: "DICKINSON" },
+                { text: "“知更鸟的歌声是意识流淌中的一个金色切片”", type: "WOOLF" },
+                { text: "“分析鸟类的生理结构，观察物种存续的逻辑”", type: "BEAUVOIR" },
+                { text: "“知更鸟必须飞向风中，否则它只是美丽的囚徒”", type: "HESSE" }
             ]},
-            { id: 9, text: "如果你被囚禁在哥特式地牢，而明天就要面对必死的审判，你会：", options: [
-                { text: "在石壁上刻下对这腐朽法治的最后一记响亮的耳光", type: "REBEL" },
-                { text: "整理思绪，在脑海里完成最后一次逻辑自洽的思想实验", type: "SAGE" },
-                { text: "在墙角画一朵从未见过的、带着露水的诗意玫瑰", type: "IDEALIST" },
-                { text: "坦然穿上最重的甲胄，向那个必将到来的终点致敬", type: "HERO" }
+            { id: 9, text: "海明威的圣地亚哥正面对夺走马林鱼的鲨鱼群：", options: [
+                { text: "握紧带有锈迹的鱼叉，刺出必败的最后一击", type: "HEMINGWAY" },
+                { text: "冷眼观察鲨鱼咬痕，记录弱肉强食的闭环", type: "BEAUVOIR" },
+                { text: "割断绳索，空手驶向未知，失败也是种洗礼", type: "CAMUS" },
+                { text: "闭上眼，在脑海重现马林鱼跃出时的神性之美", type: "DURAS" }
             ]},
-            { id: 10, text: "你正在创作《到灯塔去》，但灯塔似乎永远无法抵达。你的态度是：", options: [
-                { text: "“灯塔是否抵达不重要，重要的是此时此刻意识的流淌”", type: "IDEALIST" },
-                { text: "“只要船舵还在我手里，我就从未在暴雨中落败过”", type: "HERO" },
-                { text: "“灯塔只是一个虚假的符号，其背后逻辑值得被拆解”", type: "SAGE" },
-                { text: "“我已经习惯了永远在路上，灯塔只是一个临时驿站”", type: "WANDERER" }
+            { id: 10, text: "如果你灵魂深处有一面镜子，镜子里呈现的是：", options: [
+                { text: "一个伤痕累累、拒绝下跪的硬汉剪影", type: "HEMINGWAY" },
+                { text: "无数细碎的线条，构成的精密因果网络", type: "BORGES" },
+                { text: "一朵正在腐烂但美得惊心动魄的丁香花", type: "DURAS" },
+                { text: "一面破碎的镜子，碎片中折射出我不愿示人的梦", type: "PLATH" }
             ]},
-            { id: 11, text: "在卡夫卡的法庭里，你从未被告知罪名。你的辩护策略是：", options: [
-                { text: "以最大的疯狂反诉这法治本身的非法性", type: "REBEL" },
-                { text: "试图从繁琐的案卷中理清一套根本不存在的运作规律", type: "SAGE" },
-                { text: "沉默，因为在这个荒诞处境里，任何语言都是亵渎", type: "WANDERER" },
-                { text: "在冰冷的审判席上，回忆起童年一个纯真到近乎神性的午后", type: "IDEALIST" }
+            { id: 11, text: "杜拉斯在湄公河的夕阳下对你说“我老了”，你会想：", options: [
+                { text: "衰老是种颓废的艺术，皱纹是时间写给美的情诗", type: "DURAS" },
+                { text: "衰老只是细胞凋亡，生命本质在意志中永存", type: "HEMINGWAY" },
+                { text: "由于这种生理性的异化，我感到了彻底的羞辱", type: "KAFKA" },
+                { text: "衰老是自由的代价，要在停摆前走完最后一段路", type: "CAMUS" }
             ]},
             { id: 12, text: "黑塞的“魔幻剧场”门上写着：仅供疯子。你会：", options: [
-                { text: "笑着走进去，因为你深知正常的灵魂都是一潭死水", type: "WANDERER" },
-                { text: "在门口分析这种标签化的心理机制，寻找进入的算法", type: "SAGE" },
-                { text: "撕掉那个告示，没人有权定义谁是“疯子”", type: "REBEL" },
-                { text: "带上一面镜子，去观看灵魂内部那场唯美而忧郁的潮汐", type: "IDEALIST" }
+                { text: "笑着走进去，因为正常的灵魂都是一潭死水", type: "HESSE" },
+                { text: "在门口分析这种心理机制，寻找进入的算法", type: "BORGES" },
+                { text: "撕掉那个告示，没人有权定义谁是“疯子”", type: "BEAUVOIR" },
+                { text: "带上面具，去观看灵魂内部那场忧郁的潮汐", type: "PLATH" }
             ]},
-            { id: 13, text: "如果你的文学对手是海明威笔下的斗牛士，你希望他：", options: [
-                { text: "在牛角刺入胸膛的一刻，依然保持着最冷静的风度", type: "HERO" },
-                { text: "成为我智性的镜像，在逻辑的巅峰与我进行零和博弈", type: "SAGE" },
-                { text: "突然扔下长剑，在那场充满血腥的表演中完成一次突围", type: "REBEL" },
-                { text: "成为我理想人格的化身，替我在尘埃中寻找纯洁感", type: "IDEALIST" }
+            { id: 13, text: "关于文学中“风景”的描写，你最中意：", options: [
+                { text: "充满数学隐喻的森林，每个细节都藏着线索", type: "BORGES" },
+                { text: "荆棘密布的荒原，试炼英雄骨骼的战道", type: "HEMINGWAY" },
+                { text: "半梦半醒间的江南烟雨，灵魂的避难所", type: "DICKINSON" },
+                { text: "没有边际的海，呼唤着流浪者的帆", type: "CAMUS" }
             ]},
-            { id: 14, text: "在一本博尔赫斯的神秘典籍中，你发现自己的人生已被写死：", options: [
-                { text: "这说明宿命是一个闭环，这套系统具有极致的稳定美", type: "SAGE" },
-                { text: "哪怕只有最后一页，我也要亲手改写最后那一个字", type: "REBEL" },
-                { text: "合上书，既然结局已定，过程的流浪就变得更加自由", type: "WANDERER" },
-                { text: "在字里行间撒下彩色的墨水，模糊掉那个冷酷的句号", type: "IDEALIST" }
+            { id: 14, text: "如果你被误判关进《钟形罩》式的绝望，你会：", options: [
+                { text: "敲碎玻璃，哪怕满手鲜血也要看一眼外面的阳光", type: "PLATH" },
+                { text: "在罩壁上记录下每一道裂痕，作为文明消逝存证", type: "KAFKA" },
+                { text: "建立一个内心乌托邦，在这里我不再是被叙述的人", type: "DICKINSON" },
+                { text: "华丽地修饰这份崩塌，让陨落也显得高贵", type: "DURAS" }
             ]},
-            { id: 15, text: "伍尔夫的“一间自己的房间”里，最重要的陈设应当是：", options: [
-                { text: "一扇永远敞向花园、能听见潮汐声的透明窗户", type: "IDEALIST" },
-                { text: "一张总是装满草稿、随时准备拎走的破旧写字台", type: "WANDERER" },
-                { text: "一台精确运行、毫无情感偏私的打字机", type: "SAGE" },
-                { text: "一把拒绝任何人坐下的、带刺且具有攻击性的铁椅", type: "REBEL" }
+            { id: 15, text: "你被要求为世界历史写一段注脚：", options: [
+                { text: "拆解辉煌词藻下的权力本质，揭穿所有谎言", type: "BEAUVOIR" },
+                { text: "总结演变公理，让必然的因果律在文字中永存", type: "BORGES" },
+                { text: "为被遗忘的个体写葬歌，守护那些温柔瞬间", type: "WOOLF" },
+                { text: "告诉后人，除了历史，旷野里还有永恒的自由", type: "HESSE" }
             ]},
-            { id: 16, text: "海明威式的“胜利”在一场惨烈的战争中降临，你内心的感受是：", options: [
-                { text: "“人可以被毁灭，但不能被击败”，这是一种神圣悲情", type: "HERO" },
-                { text: "看透了胜利背后的荒谬，由于彻底洞察而感到一阵虚无", type: "WANDERER" },
-                { text: "这就是摧毁旧秩序、粉碎虚伪秩序后的极致快慰", type: "REBEL" },
-                { text: "胜利只是一个参数的闭环，并不意味着感性的终结", type: "SAGE" }
+            { id: 16, text: "在《地狱一季》中，你认为地狱的质感应该是：", options: [
+                { text: "永无止境的重复，像西绪福斯推不完的巨石", type: "CAMUS" },
+                { text: "感官的绝对缺失，由于过度洁净而感到的空洞", type: "DICKINSON" },
+                { text: "由于真相被遮蔽而感到的窒息，一种隐形的围墙", type: "KAFKA" },
+                { text: "充满色彩与气味的痛苦，一种高级的审美折磨", type: "DURAS" }
             ]},
-            { id: 17, text: "关于“叙述者”的语气，你更倾向于模仿：", options: [
-                { text: "海明威式的电报体：简练、克制，文字里流淌着血迹", type: "HERO" },
-                { text: "卡夫卡式的冷峻调子：像法官在记录一场非法的梦境", type: "REBEL" },
-                { text: "伍尔夫式的碎碎念：意识在时空的切片中喃喃自语", type: "IDEALIST" },
-                { text: "博尔赫斯式的百科全书：冷静地引用着不存在的典籍", type: "SAGE" }
+            { id: 17, text: "如果时间是一张“纸张”，你会涂抹：", options: [
+                { text: "无数向后连接的箭头，编织庞大的逻辑网", type: "BORGES" },
+                { text: "一道道深邃的划痕，记录对抗衰老的疤痕", type: "HEMINGWAY" },
+                { text: "漫无目的的潦草线条，随风飘向空白处", type: "HESSE" },
+                { text: "一层层半透明的彩墨，构建虚幻的厚度", type: "WOOLF" }
             ]},
-            { id: 18, text: "在黑塞笔下的荒原中，你遇到一只濒死的老狼：", options: [
-                { text: "它是你孤独意志的对照，你蹲下身，与它共度最后一晚", type: "WANDERER" },
-                { text: "解剖它的本能，看看这种野性在社会化进程中如何枯萎", type: "SAGE" },
-                { text: "由于这种生理性的异化感到了极大的羞辱，向天咒骂", type: "REBEL" },
-                { text: "将其安葬，并摘下一朵野花，记录这唯美而残酷的消亡", type: "IDEALIST" }
+            { id: 18, text: "当你遇到一个完美的、毫无瑕疵的“家园”：", options: [
+                { text: "“家园是温床也是坟墓，我必须亲手摧毁它”", type: "PLATH" },
+                { text: "“它是我一直守护的旧梦，是我所有创作的归宿”", type: "DICKINSON" },
+                { text: "“分析它的构成条件，试图在现实中复刻逻辑”", type: "BEAUVOIR" },
+                { text: "“这一定是幻觉，真正的灵魂应当永远在路上”", type: "HESSE" }
             ]},
-            { id: 19, text: "对于文学中的“神秘主义”和“不可知论”，你的态度是：", options: [
-                { text: "“神秘是审美的温床，解释清楚了，美也就凋谢了”", type: "IDEALIST" },
-                { text: "“神秘只是理性的边疆，总有一天所有迷雾都会被穿透”", type: "SAGE" },
-                { text: "“神秘是真理的掩体，我们要用反叛的手法逼出真相”", type: "REBEL" },
-                { text: "“神秘是地平线，我们永远在追逐，但从未真正抵达”", type: "WANDERER" }
+            { id: 19, text: "关于“叙述者”的语气，你更倾向于：", options: [
+                { text: "海明威式的电报体：简练、克制，藏着血迹", type: "HEMINGWAY" },
+                { text: "卡夫卡式的冷峻：像法官记录一场非法的梦", type: "KAFKA" },
+                { text: "伍尔夫式的碎念：意识在时空切片中喃喃自语", type: "WOOLF" },
+                { text: "博尔赫斯式的百科全书：引用不存在的典籍", type: "BORGES" }
             ]},
-            { id: 20, text: "最后，如果你必须在《巴黎是一场流动的盛宴》中离开，你会选择：", options: [
-                { text: "喝完那口苦涩的黑咖啡，头也不回地走向下一个异乡", type: "WANDERER" },
-                { text: "紧紧抱住那个在这个时代显得不完美的自己，悄然谢幕", type: "HERO" },
-                { text: "记录下所有宾客的数据，作为这个文明最后消逝的存证", type: "SAGE" },
-                { text: "大笑三声，嘲讽这所谓的盛宴终究只是一场荒唐的剧终", type: "REBEL" }
+            { id: 20, text: "如果世界将在五分钟后毁灭：", options: [
+                { text: "喝完苦涩咖啡，看夕阳沉入最后的地平线", type: "CAMUS" },
+                { text: "紧紧抱住不完美的自己，在极致痛苦中谢幕", type: "DURAS" },
+                { text: "记录下毁灭的数据，作为文明最后的存证", type: "BEAUVOIR" },
+                { text: "大笑三声，嘲讽这荒唐的世界终于剧终", type: "KAFKA" }
             ]},
-            { id: 21, text: "一个博尔赫斯式的“叙事黑洞”正在吞噬你的结局：", options: [
-                { text: "站在引力边缘，冷静记录逻辑符号的扭曲率", type: "SAGE" },
-                { text: "在被吞噬前，对着虚无发出最后一声狂笑", type: "REBEL" },
-                { text: "纵身一跃，看看黑洞另一端的未知宇宙是否自由", type: "WANDERER" },
-                { text: "用华丽的词藻修饰这场崩塌，让陨落也显得高贵", type: "IDEALIST" }
+            { id: 21, text: "你在页边距里发现了一个“微型国家”，你认为：", options: [
+                { text: "这是非法的寄生，应当被正文逻辑肃清", type: "BEAUVOIR" },
+                { text: "这是主体性的自留地，抗衡宏大的堡垒", type: "DICKINSON" },
+                { text: "这是语言不稳定性的溢出，值得研究", type: "BORGES" },
+                { text: "这是我的乌托邦，在这里我不再是被叙述的人", type: "WOOLF" }
             ]},
-            { id: 22, text: "你在文本荒漠中发现一朵永不凋零的“塑料花”：", options: [
-                { text: "分析它的分子结构，思考它如何欺骗了人类的感官", type: "SAGE" },
-                { text: "愤怒于这种廉价的永恒，亲手将其埋入沙土深处", type: "REBEL" },
-                { text: "把它带走，作为对失落工业文明的一次唯美怀旧", type: "IDEALIST" },
-                { text: "看一眼就走，假的东西即便永恒也毫无重量", type: "WANDERER" }
+            { id: 22, text: "如果你的文字有气味，那应当是：", options: [
+                { text: "福尔马林：冷静、洁净、具有解剖质感的理性", type: "BORGES" },
+                { text: "火药与灰烬：带有破坏秩序后的余温", type: "KAFKA" },
+                { text: "旧报纸与丁香：忧郁而细腻的感官记忆", type: "DURAS" },
+                { text: "咸涩的海风：自由、广阔且带着孤独的野性", type: "HEMINGWAY" }
             ]},
-            { id: 23, text: "如果文字有气味，你笔下的叙事更接近：", options: [
-                { text: "福尔马林：冷静、洁净、具有解剖质感的理性", type: "SAGE" },
-                { text: "火药与灰烬：带有破坏秩序后的余温", type: "REBEL" },
-                { text: "旧报纸与丁香：一种极其细腻且忧郁的感官记忆", type: "IDEALIST" },
-                { text: "咸涩的海风：自由、广阔且带着孤独的野性", type: "WANDERER" }
+            { id: 23, text: "对手是你亲手创造的角色，你希望他：", options: [
+                { text: "比我更坚定地反抗，甚至反过来审判我", type: "PLATH" },
+                { text: "在逻辑巅峰与我博弈，形成智性的闭环", type: "BORGES" },
+                { text: "替我在文字里完成最纯洁的自我救赎", type: "DICKINSON" },
+                { text: "映照出人的主体性尊严，哪怕最后陨落", type: "HEMINGWAY" }
             ]},
-            { id: 24, text: "你在页边距里发现了一个“微型国家”，你认为：", options: [
-                { text: "这是正文逻辑之外的非法寄生，应当被肃清", type: "REBEL" },
-                { text: "这是主体性的一块自留地，是抗衡宏大的堡垒", type: "HERO" },
-                { text: "这是文本的偶然溢出，体现了语言的不稳定性", type: "SAGE" },
-                { text: "这是我一直寻找的乌托邦，在这里我不再是被叙述的人", type: "IDEALIST" }
+            { id: 24, text: "你如何处理文字中的“自然景观”？", options: [
+                { text: "它是神性的投影，灵魂唯一能安宁的圣地", type: "WOOLF" },
+                { text: "它是流浪者的伙伴，野花比图书馆更亲切", type: "HESSE" },
+                { text: "它是意志的磨刀石，狂风试炼英雄骨骼", type: "HEMINGWAY" },
+                { text: "它是可开采的资源池，隐喻可被理性捕捉", type: "BEAUVOIR" }
             ]},
-            { id: 25, text: "如果时间可以作为一种纸张，你会在上面涂抹：", options: [
-                { text: "无数个向后连接的箭头，编织一张庞大的逻辑网", type: "SAGE" },
-                { text: "一道道深邃的划痕，记录对抗衰老的尊严疤痕", type: "HERO" },
-                { text: "漫无目的的线条，随风飘向空白处", type: "WANDERER" },
-                { text: "一层又一层半透明的彩墨，构建虚幻的厚度", type: "IDEALIST" }
+            { id: 25, text: "世界坍塌了，只剩下一个词。你希望是：", options: [
+                { text: "“但是”，永远代表反抗与转折的可能", type: "KAFKA" },
+                { text: "“因为”，守住因果关系的最后底线", type: "BORGES" },
+                { text: "“也许”，保留审美中那种朦胧的余地", type: "DICKINSON" },
+                { text: "“再会”，预示着下一场未知的启程", type: "CAMUS" }
             ]},
-            { id: 26, text: "文字最终的形态应当是：", options: [
-                { text: "一把燃烧的火炬，点燃读者的同时也毁灭自己", type: "REBEL" },
-                { text: "一个完美的圆环，首尾相接，逻辑自闭且神圣", type: "SAGE" },
-                { text: "一条延伸至地平线尽头的、模糊的直线", type: "WANDERER" },
-                { text: "一片散落在虚空中的、发光的羽毛", type: "IDEALIST" }
+            { id: 26, text: "在《巴黎流动的盛宴》中离开，你会选择：", options: [
+                { text: "头也不回走向异乡，盛宴只是个路标", type: "HESSE" },
+                { text: "在散场前，完成最后一次灵魂的主体辩护", type: "BEAUVOIR" },
+                { text: "记录所有宾客的灵魂切片，汇成一部百科", type: "BORGES" },
+                { text: "为这一场唯美的消逝，写一首绝笔情诗", type: "DURAS" }
             ]},
-            { id: 27, text: "你笔下的主角面对神灵的沉默，他的回答是：", options: [
-                { text: "拔出剑，向那沉默的苍穹发起必败的挑战", type: "HERO" },
-                { text: "笑出声，意识到神灵只是逻辑的伪命题", type: "SAGE" },
-                { text: "转身走入沙漠，在那神灵不曾触及的沙丘中流浪", type: "WANDERER" },
-                { text: "用诗篇去填满神灵的空位，创造自己的神圣瞬间", type: "IDEALIST" }
+            { id: 27, text: "面对神灵的沉默，主角的回答是：", options: [
+                { text: "拔出剑，向沉默的苍穹发起必败的挑战", type: "HEMINGWAY" },
+                { text: "笑出声，意识到神灵只是逻辑的伪命题", type: "CAMUS" },
+                { text: "转身入沙漠，在神不曾触及的沙丘中流浪", type: "HESSE" },
+                { text: "用诗填满空位，创造自己的瞬间神圣", type: "WOOLF" }
             ]},
-            { id: 28, text: "如果文字世界坍塌了，只剩下一个词，你希望是：", options: [
-                { text: "“但是”，永远代表反抗与转折的可能", type: "REBEL" },
-                { text: "“因为”，即使毁灭也要守住因果的底线", type: "SAGE" },
-                { text: "“也许”，保留审美中那种朦胧的余地", type: "IDEALIST" },
-                { text: "“再会”，预示着下一场未知的启程", type: "WANDERER" }
+            { id: 28, text: "文字最终的形态应当是：", options: [
+                { text: "一把燃烧的火炬，点燃读者也毁灭自己", type: "PLATH" },
+                { text: "一个完美的圆环，逻辑自闭且神圣", type: "BORGES" },
+                { text: "一条延伸至地平线的、模糊的直线", type: "HESSE" },
+                { text: "一片散落在虚空中的、发光的羽毛", type: "WOOLF" }
             ]},
-            { id: 29, text: "你被要求为历史写一段注脚，你选择：", options: [
-                { text: "拆解那些辉煌词藻下的权力本质，揭穿谎言", type: "REBEL" },
-                { text: "总结文明演变的公理，让规律在文字中永存", type: "SAGE" },
-                { text: "为每一个被遗忘的个体写一首葬歌，守护温柔", type: "IDEALIST" },
-                { text: "告诉后人，除了所谓的历史，旷野还有自由", type: "WANDERER" }
+            { id: 29, text: "你的灵魂是一件文学圣器，它应该是：", options: [
+                { text: "一把剖开一切伪善的利刃", type: "PLATH" },
+                { text: "一架观测星体轨迹的望远镜", type: "BEAUVOIR" },
+                { text: "一个装下整片晚霞的墨水瓶", type: "DURAS" },
+                { text: "一张永远折叠不完的地图", type: "CAMUS" }
             ]},
-            { id: 30, text: "如果你灵魂是一件文学圣器，它应该是：", options: [
-                { text: "一把能剖开一切伪善的利刃", type: "REBEL" },
-                { text: "一架能观测星体运行轨迹的望远镜", type: "SAGE" },
-                { text: "一个能装下整片晚霞的墨水瓶", type: "IDEALIST" },
-                { text: "一张永远折叠不完的远行地图", type: "WANDERER" }
+            { id: 30, text: "最后，如果你的文学人生可以重来，你会选：", options: [
+                { text: "背负沉重使命，在明知必败中完成博弈", type: "HEMINGWAY" },
+                { text: "最无拘无束的流浪，在异乡发明新的自我", type: "HESSE" },
+                { text: "最纯粹的艺术修行，在词藻中构建永恒", type: "DICKINSON" },
+                { text: "最彻底的认知突围，在逻辑中成为捕猎者", type: "BORGES" }
             ]}
         ];
 
+        // --- [SECTION 3: 组件定义] ---
+
         const Icon = ({ name, size = 24, className = "" }) => {
             const paths = {
-                ChevronRight: "M9 18l6-6-6-6",
-                RefreshCw: "M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15",
+                ChevronRight: "M9 18l6-6-6-6", RefreshCw: "M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15",
                 Quote: "M3 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2H3c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2 0 4-1 6-2 6zm11 0c3 0 7-1 7-8V5c0-1.25-.75-2-2-2h-5c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2 0 4-1 6-2 6z",
-                ArrowLeft: "M19 12H5M12 19l-7-7 7-7",
-                ArrowRight: "M5 12h14M12 5l7 7-7 7",
+                ArrowLeft: "M19 12H5M12 19l-7-7 7-7", ArrowRight: "M5 12h14M12 5l7 7-7 7",
                 PenTool: "M12 19l7-7 3 3-7 7-3-3z M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z M2 2l5 5",
-                ChevronDown: "M6 9l6 6 6-6",
-                ChevronUp: "M18 15l-6-6-6 6",
+                ChevronDown: "M6 9l6 6 6-6", ChevronUp: "M18 15l-6-6-6 6",
                 Star: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
                 Bookmark: "M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z",
                 BookOpen: "M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z",
                 Layers: "M12 2L2 7l10 5 10-5-10-5z M2 17l10 5 10-5 M2 12l10 5 10-5",
-                Zap: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
-                Download: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4 M7 10l5 5 5-5 M12 15V3",
+                Zap: "M13 2L3 14h9l-1 8 10-12h-9l1-8z", Download: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4 M7 10l5 5 5-5 M12 15V3",
                 Fingerprint: "M12 11c0 3.517-1.009 6.799-2.753 9.571m-4.94-8.828A9 9 0 0118 9c0 1.258-.258 2.456-.725 3.546m-3.562 3.954A9 9 0 014 12"
             };
             return (
@@ -369,7 +422,7 @@
         function App() {
             const [step, setStep] = useState('welcome');
             const [currentQuestion, setCurrentQuestion] = useState(0);
-            const [scores, setScores] = useState({ REBEL: 0, SAGE: 0, IDEALIST: 0, WANDERER: 0, HERO: 0 });
+            const [scores, setScores] = useState({ KAFKA: 0, BORGES: 0, WOOLF: 0, HESSE: 0, HEMINGWAY: 0, BEAUVOIR: 0, DICKINSON: 0, CAMUS: 0, DURAS: 0, PLATH: 0 });
             const [history, setHistory] = useState([]);
             const [result, setResult] = useState(null);
             const [isSaving, setIsSaving] = useState(false);
@@ -380,7 +433,11 @@
             const captureRef = useRef(null);
             const chartRef = useRef(null);
 
-            const handleVerify = () => { if (code.toLowerCase() === "cloud") setStep('quiz'); else { setShowError(true); setTimeout(() => setShowError(false), 500); } };
+            const handleVerify = () => { 
+                if (code.toLowerCase().trim() === "cloud") setStep('quiz'); 
+                else { setShowError(true); setTimeout(() => setShowError(false), 500); } 
+            };
+
             const handleAnswer = (type) => {
                 const newScores = { ...scores, [type]: scores[type] + 1 };
                 setHistory([...history, { scores, currentQuestion }]);
@@ -393,10 +450,18 @@
                     window.scrollTo(0, 0);
                 }
             };
-            const handleBack = () => { if (history.length > 0) { const last = history.pop(); setScores(last.scores); setCurrentQuestion(last.currentQuestion); setHistory([...history]); } else setStep('welcome'); };
-            const handleRestart = () => { setStep('welcome'); setCurrentQuestion(0); setScores({ REBEL: 0, SAGE: 0, IDEALIST: 0, WANDERER: 0, HERO: 0 }); setHistory([]); setResult(null); setCode(""); window.scrollTo(0, 0); };
+
+            const handleBack = () => { 
+                if (history.length > 0) { 
+                    const last = history.pop(); 
+                    setScores(last.scores); setCurrentQuestion(last.currentQuestion); setHistory([...history]); 
+                } else setStep('welcome'); 
+            };
+
+            const handleRestart = () => { setStep('welcome'); setCurrentQuestion(0); setScores({ KAFKA: 0, BORGES: 0, WOOLF: 0, HESSE: 0, HEMINGWAY: 0, BEAUVOIR: 0, DICKINSON: 0, CAMUS: 0, DURAS: 0, PLATH: 0 }); setHistory([]); setResult(null); setCode(""); window.scrollTo(0, 0); };
 
             const saveAsImage = async () => {
+                if (typeof html2canvas === 'undefined') return;
                 setIsSaving(true);
                 try {
                     const canvas = await html2canvas(captureRef.current, { scale: 2, backgroundColor: COLORS.bg, useCORS: true });
@@ -409,12 +474,12 @@
             };
 
             useEffect(() => {
-                if (step === 'result' && result && radarCanvas.current) {
+                if (step === 'result' && result && radarCanvas.current && typeof Chart !== 'undefined') {
                     if (chartRef.current) chartRef.current.destroy();
                     chartRef.current = new Chart(radarCanvas.current.getContext('2d'), {
                         type: 'radar',
                         data: {
-                            labels: ['反叛', '智性', '审美', '自由', '英雄性'],
+                            labels: ['反叛', '智性', '审美', '自由', '意志'],
                             datasets: [{ data: result.stats, backgroundColor: 'rgba(53, 175, 203, 0.1)', borderColor: COLORS.accentBlue, borderWidth: 1, pointRadius: 0 }]
                         },
                         options: { scales: { r: { angleLines: { display: false }, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { display: false }, min: 0, max: 100 } }, plugins: { legend: { display: false } } }
@@ -437,17 +502,11 @@
                                 </div>
                             </div>
                             <div className="space-y-10">
-                                <p className="text-xs text-[#6d6b64] leading-relaxed tracking-wider px-6 font-light">基于 30 组跨越时空的文学幻境，勾勒你灵魂深处的回响。</p>
+                                <p className="text-xs text-[#6d6b64] leading-relaxed tracking-wider px-6 font-light">基于 30 组世界文学宗师的幻境情境，勾勒你灵魂深处的回响。</p>
                                 <div className={`space-y-4 ${showError ? 'shake' : ''}`}>
                                     <div className="flex flex-col items-center gap-2">
-                                        <span className="text-[10px] uppercase tracking-[0.3em] opacity-40">文学通行码认证</span>
-                                        <input 
-                                            type="text" 
-                                            value={code} 
-                                            onChange={(e) => setCode(e.target.value)} 
-                                            className="redeem-input w-48 py-2 text-sm" 
-                                            placeholder="请输入通行码" 
-                                        />
+                                        <span className="text-[10px] uppercase tracking-[0.3em] opacity-40">通行码认证 / ACCESS CODE</span>
+                                        <input type="text" value={code} onChange={(e) => setCode(e.target.value)} className="redeem-input w-48 py-2 text-sm" placeholder="请输入通行码" />
                                         {showError && <span className="text-[9px] text-red-400">认证失败，请核对。</span>}
                                     </div>
                                 </div>
@@ -483,8 +542,7 @@
                                 <div className="text-center space-y-6 py-12 bg-white border border-[#dcd8cf] rounded-sm shadow-sm relative overflow-hidden">
                                     <div className="absolute top-4 left-4"><Icon name="Fingerprint" size={32} className="opacity-10" /></div>
                                     <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-[#35afcb]">Literature Archetype Profile</span>
-                                    {/* 核心改动：减小名字字体大小 text-5xl md:text-6xl -> text-4xl md:text-5xl */}
-                                    <h2 className="text-4xl md:text-5xl font-bold text-[#3a3833] tracking-widest">{result.name}</h2>
+                                    <h2 className="text-3xl md:text-4xl font-bold text-[#3a3833] tracking-widest">{result.name}</h2>
                                     <p className="text-sm text-[#35afcb] italic tracking-[0.4em]">{result.sub}</p>
                                     <div className="flex justify-center gap-4 pt-4">
                                         <span className="px-3 py-1 border border-[#3a3833] text-[9px] font-bold uppercase">思辨觉醒度 98%</span>
@@ -497,11 +555,11 @@
                                     <div className="space-y-4 text-left">
                                         <h4 className="text-[11px] font-bold border-b pb-2">叙事基因分析报告</h4>
                                         <div className="space-y-3">
-                                            <div className="flex justify-between items-center text-[10px]"><span>感性驱动</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-[#e8ed2a]" style={{width:'85%'}}></div></div></div>
-                                            <div className="flex justify-between items-center text-[10px]"><span>理性逻辑</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-[#35afcb]" style={{width:'40%'}}></div></div></div>
-                                            <div className="flex justify-between items-center text-[10px]"><span>反叛意志</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-black" style={{width:'70%'}}></div></div></div>
+                                            <div className="flex justify-between items-center text-[10px]"><span>感性/意志</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-[#e8ed2a]" style={{width:'85%'}}></div></div></div>
+                                            <div className="flex justify-between items-center text-[10px]"><span>理性/逻辑</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-[#35afcb]" style={{width:'40%'}}></div></div></div>
+                                            <div className="flex justify-between items-center text-[10px]"><span>自由/反叛</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-black" style={{width:'70%'}}></div></div></div>
                                         </div>
-                                        <div className="handwritten-note mt-4 text-left">* 核心观察：存在强烈的审美自觉</div>
+                                        <div className="handwritten-note mt-4 text-left font-bold">* 核心观察：存在强烈的审美自觉</div>
                                     </div>
                                     <div className="aspect-square w-full max-w-[200px] mx-auto">
                                         <canvas ref={radarCanvas}></canvas>
@@ -541,9 +599,9 @@
                                             </div>
                                         </div>
                                     </section>
-                                    <section className="space-y-6 text-left">
+                                    <section className="space-y-6">
                                         <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] flex items-center gap-3 border-b border-[#dcd8cf] pb-2">
-                                            <Icon name="Star" size={14} className="text-[#e8ed2a]" /> 进阶书单推荐
+                                            <Icon name="Star" size={14} className="text-[#e8ed2a]" /> 思想进阶书单推荐
                                         </h4>
                                         <div className="grid gap-4">
                                             {result.books.map((book, i) => (
