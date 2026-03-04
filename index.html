@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>文学原型测试 | 世界二十大家作家人格</title>
     
-    <!-- 全球加速 CDN -->
+    <!-- 引入核心垫片库：解决鸿蒙/旧版安卓不兼容 ES6+ 的白屏问题 -->
+    <script src="https://fastly.jsdelivr.net/npm/core-js-bundle@3.32.1/minified.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/regenerator-runtime@0.13.11/runtime.js"></script>
+
+    <!-- 高速 CDN 资源 -->
     <script src="https://fastly.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
     <script src="https://fastly.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://fastly.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
@@ -52,6 +56,7 @@
         .option-btn {
             transition: all 0.2s ease;
             background: rgba(255, 255, 255, 0.6);
+            touch-action: manipulation;
         }
         .option-btn:active {
             background: rgba(255, 255, 255, 1);
@@ -63,7 +68,10 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        // 显式解构以确保在旧版环境下引用的稳定性
+        const useState = React.useState;
+        const useEffect = React.useEffect;
+        const useRef = React.useRef;
 
         const COLORS = { 
             bg: "#f2f0e9", textMain: "#3a3833", textSecondary: "#6d6b64", 
@@ -105,7 +113,7 @@
             { id: 9, text: "狄金森在果园里指着血色日落。她说：", source: "出自 艾米莉·狄金森《诗集》", options: [{ text: "“这是我内心宇宙里唯一的太阳”", type: "IDEALIST" }, { text: "“光线反射而已，规律本身比颜色更美”", type: "SAGE" }, { text: "“那是黑暗前的挣扎，我绝不向天黑低头”", type: "HERO" }, { text: "“门开了，灵魂该去更远的地方流浪了”", type: "WANDERER" }] },
             { id: 10, text: "西绪福斯推上山的巨石又要滚下来了。如果你是叙述者：", source: "出自 阿尔贝·加缪《西绪福斯神话》", options: [{ text: "“他笑出声了：只要我不在乎，众神就输了”", type: "REBEL" }, { text: "“他把名字刻在山顶，那是他活过的证明”", type: "HERO" }, { text: "“计算巨石滚落的曲线，比推它更有意思”", type: "SAGE" }, { text: "“在山脚种朵小花，苦役也就没那么难熬了”", type: "IDEALIST" }] },
             { id: 11, text: "普鲁斯特的一块蛋糕勾起了你所有的记忆。你会：", source: "出自 马塞尔·普鲁斯特《追寻逝去的时光》", options: [{ text: "闭上眼，在过去的午后里待一辈子，不出来了", type: "IDEALIST" }, { text: "看看记忆是怎么被大脑重新加工的，真奇妙", type: "SAGE" }, { text: "觉得沉重，过去是个牢笼，我得赶紧走开", type: "WANDERER" }, { text: "把这些记忆当成反抗现在的子弹，射向生活", type: "REBEL" }] },
-            { id: 12, text: "黑塞的“魔幻剧场”门口写着：仅供疯子进入：", source: "出自 赫尔曼·黑塞《荒原狼》", options: [{ text: "笑了一下：正常人的灵魂才叫死水，我进去了", type: "WANDERER" }, { text: "去看看灵魂里的潮汐，哪怕把自己淹死", type: "IDEALIST" }, { text: "这剧场一定有准入公式，我得把它算出来", type: "SAGE" }, { text: "撕掉牌子：没人能定义疯子，我要自己定规则", type: "REBEL" }] },
+            { id: 12, text: "黑塞的“魔幻剧场”门口写着：仅供疯子进入：", source: "出自 赫尔曼·黑塞《荒原狼》", options: [{ text: "笑了一下：正常人的灵魂才叫死水，我进去了", type: "WANDERER" }, { text: "去观看灵魂里的潮汐，哪怕把自己淹死", type: "IDEALIST" }, { text: "这剧场一定有准入公式，我得把它算出来", type: "SAGE" }, { text: "撕掉牌子：没人能定义疯子，我要自己定规则", type: "REBEL" }] },
             { id: 13, text: "如果你被关进《钟形罩》式的透明空间：", source: "出自 西尔维娅·普拉斯《钟形罩》", options: [{ text: "直接撞玻璃，满手血也要看一眼太阳", type: "REBEL" }, { text: "在墙上记下每一道裂痕，这叫文明存证", type: "SAGE" }, { text: "在脑子里建个乌托邦，在这里我谁也不是", type: "IDEALIST" }, { text: "穿上最硬的甲，体面地等到结局到来", type: "HERO" }] },
             { id: 14, text: "萨冈驾跑车在南法公路上疯跑。风速极快时：", source: "出自 弗朗索瓦丝·萨冈《你好，忧愁》", options: [{ text: "速度是唯一的药，破坏现实的感觉真好", type: "REBEL" }, { text: "风声就是我在异乡的呼吸，我是自由的", type: "WANDERER" }, { text: "算算风阻，看看这种疯狂背后的代偿机制", type: "SAGE" }, { text: "夕阳美得想哭，忧愁是我最贵的勋章", type: "IDEALIST" }] },
             { id: 15, text: "兰波在《地狱一季》入口要你用“一半灵魂”换灵感：", source: "出自 阿蒂尔·兰波《地狱一季》", options: [{ text: "换！只要那一秒的烟火，之后死掉也行", type: "IDEALIST" }, { text: "拔剑：这是对生命的羞辱，我一定要打赢它", type: "HERO" }, { text: "没门，没灵魂的自由那就是旷野里的风", type: "WANDERER" }, { text: "成交，然后找找契约的漏洞，把它反杀了", type: "SAGE" }] },
@@ -140,11 +148,11 @@
                 <path d="M265 135 Q 360 70 390 110" stroke={COLORS.textMain} strokeWidth="0.6" strokeDasharray="5 3" />
                 <g transform="translate(35, 45) rotate(-6)">
                     <rect x="0" y="0" width="85" height="32" rx="4" fill="white" stroke={COLORS.border} strokeWidth="1" />
-                    <text x="42" y="21" textAnchor="middle" fontSize="9" fill={COLORS.textSecondary} fontWeight="bold">存稿编号：零壹</text>
+                    <text x="42" y="21" textAnchor="middle" fontSize="9" fill={COLORS.textSecondary} fontWeight="bold" fontFamily="sans-serif">存稿编号：零壹</text>
                 </g>
                 <g transform="translate(285, 275) rotate(12)">
                     <path d="M0 20 Q 25 -5 55 20" fill="none" stroke={COLORS.accentBlue} strokeWidth="1.8" />
-                    <text x="0" y="48" fontSize="8.5" fill={COLORS.accentBlue} fontWeight="bold">精神底色投射 →</text>
+                    <text x="0" y="48" fontSize="8.5" fill={COLORS.accentBlue} fontWeight="bold" fontFamily="sans-serif">精神底色投射 →</text>
                 </g>
                 <circle cx="350" cy="55" r="28" fill={COLORS.accentYellow} opacity="0.35" />
                 <rect x="45" y="245" width="45" height="45" rx="22" fill={COLORS.accentGreen} opacity="0.25" />
@@ -168,8 +176,8 @@
             const handleVerify = () => { if (code.toLowerCase().trim() === "cloud") setStep('quiz'); else { setShowError(true); setTimeout(() => setShowError(false), 500); } };
             
             const handleAnswer = (type) => {
-                const newScores = { ...scores, [type]: scores[type] + 1 };
-                setHistory([...history, { scores, currentQuestion }]);
+                const newScores = Object.assign({}, scores, { [type]: scores[type] + 1 });
+                setHistory(history.concat([{ scores: scores, currentQuestion: currentQuestion }]));
                 setScores(newScores);
                 if (currentQuestion < 29) {
                     setCurrentQuestion(currentQuestion + 1);
@@ -192,7 +200,7 @@
 
             const handleBack = () => { 
                 if (history.length > 0) { 
-                    const newHistory = [...history];
+                    const newHistory = [].concat(history);
                     const last = newHistory.pop(); 
                     setScores(last.scores); 
                     setCurrentQuestion(last.currentQuestion); 
@@ -208,7 +216,7 @@
             useEffect(() => {
                 if (step === 'result' && result && radarCanvas.current) {
                     if (chartRef.current) chartRef.current.destroy();
-                    const ctx = radarCanvas.current.getContext('2d');
+                    var ctx = radarCanvas.current.getContext('2d');
                     chartRef.current = new Chart(ctx, {
                         type: 'radar',
                         data: {
@@ -220,17 +228,21 @@
                 }
             }, [step, result]);
 
-            const saveAsImage = async () => {
+            const saveAsImage = function() {
                 if (typeof html2canvas === 'undefined') return;
                 setIsSaving(true);
-                try {
-                    const canvas = await html2canvas(captureRef.current, { scale: 2, backgroundColor: COLORS.bg, useCORS: true });
-                    const link = document.createElement('a');
-                    link.download = `文学原型报告-${result.name}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                } catch (err) { console.error(err); }
-                setIsSaving(false);
+                html2canvas(captureRef.current, { scale: 2, backgroundColor: COLORS.bg, useCORS: true })
+                    .then(function(canvas) {
+                        var link = document.createElement('a');
+                        link.download = '文学报告-' + result.name + '.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        setIsSaving(false);
+                    })
+                    .catch(function(err) { 
+                        console.error(err); 
+                        setIsSaving(false); 
+                    });
             };
 
             return (
@@ -246,14 +258,15 @@
                             </div>
                             <div className="space-y-10">
                                 <p className="text-xs text-[#6d6b64] leading-relaxed tracking-wider px-6 font-light italic">“文学不是修辞的点缀，而是你在精神废墟上，重建主体性的最后一次存证。”</p>
-                                <div className={`space-y-4 ${showError ? 'shake' : ''}`}>
+                                <div className={"space-y-4 " + (showError ? 'shake' : '')}>
                                     <div className="flex flex-col items-center gap-2">
-                                        <span className="text-[10px] uppercase tracking-[0.3em] opacity-40 font-bold">通行码认证 / ACCESS CODE</span>
-                                        <input type="text" value={code} onChange={(e) => setCode(e.target.value)} className="redeem-input w-48 py-2 text-sm text-center" placeholder="请输入通行码" />
+                                        <span className="text-[10px] uppercase tracking-[0.3em] opacity-40 font-bold font-sans">通行码认证 / ACCESS CODE</span>
+                                        <input type="text" value={code} onChange={function(e){ setCode(e.target.value) }} className="redeem-input w-48 py-2 text-sm text-center" placeholder="请输入通行码" />
+                                        {showError && <span className="text-[9px] text-red-500 font-bold uppercase tracking-widest">认证失败：权限不足</span>}
                                     </div>
                                 </div>
                                 <button onClick={handleVerify} className="w-full py-6 bg-[#3a3833] text-white text-[11px] tracking-[0.8em] font-bold flex items-center justify-center transition-all shadow-lg active:scale-95">开启漫游 / LAUNCH</button>
-                                <div className="text-[10px] text-gray-400 tracking-[0.3em]">Curated by @云树cloudtree</div>
+                                <div className="text-[10px] text-gray-400 tracking-[0.3em] font-sans">Curated by @云树cloudtree</div>
                             </div>
                         </div>
                     )}
@@ -270,13 +283,15 @@
                                 <p className="text-[10px] text-[#6d6b64] opacity-40 font-sans italic tracking-widest">— {QUESTIONS[currentQuestion].source} —</p>
                             </div>
                             <div className="space-y-4 text-left">
-                                {QUESTIONS[currentQuestion].options.map((option, idx) => (
-                                    <button key={idx} onClick={() => handleAnswer(option.type)} className="option-btn w-full p-6 rounded-[12px] border border-[#dcd8cf] hover:border-[#3a3833] text-left group shadow-sm">
-                                        <span className="text-[14px] text-[#6d6b64] group-hover:text-[#3a3833] leading-relaxed pr-4 font-medium">{option.text}</span>
-                                    </button>
-                                ))}
+                                {QUESTIONS[currentQuestion].options.map(function(option, idx){
+                                    return (
+                                        <button key={idx} onClick={function(){ handleAnswer(option.type) }} className="option-btn w-full p-6 rounded-[12px] border border-[#dcd8cf] hover:border-[#3a3833] text-left group shadow-sm">
+                                            <span className="text-[14px] text-[#6d6b64] group-hover:text-[#3a3833] leading-relaxed pr-4 font-medium">{option.text}</span>
+                                        </button>
+                                    );
+                                })}
                             </div>
-                            <div className="pt-10 flex justify-center"><div className="h-[1px] w-48 bg-[#dcd8cf] relative"><div className="h-full bg-[#3a3833] transition-all duration-700" style={{width: `${((currentQuestion+1)/30)*100}%`}}></div></div></div>
+                            <div className="pt-10 flex justify-center"><div className="h-[1px] w-48 bg-[#dcd8cf] relative"><div className="h-full bg-[#3a3833] transition-all duration-700" style={{width: ((currentQuestion+1)/30*100) + '%'}}></div></div></div>
                         </div>
                     )}
 
@@ -284,20 +299,20 @@
                         <div className="animate-fade-in space-y-8 pb-12">
                             <div ref={captureRef} className="p-4 space-y-12 bg-[#f2f0e9]">
                                 <div className="text-center space-y-6 py-12 bg-white border border-[#dcd8cf] rounded-sm shadow-sm relative overflow-hidden">
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-[#35afcb]">Literature Archetype Profile</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-[#35afcb] font-sans">Literature Archetype Profile</span>
                                     <h2 className="text-3xl md:text-4xl font-bold text-[#3a3833] tracking-widest px-2">{result.name}</h2>
-                                    <p className="text-sm text-[#35afcb] italic tracking-[0.4em]">{result.sub}</p>
+                                    <p className="text-sm text-[#35afcb] italic tracking-[0.4em] font-sans">{result.sub}</p>
                                     <div className="flex justify-center gap-4 pt-4">
-                                        <span className="px-3 py-1 border border-[#3a3833] text-[9px] font-bold uppercase">思辨觉醒度 98%</span>
-                                        <span className="px-3 py-1 bg-[#3a3833] text-white text-[9px] font-bold uppercase">主体性存证</span>
+                                        <span className="px-3 py-1 border border-[#3a3833] text-[9px] font-bold uppercase font-sans">思辨觉醒度 98%</span>
+                                        <span className="px-3 py-1 bg-[#3a3833] text-white text-[9px] font-bold uppercase font-sans">主体性存证</span>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white p-8 border border-[#dcd8cf] relative">
-                                    <div className="absolute -top-3 -right-3 px-3 py-1 bg-white border border-[#3a3833] text-[10px] font-bold transform rotate-3 shadow-sm">NO. 2026-Soul</div>
+                                    <div className="absolute -top-3 -right-3 px-3 py-1 bg-white border border-[#3a3833] text-[10px] font-bold transform rotate-3 shadow-sm font-sans">NO. 2026-Soul</div>
                                     <div className="space-y-4 text-left">
-                                        <h4 className="text-[11px] font-bold border-b pb-2 text-left">叙事基因分析报告</h4>
-                                        <div className="space-y-3 text-[10px]">
+                                        <h4 className="text-[11px] font-bold border-b pb-2 text-left font-sans">叙事基因分析报告</h4>
+                                        <div className="space-y-3 text-[10px] font-sans">
                                             <div className="flex justify-between items-center"><span>感性/意志</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-[#e8ed2a]" style={{width:'85%'}}></div></div></div>
                                             <div className="flex justify-between items-center"><span>理性/逻辑</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-[#35afcb]" style={{width:'40%'}}></div></div></div>
                                             <div className="flex justify-between items-center"><span>自由/反叛</span><div className="w-24 h-1 bg-gray-100"><div className="h-full bg-black" style={{width:'70%'}}></div></div></div>
@@ -310,58 +325,60 @@
 
                                 <div className="relative p-12 bg-white border border-[#dcd8cf] text-center shadow-sm">
                                     <p className="text-xl leading-relaxed mb-6 font-medium text-center"><span className="highlight-yellow">{result.quote}</span></p>
-                                    <div className="text-[10px] text-[#a4c29b] tracking-widest uppercase font-bold text-center">— {result.quoteSource} —</div>
+                                    <div className="text-[10px] text-[#a4c29b] tracking-widest uppercase font-bold text-center font-sans">— {result.quoteSource} —</div>
                                 </div>
 
                                 <div className="space-y-10 px-2 text-left">
                                     <section className="space-y-4">
-                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] border-b border-[#dcd8cf] pb-2 font-sans text-left">灵魂本色 / THE SELF</h4>
+                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] border-b border-[#dcd8cf] pb-2 font-sans">灵魂本色 / THE SELF</h4>
                                         <div className="bg-white p-6 border-l-4 border-[#35afcb] space-y-4">
                                             <p className="text-[13px] leading-relaxed text-[#6d6b64] italic">“{result.identity}”</p>
                                             <p className="text-[13px] leading-relaxed font-light">{result.longDesc}</p>
                                         </div>
                                     </section>
                                     <section className="space-y-4 text-left">
-                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] border-b border-[#dcd8cf] pb-2 text-red-800">核心焦虑与盲区</h4>
+                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] border-b border-[#dcd8cf] pb-2 text-red-800 font-sans">核心焦虑与盲区</h4>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[12px]">
                                             <div className="p-4 bg-red-50 border border-red-100 rounded text-left">
-                                                <div className="font-bold mb-1">主导焦虑</div>
-                                                <div className="opacity-70">{result.anxiety}</div>
+                                                <div className="font-bold mb-1 font-sans">主导焦虑</div>
+                                                <div className="opacity-70 font-sans">{result.anxiety}</div>
                                             </div>
                                             <div className="p-4 bg-gray-50 border border-gray-100 rounded text-left">
-                                                <div className="font-bold mb-1">阴影面</div>
-                                                <div className="opacity-70">{result.shadow}</div>
+                                                <div className="font-bold mb-1 font-sans">阴影面</div>
+                                                <div className="opacity-70 font-sans">{result.shadow}</div>
                                             </div>
                                         </div>
                                     </section>
                                     <section className="space-y-6">
-                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] border-b border-[#dcd8cf] pb-2">思想进阶书单推荐</h4>
+                                        <h4 className="text-[11px] font-bold uppercase tracking-[0.5em] border-b border-[#dcd8cf] pb-2 font-sans">思想进阶书单推荐</h4>
                                         <div className="grid gap-4">
-                                            {result.books && result.books.map((book, i) => (
-                                                <div key={i} className="bg-white p-6 border border-[#dcd8cf] relative group shadow-sm text-left">
-                                                    <h5 className="text-[15px] font-bold mb-1">{book.title}</h5>
-                                                    <p className="text-[10px] text-[#a4c29b] font-bold mb-2 uppercase">作者: {book.author}</p>
-                                                    <p className="text-xs text-[#6d6b64] italic leading-relaxed opacity-80">{book.desc}</p>
-                                                </div>
-                                            ))}
+                                            {result.books && result.books.map(function(book, i){
+                                                return (
+                                                    <div key={i} className="bg-white p-6 border border-[#dcd8cf] relative group shadow-sm text-left">
+                                                        <h5 className="text-[15px] font-bold mb-1 font-sans">{book.title}</h5>
+                                                        <p className="text-[10px] text-[#a4c29b] font-bold mb-2 uppercase font-sans">作者: {book.author}</p>
+                                                        <p className="text-xs text-[#6d6b64] italic leading-relaxed opacity-80 font-sans">{book.desc}</p>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </section>
                                 </div>
                             </div>
                             <div className="pt-8 space-y-4 text-center px-4">
-                                <button onClick={saveAsImage} disabled={isSaving} className="w-full py-5 bg-black text-white text-[11px] font-bold uppercase tracking-[0.5em] flex items-center justify-center gap-3 shadow-xl active:bg-gray-800 disabled:opacity-50 transition-all font-sans">{isSaving ? "生成中..." : "保存手稿报告 / SAVE REPORT"}</button>
-                                <button onClick={handleRestart} className="w-full py-5 border border-[#3a3833] text-[11px] font-bold uppercase tracking-[0.5em] hover:bg-[#3a3833] hover:text-white transition-all">再次重塑原型</button>
+                                <button onClick={saveAsImage} disabled={isSaving} className="w-full py-5 bg-black text-white text-[11px] font-bold uppercase tracking-[0.5em] flex items-center justify-center gap-3 shadow-xl active:bg-gray-800 disabled:opacity-50 transition-all font-sans">{isSaving ? "生成报告图片中..." : "保存手稿报告 / SAVE REPORT"}</button>
+                                <button onClick={handleRestart} className="w-full py-5 border border-[#3a3833] text-[11px] font-bold uppercase tracking-[0.5em] hover:bg-[#3a3833] hover:text-white transition-all font-sans">再次重塑原型</button>
                             </div>
                         </div>
                     )}
                     <footer className="mt-16 pt-16 border-t border-[#dcd8cf] text-center space-y-4">
-                        <p className="text-[10px] tracking-[0.6em] uppercase text-[#3a3833] font-bold opacity-60">© 2026 CURATED BY @云树CLOUDTREE</p>
+                        <p className="text-[10px] tracking-[0.6em] uppercase text-[#3a3833] font-bold opacity-60 font-sans">© 2026 CURATED BY @云树CLOUDTREE</p>
                     </footer>
                 </div>
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
+        var root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
