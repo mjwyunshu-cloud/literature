@@ -27,7 +27,7 @@
             font-weight: 300;
         }
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         
         .option-card {
             transition: all 0.2s ease;
@@ -36,24 +36,28 @@
             cursor: pointer;
             border-radius: 4px;
             user-select: none;
-            padding: 22px;
+            padding: 14px;
             text-align: left;
         }
-        .option-card:active { background: #fdfcf8; transform: scale(0.98); border-color: #35afcb; }
+        .option-card:active {
+            background: #fdfcf8;
+            transform: scale(0.98);
+            border-color: #35afcb;
+        }
 
-        .highlight-yellow { background: linear-gradient(180deg, rgba(255,255,255,0) 65%, #e8ed2a 65%); padding: 0 4px; }
+        .highlight-yellow { background: linear-gradient(180deg, rgba(255,255,255,0) 65%, #e8ed2a 65%); padding: 0 2px; }
         .progress-bar-thin { height: 2px; background: #e5e7eb; border-radius: 1px; overflow: hidden; }
         .progress-fill-thin { height: 100%; transition: width 1.2s ease-out; }
 
         .tag-soul {
             position: absolute; top: -10px; right: 25px;
-            background: white; border: 1.2px solid #3a3833;
-            padding: 3px 10px; font-size: 10px; font-weight: 900;
-            transform: rotate(2deg); box-shadow: 4px 4px 0px rgba(0,0,0,0.04);
+            background: white; border: 1px solid #3a3833;
+            padding: 2px 8px; font-size: 9px; font-weight: 700;
+            transform: rotate(2deg); box-shadow: 3px 3px 0px rgba(0,0,0,0.04);
             z-index: 10;
         }
 
-        .book-card { background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 6px; padding: 20px; text-align: left; }
+        .book-card { background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 4px; padding: 14px; text-align: left; }
         ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
@@ -67,8 +71,8 @@
             BORGES: { 
                 name: "豪尔赫·博尔赫斯", sub: "符号迷宫的筑造者", 
                 identity: "你视世界为一场博弈，通过逻辑建构反编译上帝的密码。你拒绝肉身的粗鄙，偏爱符号的永恒。", 
-                writing: "互文性叙事。练习写虚构的百科全书或学术批注。在细节中编织悖论，在引经据典中消解现实的粗糙。笔触应冷淡如石刻，将情节坍缩为一组互涉的符号。",
-                symptom: "阿莱夫视角。试图在单一的点上观测全宇宙的因果。这种智性的全知往往伴随着对他者痛苦的‘降维化’处理，将世界看作纯粹的结构。",
+                writing: "互文性叙事。练习写‘虚假的学术评论’或‘伪造的百科全书’。在细节中编织悖论，在引经据典中消解现实的粗鄙。笔触应冷淡如石刻，将情节坍缩为一组互涉的符号。",
+                symptom: "阿莱夫视角。你试图在单一的点上观测全宇宙的因果。这种智性的全知往往伴随着对他者痛苦的‘降维化’处理，将世界看作纯粹的结构。",
                 counsel: "现实是粗陋的，只有当你通过逻辑将其转化为迷宫时，它才值得被居留。守住你那座虚构的图书馆，它是你对抗平庸的防线。",
                 anxiety: "害怕逻辑的坍塌导致自我的虚化，害怕自己终究只是他人梦中的一个字符。", 
                 shadow: "极度的智性傲慢。容易将人间疾苦视为美学上的‘注脚’，缺乏对血肉之躯最原始的悲悯感。", 
@@ -82,21 +86,21 @@
             KAFKA: { 
                 name: "弗朗茨·卡夫卡", sub: "异化世界的报错日志", 
                 identity: "你在无处不在的秩序‘审判’中进行主体突围。你用变形作为对绝对权威最后的嘲讽。", 
-                writing: "练习‘临床解剖式’写作。用冰冷、枯燥的公文语气描写最荒诞的变故。剥离感叹词，只管记录那场无望的拉锯战，越写实越荒谬。",
+                writing: "练习‘临床解剖式’写作。用最冰冷、最枯燥的公文语气描写最荒诞的变故。剥离感叹词，只管记录那场无望的拉锯战，越写实越荒谬。",
                 symptom: "甲虫综合征。卑微到了极点，反而获得了不被捕捉的自由。你习惯在无法抵达终点的焦虑中确认自我的实存。",
                 counsel: "认领你的‘报错’身份。城堡是进不去的，但在围墙外写下的那些异化日志，才是你对抗虚无的唯一存证。",
                 anxiety: "害怕被彻底格式化。害怕自己沦为一张没有面孔、只有编号的办公表格。", 
                 shadow: "极度的被动攻击。通过自我折磨和退缩，来对整个平庸世界进行无声的复仇。", 
                 stats: [98, 45, 60, 55, 85], quote: "即使变成甲虫，也要保持思考的尊严。",
                 books: [
-                    {title: "《审判》", author: "卡夫卡", desc: "当代人精神内耗与异化处境的终极说明书。"},
-                    {title: "《变形记》", author: "卡夫卡", desc: "当价值被剥离，肉体如何物化为社会零件。"},
+                    {title: "《审判》", author: "卡夫卡", desc: "现代人精神内耗与异化处境的终极说明书。"},
+                    {title: "《变形记》", author: "卡夫卡", desc: "当价值被剥离，肉体如何物化为零件。"},
                     {title: "《城堡》", author: "卡夫卡", desc: "对不可达到的权力中心最深刻的解构。"}
                 ]
             },
             CAMUS: { 
                 name: "阿尔贝·加缪", sub: "荒诞中的反抗英雄", 
-                identity: "你在必败的推石游戏中，用‘清醒’向虚无宣战。你拒绝闭眼，直到最后一刻。", 
+                identity: "你在必败的推石游戏中，用‘诚实’向虚无优雅宣战。你拒绝闭眼，直到最后一刻。", 
                 writing: "阳刚且克制的叙事。删除心理告白，只写物理动作。别说‘他很难过’，说‘他点了一根烟，盯着海看了一下午’。让立场在冷静中显影。",
                 symptom: "局外人倾向。因为看透了冷漠，你获得了一种不受任何人绑架的特权。这种清醒的幸福带有某种冒犯性。",
                 counsel: "荒谬不是终点，而是反抗的起点。既然结局注定失败，过程的体面就是你唯一的信仰。反抗是唯一的解药。",
@@ -141,12 +145,12 @@
             },
             HEMINGWAY: { 
                 name: "欧内斯特·海明威", sub: "重压下的斯多葛", 
-                identity: "你在必败的战争中，用最后的风度体面地认输。你通过对抗熵增来确证人的硬度。", 
+                identity: "你在必败的战争中，坚持用最后的风度体面地认输。你通过对抗熵增来确证人的硬度。", 
                 writing: "经典的‘冰山理论’。练习极简短句。不直接描写情感，描写‘具体动作’。让痛感藏在纸张的褶皱里。",
                 symptom: "硬汉幻觉。你拒绝展示任何软弱痕迹，认为暴露伤口是廉价的。你在老去中确立了作为人的尊严。",
                 counsel: "你会输给时间，但不能输给怯懦。站直了，那是你叙事中最后的格调。那是你唯一的防线。",
                 anxiety: "害怕意志的枯竭与怯懦的滋生。害怕在战役中显露出哪怕一秒的软弱。", 
-                shadow: "为了维持壮烈感，你可能会暴力压抑内心那些细腻且具有温情的感知。", 
+                shadow: "为了维持壮烈感，你可能会暴力压抑内心那些细腻且具有温度的感知。", 
                 stats: [85, 65, 45, 60, 98], quote: "一个人可以被毁灭，但不能被击败。",
                 books: [
                     {title: "《老人与海》", author: "海明威", desc: "一个人、一片海，关于尊严的永恒角力。"},
@@ -156,12 +160,12 @@
             },
             EILEEN_CHANG: { 
                 name: "张爱玲", sub: "荒凉美学的旁观者", 
-                identity: "你在华丽的袍子上观察虱子，在琐碎物质中捕捉幻灭感。你用文字筑起凄美的防空洞。", 
-                writing: "质感叙事。重点关注布料、气味等物质细节，用睿智剖析温情背后的算计。文字要像透视镜，直达人性荒野。",
-                symptom: "苍凉式清醒。你对人性持有极度不信任。总是在温情底色下，看到利益交换。清醒是你的自救。",
+                identity: "你在华丽的袍子上观察虱子，在琐碎物质中捕捉彻骨的幻灭感。你用文字筑起凄美的防空洞。", 
+                writing: "质感叙事。重点关注布料、气味等物质细节，用睿智剖析温情背后的算议。文字要像透视镜，直达人性荒野。",
+                symptom: "苍凉式清醒。你对人性持有极度不信任。总是在温情底色下，看到利益交换。清醒是你自救的唯一锚点。",
                 counsel: "看透了也就释然了。在那一抹月光里，守住你最后的苍凉风度。冷笑是你保护核心的方式。",
-                anxiety: "害怕在时间的荒野里被抛弃。害怕自我的‘精致’沦为过时的笑话。", 
-                shadow: "过于透彻导致的绝望感，有时会让你的文字显得过于刻薄与决绝。", 
+                anxiety: "害怕在时间的荒野里被毫无意义地抛弃。害怕自我的‘精致’沦为笑话。", 
+                shadow: "过于透彻导致的决望感，有时会让你的文字显得过于刻薄与决绝。", 
                 stats: [45, 88, 95, 55, 65], quote: "生命是一袭华丽的袍，爬满了蚤子。",
                 books: [
                     {title: "《金锁记》", author: "张爱玲", desc: "欲望如何扭曲了灵魂，成就了苍凉。"},
@@ -170,13 +174,11 @@
                 ]
             },
             MARQUEZ: { 
-                name: "加西亚·马尔克斯", sub: "宿命编织者", 
-                identity: "在神话与现实交界处观测族群兴衰。你相信诅咒也相信奇迹。孤独是你的遗传密码。", 
-                writing: "非线性叙事。运用超验的魔幻细节缝合琐碎现实。笔触应带有一种祭司般的庄严与博大。",
+                name: "马尔克斯", sub: "宿命编织者", 
+                identity: "你在神话与现实交界处观测族群兴衰。相信诅咒也相信奇迹。孤独是你的遗传密码。", 
+                writing: "非线性叙事。运用超验细节缝合琐碎现实。笔触带有一种祭司般的庄严。",
                 symptom: "百年孤独症。你习惯从宏大长河视角俯瞰个体。由于看透轮回而产生阔大的悲悯感。",
                 counsel: "既然结局注定是孤独，就让这场宿命在想象中沸腾吧。记忆是抵抗遗忘最后的堡垒。",
-                anxiety: "害怕历史的循环导致停滞，害怕自我的名字在洪流中被抹除。", 
-                shadow: "宏大视野有时会掩盖微观情感，导致叙事产生‘巨物感’的压迫。", 
                 stats: [75, 85, 80, 75, 90], quote: "生命中重要的是你记住了什么。", 
                 books: [
                     {title: "《百年孤独》", author: "马尔克斯", desc: "家族七代人的兴衰，认领终极孤绝。"},
@@ -185,13 +187,11 @@
                 ] 
             },
             DURAS: { 
-                name: "玛格丽特·杜拉斯", sub: "欲望叙事者", 
+                name: "杜拉斯", sub: "欲望叙事者", 
                 identity: "将痛苦提炼为美，通过自毁确认自我的‘临场感’。你渴望在灼热中消失。", 
-                writing: "绝望的呼吸感。练习简短跳跃的句式。通过‘重复’关键词制造感官张力。别去解释，只提供冲击。",
-                symptom: "末世欲望。你视‘爱’为一种破坏性力量。你迷恋下坠的快感。书写是你唯一的锚点。",
-                counsel: "爱是有毒的，书写是解药。在那场潮湿的初恋里，你终于完成了自我发明。痛苦是勋章。",
-                anxiety: "害怕‘安全’的生活导致欲望被埋没，害怕独特性在幸福中被磨平。", 
-                shadow: "极度的沉溺感。可能使叙事陷入某种病态循环，难以自拔。", 
+                writing: "绝望的呼吸感。练习简短跳跃的句式。通过‘重复’关键词制造张力。不解释，只提供冲击。",
+                symptom: "末世欲望。你视‘爱’为一种破坏性力量。迷恋下坠的快感。书写是你唯一的锚点。",
+                counsel: "爱是有毒的，书写是解药。在那场潮湿的初恋里，你终于完成了自我发明。",
                 stats: [75, 40, 92, 60, 80], quote: "我准备好为你毁灭。", 
                 books: [
                     {title: "《情人》", author: "杜拉斯", desc: "在那场带有阶级印记的初恋里自我发明。"},
@@ -200,13 +200,11 @@
                 ] 
             },
             HESSE: { 
-                name: "赫尔曼·黑塞", sub: "灵魂漫游修行者", 
-                identity: "视生命为不断的破碎与重生，身份在修行中被‘发明’。你是一个寻找神性的浪子。", 
-                writing: "寓言式叙事。将抽象争斗具象化为两个对立的人物。用修行者的沉静笔调描写磨难。",
-                symptom: "德米安症候。灵魂里同时住着野兽与圣人。你终其一生都在寻找那条通向‘中道’的路。",
-                counsel: "归宿是危险的。只有在不断的流浪与自毁中，你才能认领真实的自我。去寻找那个属于你的神。",
-                anxiety: "害怕妥协于世俗生活而导致灵魂死水化，害怕任何形式的定居。", 
-                shadow: "极度关注精神成长，有时会显得社会责任感缺失或与现实脱节。", 
+                name: "黑塞", sub: "灵魂漫游修行者", 
+                identity: "视生命为不断的破碎与重生。你是一个寻找神性的浪子。归宿对你而言是危险的。", 
+                writing: "寓言式叙事。将抽象争斗具象化。用修行者的沉静笔调描写磨难。追求内在的统一。",
+                symptom: "德米安症候。灵魂里住着野兽与圣人。你终其一生都在寻找那条通向‘中道’的路。",
+                counsel: "只有在流浪与自毁中，你才能认领真实的自我。去寻找那个属于你的神。",
                 stats: [60, 50, 75, 98, 55], quote: "我只是一个探索者。", 
                 books: [
                     {title: "《德米安》", author: "黑塞", desc: "少年如何打破鸟蛋，寻找自我的神。"},
@@ -216,12 +214,10 @@
             },
             MURAKAMI: { 
                 name: "村上春树", sub: "都市孤独守望者", 
-                identity: "在日常的缝隙中挖掘深井，抗衡荒谬的世界。你用疏离感筑起自我的壳。", 
-                writing: "超现实写实。用直白词汇描写日常生活，嵌入一个‘不合理’的超现实切片。不提供答案，只提供氛围。",
-                symptom: "深井情结。通过高度自律的日常仪式构建防御系统。你认为秘密空间里的孤独比社交更有质感。",
-                counsel: "维持一个极其私密的审美逻辑，本身就是一种力量。在深井里，你不需要观众。",
-                anxiety: "害怕被他者的逻辑格式化，害怕与那个‘真实的自我’永久失联。", 
-                shadow: "情感冷感倾向。过度的疏离感可能使叙事显得过于机械或缺乏热度。", 
+                identity: "在日常的缝隙中挖掘深井。你用疏离感筑起自我的壳，抗衡荒谬的世界。", 
+                writing: "超现实写实。用直白词汇描写日常生活，嵌入一个‘不合理’的切片。只提供氛围。",
+                symptom: "深井情结。通过自律的仪式构建防御系统。你认为秘密空间里的孤独比社交更有质感。",
+                counsel: "维持一个私密的审美逻辑，本身就是一种力量。在深井里，你不需要观众。",
                 stats: [55, 75, 85, 92, 65], quote: "感受才是正确的。", 
                 books: [
                     {title: "《奇鸟行状录》", author: "村上春树", desc: "潜入深井，修补现实的裂缝。"},
@@ -230,13 +226,11 @@
                 ] 
             },
             MORRISON: { 
-                name: "托尼·莫里森", sub: "记忆创伤史诗家", 
+                name: "莫里森", sub: "记忆创伤史诗家", 
                 identity: "在碎裂的叙事中重塑族群灵魂，通过‘找回名字’的过程修复个体的尊严。", 
-                writing: "神话叙事。让叙述像水流一样包裹创伤，展现强韧的生命力。借用民间传说来对抗历史的傲慢。",
-                symptom: "幽灵记忆。被抹去的痛苦总会回来。你不得不通过书写来祭奠它们。文字是你招魂的工具。",
-                counsel: "记住痛苦是你的使命。在那片名为‘宠儿’的荒原上，找回那个被丢掉的名字。",
-                anxiety: "害怕历史的二次沉默与自我的集体丧失。", 
-                shadow: "过于沉重的主题。叙事有时显得过于紧绷，缺乏审美上的松弛感。", 
+                writing: "神话叙事。让叙述像水流一样包裹创伤。借用民间传说来对抗历史的傲慢。",
+                symptom: "幽灵记忆。被抹去的痛苦总会回来。你不得不通过书写来祭奠它们。文字是招魂工具。",
+                counsel: "记住痛苦是你的使命。在那片名为‘宠儿’的荒原上，找回属于自己的名字。",
                 stats: [75, 80, 85, 88, 92], quote: "如果你想飞，你必须放下拖累你的东西。", 
                 books: [
                     {title: "《宠儿》", author: "莫里森", desc: "关于创伤、母爱与生存的极致史诗。"},
@@ -245,13 +239,11 @@
                 ] 
             },
             ATWOOD: { 
-                name: "玛格丽特·阿特伍德", sub: "末世寓言观察家", 
-                identity: "在生存边缘预演文明的坍塌，守护女性主体性的叙事主权。你是清醒的哨兵。", 
-                writing: "手术刀笔触。笔触冷峻锋利，在解剖社会结构的同时保留最深的人性叩问。预防性地练习末日演习。",
+                name: "阿特伍德", sub: "末世寓言观察家", 
+                identity: "在生存边缘预演文明的坍塌，守护叙事主权。你是清醒的哨兵，眼光如冰。", 
+                writing: "手术刀笔触。笔触冷峻锋利，在解剖社会结构的同时保留最深的人性叩问。",
                 symptom: "预言家焦虑。你总是在最繁荣的时刻嗅到腐朽。清醒是你要付出的最高昂代价。",
                 counsel: "不要让恐惧成为主人。你的眼光应当像冰块一样冷。你的记录是文明最后的火种。",
-                anxiety: "害怕女性被重新物化为某种功能的载体，害怕叙事主权的丢失。", 
-                shadow: "过于冷峻。预言视角有时会陷入宿命论的绝望，忽视微小的偶然性。", 
                 stats: [85, 90, 70, 80, 85], quote: "眼光必须清醒，即使看到的只有灰烬。", 
                 books: [
                     {title: "《使女的故事》", author: "阿特伍德", desc: "当权利被格式化，个体如何成为防线。"},
@@ -260,13 +252,11 @@
                 ] 
             },
             JOYCE: { 
-                name: "詹姆斯·乔伊斯", sub: "语言迷宫的开拓者", 
-                identity: "用复杂的符号重塑感官，视‘错误’为发现真理的门径。你用语言建造了一个帝国。", 
-                writing: "全感官互文。让文字不仅仅是看，更是听、嗅、触摸。捕捉未经修饰的瞬时念头。在解构中确立‘私人神学’。",
-                symptom: "史诗化强迫。你试图赋予平庸瞬间以古典神圣感。你在文字里进行一场永无止境的奥德赛。",
-                counsel: "平凡并非琐碎。如果你能在一粒沙中发现都柏林，你就掌握了不朽。语言是你的砖石。",
-                anxiety: "害怕平庸叙事对真相的遮蔽，害怕灵魂在无意义的循环中瘫痪。", 
-                shadow: "过度的实验性。有时会导致叙事产生严重的情感窒息与阅读屏障。", 
+                name: "乔伊斯", sub: "语言迷宫开拓者", 
+                identity: "用复杂的符号重构感官，视‘错误’为发现真理的门径。你用语言建造了一个帝国。", 
+                writing: "全感官互文。文字不仅仅是看，更是听、嗅、触摸。在解构中确立‘私人神学’。",
+                symptom: "史诗化强迫。试图赋予平庸瞬间以古典神圣感。在文字里进行永无止境的奥德赛。",
+                counsel: "平凡并非琐碎。如果你能在一粒沙中发现都柏林，你就掌握了不朽。",
                 stats: [50, 98, 92, 60, 75], quote: "错误是发现的门径。", 
                 books: [
                     {title: "《尤利西斯》", author: "乔伊斯", desc: "重演人类文明的现代史诗。"},
@@ -275,13 +265,11 @@
                 ] 
             },
             SAGAN: { 
-                name: "弗朗索瓦丝·萨冈", sub: "忧愁叛逆的缪斯", 
-                identity: "用慵懒姿态抗拒成人的沉重，视‘忧愁’为高级的配件。你用轻盈反抗那个臃肿的世界。", 
-                writing: "漫不经心的优雅。练习‘减法’写作，重心放在情绪流转。拒绝刻意深沉，在速度中寻求瞬间完整。",
-                symptom: "某种微笑。习惯用轻佻的优雅对抗深沉。你拒绝宏大叙事。那一抹忧愁是你最奢侈的勋章。",
-                counsel: "轻盈也是一种力量。拒绝深沉是对这个世界最优雅的嘲讽。在那一抹忧愁里守住反叛的风度。",
-                anxiety: "害怕激情后的空虚，害怕变成那些平庸的大人。", 
-                shadow: "随性可能演变为任性。由于缺乏坚固支点，容易陷入感官经验的重复。", 
+                name: "萨冈", sub: "忧愁叛逆的缪斯", 
+                identity: "用慵懒姿态抗拒成人的沉重，视‘忧愁’为高级配件。你用轻盈反抗那个臃肿的世界。", 
+                writing: "漫不经心的优雅。练习‘减法’写作。重心放在情绪流转。在速度中寻求瞬间完整。",
+                symptom: "某种微笑。习惯用轻佻的优雅对抗深沉。拒绝宏大叙事。忧愁是你最奢侈的勋章。",
+                counsel: "轻盈也是一种力量。拒绝深沉是对这个世界最优雅的嘲讽。守住反叛的风度。",
                 stats: [88, 55, 85, 90, 60], quote: "所有这些温柔忧伤的时刻。", 
                 books: [
                     {title: "《你好，忧愁》", author: "萨冈", desc: "青春的任性、夏日的烦躁与不确定的爱。"},
@@ -290,13 +278,11 @@
                 ] 
             },
             PROUST: { 
-                name: "马塞尔·普鲁斯特", sub: "时间的拾荒者", 
-                identity: "通过感官共振召唤失落的过去，将消失的时间固化为永恒。你是记忆的炼金术士。", 
-                writing: "显微镜叙事。练习极细致的情境复原。通过特定的感官线索（如气味），让叙事在时间中跳跃。",
-                symptom: "玛德琳症候。气味能开启整个宇宙。你认为艺术化叙述过的生活才有意义。你活在‘复现’中。",
-                counsel: "时间带不走一切，只要你能将其文学化。你的记忆就是你的行宫。在褶皱里寻找本源。",
-                anxiety: "害怕时光流逝带走意义，害怕珍贵的瞬间由于未被叙述而灭绝。", 
-                shadow: "过度沉溺过去。容易在‘当下’感到被动与疲惫，产生退避生活的倾向。", 
+                name: "普鲁斯特", sub: "时间的拾荒者", 
+                identity: "通过感官共振召唤失落的过去，将消失的时间固化为永恒。你是记忆炼金术士。", 
+                writing: "显微镜叙事。通过特定的感官线索（如气味），让叙事在时间中跳跃。寻找本源。",
+                symptom: "玛德琳症候。气味能开启整个宇宙。你认为艺术化叙述过的生活才有意义。",
+                counsel: "时间带不走一切，只要你能将其文学化。你的记忆就是你的行宫。",
                 stats: [30, 95, 95, 55, 60], quote: "真正的发现之旅，在于拥有新眼光。", 
                 books: [
                     {title: "《追寻逝去的时光》", author: "普鲁斯特", desc: "对精神原点最深情的智性溯源。"},
@@ -305,13 +291,11 @@
                 ] 
             },
             DICKINSON: { 
-                name: "艾米莉·狄金森", sub: "内心宇宙隐秘女皇", 
-                identity: "在极小物理空间构建无限精神，视‘孤独’为一种极高资源。你的卧室就是全宇宙。", 
-                writing: "极致凝练。删除冗余。将复杂的形而上学思考压缩进极短的破折号中。让沉默产生压迫感。",
-                symptom: "孤绝主权。你认为‘缺席’才是最高级的存在。破折号是通向宇宙的隧道。你是自己唯一的的神。",
-                counsel: "外界并不重要。只要你愿意，你就是你内心王国的女皇。你的沉默是你的主权。",
-                anxiety: "害怕精神的喧嚣和外部暴力的闯入。", 
-                shadow: "过度的精神洁癖。可能导致某种彻底的‘断裂’，切断了与血肉世界的联结。", 
+                name: "狄金森", sub: "内心宇宙隐秘女皇", 
+                identity: "在极小空间构建无限精神，视‘孤独’为极高资源。你的卧室就是全宇宙。", 
+                writing: "极致凝练。压缩形而上思考。让沉默产生压迫感。破折号是通向宇宙的隧道。",
+                symptom: "孤绝主权。你认为‘缺席’才是最高级的存在。你是自己王国的女皇。",
+                counsel: "外界并不重要。只要你愿意，你就是你内心唯一的的神。沉默是你的主权。",
                 stats: [30, 92, 90, 35, 65], quote: "假如我不曾见过太阳，我本可以忍受黑暗。", 
                 books: [
                     {title: "《狄金森诗选》", author: "狄金森", desc: "通向灵魂最深处的凝练文字。"},
@@ -320,13 +304,11 @@
                 ] 
             },
             BEAUVOIR: { 
-                name: "西蒙娜·德·波伏娃", sub: "主体性的先行者", 
-                identity: "拒绝预设的角色，主张存在先于本质。你认为自由即责任。你是永不疲倦的选择者。", 
-                writing: "辩论色彩叙事。剥离装饰性感性，让博弈在逻辑中显影。每一段陈述都具备超越现状的动能。",
-                symptom: "存在主义焦虑。坚持在‘选择’中发明自我。文学是你声明存在的旗帜。你拒绝任何被制造的身份。",
-                counsel: "绝不让生命受任何人的支配。这种孤绝是你最强的铠甲。在每一个清晨通过行动定义自己。",
-                anxiety: "害怕被他者的眼光物化。", 
-                shadow: "由于极度追求逻辑。倾向于产生情感上的冷感，忽视了生命中非理性的暖色。", 
+                name: "波伏娃", sub: "主体性的先行者", 
+                identity: "拒绝预设角色。自由即责任。你是永不疲倦的选择者，在每一个清晨定义自己。", 
+                writing: "辩论色彩叙事。剥离装饰感性，让博弈在逻辑中显影。陈述具备超越现状的动能。",
+                symptom: "存在主义焦虑。坚持在‘选择’中发明自我。文学是你声明存在的旗帜。",
+                counsel: "绝不让生命受任何人的支配。这种孤绝是你最强的铠甲。认领自由带来的重量。",
                 stats: [90, 88, 50, 80, 75], quote: "我绝不让我的生命受任何人的支配。", 
                 books: [
                     {title: "《第二性》", author: "波伏娃", desc: "彻底拆解‘被制造’的身份，夺回叙事权。"},
@@ -335,32 +317,28 @@
                 ] 
             },
             PLATH: { 
-                name: "西尔维娅·普拉斯", sub: "真实底色追光者", 
-                identity: "赤裸面对灵魂深处的风暴，宁愿灼烧也不接受伪善。你追求极致的真诚。你的意象带刺。", 
-                writing: "痛感自白。不要逃避内心的黑暗。用生理性的准确描写那些窒息或狂喜时刻。让文字带有一种侵略性。",
-                symptom: "钟形罩效应。感到一种透明但沉重的隔绝感。通过展示伤口来控诉，通过书写毁灭来宣告主权。",
-                counsel: "真诚是有毒的，但它是你唯一的药。不要熄灭内心的火焰。认领作为一个个体的完整。",
-                anxiety: "害怕灵魂在平庸的满足中窒息。", 
-                shadow: "过于激烈的真实。可能导致自我的焚毁，叙事倾向于极端的黑白分明。", 
+                name: "普拉斯", sub: "真实底色追光者", 
+                identity: "赤裸面对灵魂风暴，宁愿灼烧也不接受伪善。你追求极致的真诚。意象带刺。", 
+                writing: "痛感自白。不要逃避黑暗。用生理性的准确描写窒息时刻。让文字带有一种侵略性。",
+                symptom: "钟形罩效应。感到一种透明但沉重的隔绝感。通过展示伤口控诉。宣告主权。",
+                counsel: "真诚是有毒的，但它是你唯一的药。不要熄灭内心的火焰。认领完整的个体。",
                 stats: [95, 55, 80, 45, 92], quote: "我从灰烬中升起，我以人类为食。", 
                 books: [
                     {title: "《钟形罩》", author: "普拉斯", desc: "在窒息中寻找自我的杰作。"},
                     {title: "《爱丽儿》", author: "普拉斯", desc: "灵魂在自毁边缘发出的最后咆哮。"},
-                    {title: "《巨像》", author: "普拉斯", desc: "对父权阴影与神话原型的深沉解构。"}
+                    {title: "《巨像》", author: "普拉斯", desc: "对父权阴影与神话原型的解构。"}
                 ] 
             },
             CHRISTIE: { 
-                name: "阿加莎·克里斯蒂", sub: "秩序修复者", 
-                identity: "你在非理性的破坏中寻找逻辑终点，相信真相对人性的归位作用。你是秩序的修复者。", 
-                writing: "精密逻辑拼图。先预设‘终局’，再反向推演。每句话都应是齿轮。用理性的光照亮暗处的恶意。",
-                symptom: "闭环偏好。必须通过理性的光亮，把恶意彻底显影。你视人性为一台可以拆解的精密机器。",
-                counsel: "秩序的重建是对苦难最大的慈悲。在混乱中，你就是最后的地基。冷静是唯一的解药。",
-                anxiety: "害怕因果律在混乱面前失效。害怕邪恶由于缺乏理性的梳理而逃逸。", 
-                shadow: "过于追求机件化的逻辑，有时会缺失对苦难最深沉的生理同情。", 
+                name: "阿加莎", sub: "秩序修复者", 
+                identity: "你在非理性的破坏中寻找逻辑终点。你是混乱地带的定盘星，相信真相能归位。", 
+                writing: "精密逻辑拼图。先预设‘终局’，再反向推演。每句话都应是齿轮。用理性的光照亮恶意。",
+                symptom: "闭环偏好。必须通过将恶意显影来修复秩序。你视人性为一台可以拆解的精密机器。",
+                counsel: "秩序的重建是对苦难最大的慈悲。在混乱中，你就是最后的地基。冷静是唯一药。",
                 stats: [35, 98, 40, 75, 80], quote: "事实总是能说明一切。",
                 books: [
                     {title: "《无人生还》", author: "阿加莎", desc: "罪与罚的终极智力博弈。"},
-                    {title: "《罗杰疑案》", author: "阿加莎", desc: "一场彻底颠覆叙述者主体性的解谜。"},
+                    {title: "《罗杰疑案》", author: "阿加莎", desc: "一场彻底颠覆叙述者主体的解谜。"},
                     {title: "《东方快车谋杀案》", author: "阿加莎", desc: "当法律失效，逻辑如何定义正义。"}
                 ]
             }
@@ -385,7 +363,7 @@
                 { text: "一种剔骨的寒意。没有了枷锁，我反而迷失了自我的坐标", target: "KAFKA" },
                 { text: "一匹脱缰的马。在那阵飞驰的眩晕里，我才感到主体性的完整", target: "SAGAN" }
             ] },
-            { id: 4, text: "关于‘面具’，或者说我们在社交中表现出的那层体面，你的理解更接近：", options: [
+            { id: 4, text: "关于‘面具’，或者说我们在社交中表现出的那层体面，你的理解接近：", options: [
                 { text: "一个不得不穿上的公文外壳。它保护我也在异化我，令我窒息", target: "KAFKA" },
                 { text: "一个游戏的符号。人生本就是一场互文，真实往往藏在虚构之后", target: "BORGES" },
                 { text: "一个体面的盔甲。它能掩盖我的脆弱，在社交废墟上维持风度", target: "EILEEN_CHANG" },
@@ -409,143 +387,143 @@
                 { text: "一件华丽的袍子。掀开它，里面全是爬满的蚤子", target: "EILEEN_CHANG" },
                 { text: "一个不需要被言说的瞬间。在沉默里，它表现得最为清晰", target: "HEMINGWAY" }
             ] },
-            { id: 8, text: "如果有人告诉你，由于宇宙故障，你的‘明天’已经无法启动，你会：", options: [
+            { id: 8, text: "如果告诉由于宇宙故障，你的‘明天’已经无法启动，你会倾向于：", options: [
                 { text: "把今天当成最后的战役。站直了，体面地完成这场谢幕", target: "HEMINGWAY" },
                 { text: "疯狂地挥霍。在末日感里，品味那份最奢侈、最轻盈的快乐", target: "SAGAN" },
                 { text: "躲进回忆里。只有过去，才是时间永远偷不走的领地", target: "PROUST" },
                 { text: "分析‘消失’的逻辑。如果没了明天，‘当下’这个概念还成立吗", target: "BORGES" }
             ] },
-            { id: 9, text: "当你置身于一个完全陌生、不透明的处境时，你倾向于：", options: [
-                { text: "依靠直觉。在那阵生理性的悸动中认领我的决定", target: "LISPECTOR" },
-                { text: "依靠公式。在纷繁的因果中推导出唯一的解", target: "BORGES" },
-                { text: "依靠责任。即便我不认同，我也会为了道义而承担", target: "HEMINGWAY" },
-                { text: "依靠嘲讽。既然生活是荒诞的，怎么选都无所谓", target: "CAMUS" }
+            { id: 9, text: "你在海边捡到一个瓶子，里面装的是一股陈旧、温热的呼吸：", options: [
+                { text: "深吸一口。我想直接触碰到那个消失年代留下的生理余温", target: "LISPECTOR" },
+                { text: "带回实验室分析。我要推导出它在洋流中漂流的逻辑因果", target: "BORGES" },
+                { text: "感到一种窒息。连呼吸都被瓶装化了，这文明真可悲", target: "KAFKA" },
+                { text: "抛回大海。让这份自由的感觉回到原本的涟漪里", target: "WOOLF" }
             ] },
-            { id: 10, text: "你醒来发现时间正在倒流，今天会变成昨天，你会：", options: [
-                { text: "去摸摸凝固的露水。我想通过身体感知这种‘逆向’的生命感", target: "LISPECTOR" },
-                { text: "重新整理记录。这下我能修正所有的因果偏差了", target: "CHRISTIE" },
-                { text: "坐在门槛上等。等时间回到我出生前的那片虚无", target: "WOOLF" },
-                { text: "直接去远方。去看看大海退潮时的反向波纹是什么形状", target: "CAMUS" }
+            { id: 10, text: "镜子里出现的不是你现在的脸，而是你死后的：", options: [
+                { text: "盯着骷髅的眼窝看，品味那股凄美的幻灭感", target: "EILEEN_CHANG" },
+                { text: "直接打碎镜子。我不接受任何关于终结的预定设定", target: "CAMUS" },
+                { text: "研究肉体腐烂与时间流逝的因果逻辑点", target: "BORGES" },
+                { text: "对那具骸骨微微一笑。这就是我人生的谢幕仪式", target: "HEMINGWAY" }
             ] },
-            { id: 11, text: "如果你的一生注定要在推石头的循环里度过：", options: [
-                { text: "我选择嘲笑众神。只要我不乞求终点，众神就拿我没办法", target: "CAMUS" },
-                { text: "我在石头上刻字。证明我曾战斗过。这是我硬实的尊严", target: "HEMINGWAY" },
-                { text: "我研究石头滚落的曲线。发现规律比达成结果更让我着迷", target: "BORGES" },
-                { text: "我在这无识的重复里，捕捉那些细微的、由于疲惫产生的震颤", target: "WOOLF" }
+            { id: 11, text: "当你醒来发现时间正在倒流，今天变成了昨天：", options: [
+                { text: "去触摸凝固的露水。感知这种‘逆向’的生命战栗", target: "LISPECTOR" },
+                { text: "赶紧重整账本。这下我能修正所有的因果偏差了", target: "CHRISTIE" },
+                { text: "坐在门口。等时间回到我出生前的那片虚无", target: "WOOLF" },
+                { text: "直接出城。看看大海退潮时的反向波纹", target: "CAMUS" }
             ] },
-            { id: 12, text: "神给了你一个机会，让你能听懂万物的语言，你的第一反应是：", options: [
-                { text: "听听下水道里的老鼠在如何评价地面上的虚伪文明", target: "KAFKA" },
-                { text: "去听听石头在数万年里重复的那个逻辑咒语是什么", target: "BORGES" },
-                { text: "立刻捂住耳朵。我受不了这种全世界都在对我咆哮的敏感", target: "WOOLF" },
-                { text: "去找那只被关在笼里的狮子。问问它是否还记得荒野的颜色", target: "CAMUS" }
+            { id: 12, text: "神给了你一个听懂万物语言的机会，你会：", options: [
+                { text: "听听下水道老鼠如何评价地上的虚伪文明", target: "KAFKA" },
+                { text: "去听石头在数万年里重复的那个逻辑咒语", target: "BORGES" },
+                { text: "捂住耳朵。受不了全世界都在咆哮的敏感", target: "WOOLF" },
+                { text: "去找笼里的狮子，问它是否记得荒野的颜色", target: "CAMUS" }
             ] },
-            { id: 13, text: "如果你的一生可以浓缩成一件文学圣器。它会是：", options: [
-                { text: "一把剖开伪善外壳的利刃", target: "KAFKA" },
-                { text: "一架观测星体运行的望远镜", target: "BORGES" },
-                { text: "一瓶装满了晚霞残影的墨水", target: "WOOLF" },
-                { text: "一张永远折叠不完的灵魂地图", target: "CAMUS" }
+            { id: 13, text: "如果你的一生浓缩成一件圣器。它会是：", options: [
+                { text: "一把剖开伪善外壳的锋利利刃", target: "KAFKA" },
+                { text: "一架观测星体运行逻辑的望远镜", target: "BORGES" },
+                { text: "一瓶装满了晚霞残影的颤动墨水", target: "WOOLF" },
+                { text: "一张永远折不完的、通向荒野的地图", target: "CAMUS" }
             ] },
-            { id: 14, text: "你被要求给这个荒谬的宇宙重新起一个名字：", options: [
-                { text: "《报错日志：系统文件已损坏》", target: "KAFKA" },
-                { text: "《一个分叉路径的概率图书馆》", target: "BORGES" },
-                { text: "《隆冬里那场不可战胜的夏日幻梦》", target: "CAMUS" },
-                { text: "《华丽袍子下那一抹剔骨的苍凉》", target: "EILEEN_CHANG" }
+            { id: 14, text: "如果你的一生注定要在推石头的循环里度过：", options: [
+                { text: "嘲笑众神。只要不乞求终点，我就没失败", target: "CAMUS" },
+                { text: "在石头上刻字。证明我战斗过，站姿没乱", target: "HEMINGWAY" },
+                { text: "研究滚落曲线。发现规律比达成结果更着迷", target: "BORGES" },
+                { text: "捕捉重复中的微小震颤，寻找神性瞬间", target: "WOOLF" }
             ] },
-            { id: 15, text: "在极度的寂静中，你开始能听见尘埃落地的声音，你会：", options: [
-                { text: "感到恐慌。这种感官的过载正在撕裂我理智的边界", target: "WOOLF" },
-                { text: "闭上眼沉浸。在这种细微的、非人的、战栗的音律中找到归宿", target: "LISPECTOR" },
-                { text: "开始计算。我想推导出尘埃动能与落地分贝之间的关联", target: "BORGES" },
-                { text: "点燃一支烟。用烟草味来覆盖掉这种让人窒息的敏感", target: "CAMUS" }
+            { id: 15, text: "历史终结前只能剩下一个词。你会留下哪一个？", options: [
+                { text: "“但是” —— 永远代表反抗与翻转的张力", target: "KAFKA" },
+                { text: "“因为” —— 守住逻辑与因果的最后底线", target: "BORGES" },
+                { text: "“也许” —— 为冰冷世界保留最后一点朦胧", target: "WOOLF" },
+                { text: "“再会” —— 开启另一场未知的超越之旅", target: "CAMUS" }
             ] },
-            { id: 16, text: "如果你发现自己只是某个高阶生物程序里的一个字符：", options: [
-                { text: "我想找出那个能让我这个程序彻底崩坏、报错的Bug点", target: "KAFKA" },
-                { text: "这很优雅。我享受这种作为符号在系统里有序流转的使命感", target: "BORGES" },
-                { text: "直接切断运算。即便作为一个字符，我也有权拒绝被执行", target: "CAMUS" },
-                { text: "去感受我这个字符在屏幕上闪烁时发出的那点微弱震颤", target: "WOOLF" }
+            { id: 16, text: "你被关进只有黑白的花园。你想种什么颜色的花：", options: [
+                { text: "透明的花。我要让虚无本身显影", target: "KAFKA" },
+                { text: "我想象中的红。哪怕在别人眼里它是灰的", target: "CAMUS" },
+                { text: "分析土壤。找到能让逻辑变异产生的公式", target: "BORGES" },
+                { text: "纯黑的花。极致地拥抱这种纯粹的压抑感", target: "LISPECTOR" }
             ] },
-            { id: 17, text: "如果你发现所有你爱过的人，其实都只是你孤身一人的幻觉：", options: [
-                { text: "继续爱。既然世界本就是荒谬的，幻觉就是我的信仰", target: "CAMUS" },
-                { text: "记录这些幻觉出现的周期。找出规律并建立图表", target: "BORGES" },
-                { text: "感到彻骨的苍凉。对着空气最后敬一杯冷掉的残茶", target: "EILEEN_CHANG" },
-                { text: "我想亲吻这种幻觉。在那阵触碰中也有真实的温存感", target: "WOOLF" }
+            { id: 17, text: "如果发现你正在走的路别人已走过一万遍：", options: [
+                { text: "路边坐下。既然路已被走烂，我没必要参与", target: "KAFKA" },
+                { text: "倒立行走。用报错的姿势重新丈量这条旧路", target: "KAFKA" },
+                { text: "切入荒野。我要去没人去过的地方开辟地平线", target: "CAMUS" },
+                { text: "仔细观察。那是千万个灵魂留下的史诗纹理", target: "BORGES" }
             ] },
-            { id: 18, text: "如果你能通过按下按钮，抹去人生中最尴尬的那段记忆：", options: [
-                { text: "不按。尴尬是我人性中最鲜活、最刺痛的部分", target: "LISPECTOR" },
-                { text: "按。这种无意义的混乱是对我优雅秩序的一种污染", target: "CHRISTIE" },
-                { text: "不按。那是因果链上的关键点，抹去它会导致逻辑坍塌", target: "BORGES" },
-                { text: "不按。带着这种苍凉的尴尬活下去，本身就是一种风度", target: "EILEEN_CHANG" }
+            { id: 18, text: "如果你发现自己只是高阶程序里的字符：", options: [
+                { text: "找出那个能让程序崩溃报错的致命Bug点", target: "KAFKA" },
+                { text: "这很优雅。我享受这种作为符号流转的使命", target: "BORGES" },
+                { text: "切断运算。我有权拒绝作为一段代码被执行", target: "CAMUS" },
+                { text: "感受字符在屏幕上闪烁时的那点微弱震颤", target: "WOOLF" }
             ] },
-            { id: 19, text: "在地铁上，你发现精致的公文包里居然爬出了一只甲虫：", options: [
-                { text: "盯着它。感到一种极其荒谬的美学震撼和宿命感", target: "EILEEN_CHANG" },
-                { text: "捏碎它。然后若无其事地继续读报纸，不留痕迹", target: "HEMINGWAY" },
-                { text: "质疑厨师。这种秩序的崩坏让我感到窒息般的愤怒", target: "CHRISTIE" },
-                { text: "自嘲。我也不过是这包里寄生的一个报错零件", target: "KAFKA" }
+            { id: 19, text: "在极度寂静中开始能听见尘埃落地，你会：", options: [
+                { text: "感到恐慌。这种感官过载在撕裂理智边界", target: "WOOLF" },
+                { text: "闭上眼沉浸。在战栗音律中找到灵魂归宿", target: "LISPECTOR" },
+                { text: "开始计算。推导尘埃动能与落地分贝的关联", target: "BORGES" },
+                { text: "点根烟。用烟味覆盖掉这种窒息的敏感", target: "CAMUS" }
             ] },
-            { id: 20, text: "如果你的一生被写在了一本旧书里，你会：", options: [
-                { text: "直接翻到最后看结局，然后嘲笑这种被预设好的命运", target: "CAMUS" },
-                { text: "在页边距上写满反驳和注释，构建我的复音系统", target: "BORGES" },
-                { text: "闭上眼摸纸张。我只在意这种实存的生理触感", target: "LISPECTOR" },
-                { text: "体面地合上它。即便知道剧情，我也要演好剩下的戏", target: "HEMINGWAY" }
-            ] },
-            { id: 21, text: "当你发现天空正在向上空降落‘雨水’：", options: [
-                { text: "拿出量杯。我想分析这种反重力现象背后的逻辑偏差", target: "BORGES" },
-                { text: "脱掉外衣。我想让这种向上逆流的水流彻底洗净我的肉身", target: "LISPECTOR" },
-                { text: "躲在伞下。我无法忍受任何违反常规秩序的物理报错", target: "KAFKA" },
-                { text: "仰起头大笑。这世界终于荒诞得连物理定律都失效了", target: "CAMUS" }
-            ] },
-            { id: 22, text: "在一场华丽的晚宴上，盘底爬过一只肥硕的虱子：", options: [
-                { text: "盯着它。在精致瓷盘的映射下，这种肮脏有一种惊人的美", target: "EILEEN_CHANG" },
-                { text: "面无表情地用叉子将它拨开。我要维持住这一桌的体面", target: "HEMINGWAY" },
-                { text: "感到极度焦虑。这种微小的侵入是对我生活结构的巨大破坏", target: "KAFKA" },
-                { text: "联想到文明本身也不过是包裹在虱子上的锦缎", target: "LISPECTOR" }
-            ] },
-            { id: 23, text: "关于“真理”，你的直觉更倾向于认为：", options: [
-                { text: "它是宇宙严密的编码。只要我够清醒，我就能破解它", target: "BORGES" },
-                { text: "它是那股吹过荒原的风。不可捕捉，但能让你感到战栗", target: "WOOLF" },
-                { text: "它是那道拒绝你进入的大门。你守着它，就是真理本身", target: "KAFKA" },
-                { text: "它是你手里最后的一支烟。抽完它，你就看透了虚无", target: "CAMUS" }
-            ] },
-            { id: 24, text: "如果你发现你正在走的路，别人已经走过一万遍了：", options: [
-                { text: "在路边坐下。既然路径已被走烂，我就没必要参与这种重复", target: "KAFKA" },
-                { text: "倒立行走。我要用一种报错的、非人的姿势重新丈量它", target: "KAFKA" },
-                { text: "切入旁边的荒野。我要去没人去过的地方开辟地平线", target: "CAMUS" },
-                { text: "仔细观察。那是千万个灵魂留下的史诗纹理。我很着迷", target: "BORGES" }
-            ] },
-            { id: 25, text: "如果你可以获得极致才华，代价是交出灵魂最纯粹的一半：", options: [
-                { text: "成交！生命应该在瞬间的爆炸中，被确认为一团火", target: "LISPECTOR" },
-                { text: "拔剑。我拒绝交换。尊严必须通过意志赢来", target: "HEMINGWAY" },
+            { id: 20, text: "如果你可以获得极致才华，代价是灵魂的一半：", options: [
+                { text: "成交！生命应该在瞬间的爆炸中成为火", target: "LISPECTOR" },
+                { text: "拔剑。拒绝交换。尊严必须通过意志赢来", target: "HEMINGWAY" },
                 { text: "拒绝。我的灵魂早已挥洒在路上，他来晚了", target: "CAMUS" },
                 { text: "签约。然后分析契约漏洞，反手杀掉诱惑者", target: "BORGES" }
             ] },
+            { id: 21, text: "你被困在只有向上阶梯的枯塔，怪兽在后：", options: [
+                { text: "加快脚步。维持攀爬的挺拔姿态是我的主权", target: "HEMINGWAY" },
+                { text: "停下。如果阶梯无限，那么每一级都是终点", target: "BORGES" },
+                { text: "转身冲向黑暗。既然逃不掉，不如直接面对", target: "CAMUS" },
+                { text: "坐在台阶上，记录墙面上那些斑驳的纹理", target: "WOOLF" }
+            ] },
+            { id: 22, text: "如果你发现爱过的人其实只是孤身一人的幻觉：", options: [
+                { text: "继续爱。世界荒谬，幻觉就是我的唯一信仰", target: "CAMUS" },
+                { text: "记录周期。找出背后的心理机制并建立图表", target: "BORGES" },
+                { text: "感到彻骨苍凉。对着空气敬一杯冷掉的残茶", target: "EILEEN_CHANG" },
+                { text: "亲吻幻觉。在那阵触碰中也有真实的温存感", target: "WOOLF" }
+            ] },
+            { id: 23, text: "当你置身于一个完全陌生的决定时刻，你倾向于：", options: [
+                { text: "依靠直觉。在那阵生理悸动中认领我的决定", target: "LISPECTOR" },
+                { text: "依靠公式。在纷繁因果中推导出唯一的解", target: "BORGES" },
+                { text: "依靠责任。即便我不认同，也会为了道义承担", target: "HEMINGWAY" },
+                { text: "依靠嘲讽。既然生活是荒诞的，怎么选都行", target: "CAMUS" }
+            ] },
+            { id: 24, text: "来到一座没有名字的枯塔，墙上的画正在流血：", options: [
+                { text: "舔舐那种温度。确认这种痛苦的生理来源", target: "LISPECTOR" },
+                { text: "写下批注。将恐怖转化为可被阅读的符号", target: "BORGES" },
+                { text: "感到深深厌恶。这种非理性溢出威胁了系统", target: "KAFKA" },
+                { text: "敬一杯酒。祝贺它终于在石墙里突围了", target: "CAMUS" }
+            ] },
+            { id: 25, text: "关于“真理”，你的直觉更倾向于认为：", options: [
+                { text: "它是宇宙严密的编码。只要够清醒就能破解", target: "BORGES" },
+                { text: "它是荒原的风。不可捕捉，但能让你颤栗", target: "WOOLF" },
+                { text: "它是那道拒绝你进入的大门。你守着它就是", target: "KAFKA" },
+                { text: "它是手里最后一支烟。抽完它你就看透了", target: "CAMUS" }
+            ] },
             { id: 26, text: "如果你的影子打算离开你独自生活，你会：", options: [
-                { text: "给它写生存指南。这是两个独立灵魂的礼貌告别", target: "BORGES" },
-                { text: "感到解脱。从此我终于不再被某个确定性追随了", target: "CAMUS" },
+                { text: "写生存指南。这是两个独立灵魂的礼貌告别", target: "BORGES" },
+                { text: "感到解脱。从此不再被某个确定性追随了", target: "CAMUS" },
                 { text: "死死踩住它。这种系统的叛逃绝不能被允许", target: "KAFKA" },
-                { text: "看着它消失在黑夜。品味那种剔骨般的苍凉感", target: "EILEEN_CHANG" }
+                { text: "看着它消失。品味那种剔骨般的苍凉感", target: "EILEEN_CHANG" }
             ] },
-            { id: 27, text: "来到一座没有名字的枯塔，墙上的画正在流血：", options: [
-                { text: "去舔舐那种温度。我想确认这种痛苦的生理来源", target: "LISPECTOR" },
-                { text: "拿笔在画旁写下批注。将恐怖转化为可被阅读的符号", target: "BORGES" },
-                { text: "感到深深的厌恶。这种非理性的溢出让我感到系统性的威胁", target: "KAFKA" },
-                { text: "对着流血的画敬一杯酒。祝贺它终于在石墙里突围了", target: "CAMUS" }
+            { id: 27, text: "面对命运中那股压抑的、不给解释的沉默，你会：", options: [
+                { text: "拔出长剑。向那片虚无发起一场尊严挑战", target: "HEMINGWAY" },
+                { text: "狂笑。所谓神也不过是某种苍白的虚构逻辑", target: "KAFKA" },
+                { text: "隐退。走向荒原。在没人认识的地方认领主权", target: "CAMUS" },
+                { text: "闭上眼。用感知的灵光去发明一个神圣瞬间", target: "WOOLF" }
             ] },
-            { id: 28, text: "历史终结前只能剩下一个词。你会留下哪一个？", options: [
-                { text: "“但是” —— 永远代表反抗与转折的张力", target: "KAFKA" },
-                { text: "“因为” —— 守住逻辑与因果的最后底线", target: "BORGES" },
-                { text: "“也许” —— 为冰冷世界保留最后一点朦胧审美", target: "WOOLF" },
-                { text: "“再会” —— 开启另一场未知的超越之旅", target: "CAMUS" }
+            { id: 28, text: "如果你面前有一道门，门后是失去的一切，你会：", options: [
+                { text: "坚决不进。失去才是对拥有最好的防腐处理", target: "EILEEN_CHANG" },
+                { text: "在门外先研究一下这些‘失去’的分类标准", target: "BORGES" },
+                { text: "深吸一口气推门进去。我要找回我的尊严", target: "HEMINGWAY" },
+                { text: "坐在门槛上哭一会儿。这种幻灭感真让人沉醉", target: "KAFKA" }
             ] },
-            { id: 29, text: "临终前，你会如何评价这充满折腾的一生徒劳？", options: [
+            { id: 29, text: "生命将尽。你会如何评价这长达一生、守在门外的徒劳？", options: [
                 { text: "“终于明白了。根本没有门，是我自己囚禁了自己。”", target: "KAFKA" },
-                { text: "“起身走向背后的荒野吧。世界宽广，我没必要非进那扇门。”", target: "CAMUS" },
-                { text: "“还是想弄清楚。守门人那句‘现在不行’背后到底藏着什么逻辑？”", target: "BORGES" },
+                { text: "“起身走向背后的荒野吧。世界宽广，我不必非进这扇门。”", target: "CAMUS" },
+                { text: "“还是想弄清楚。守门人那句‘现在不行’背后的逻辑。”", target: "BORGES" },
                 { text: "“编个美梦吧。假装已经进去了。这样死得比较体面。”", target: "EILEEN_CHANG" }
             ] },
-            { id: 30, text: "面对命运中那股压抑的、不给解释的沉默，你会？", options: [
-                { text: "拔出长剑。向那片虚无发起一场尊严挑战", target: "HEMINGWAY" },
-                { text: "狂笑反弹。神不就是人类极其苍白的逻辑投射吗？", target: "KAFKA" },
-                { text: "走向更深处的沙漠。在那里连宿命也管不到我", target: "CAMUS" },
-                { text: "闭上眼。用感知的灵光去发明一个神圣瞬间", target: "WOOLF" }
+            { id: 30, text: "最后，如果你一生的意识浓缩成了一件文学圣器。它会是：", options: [
+                { text: "一把剖开伪善外壳的利刃", target: "KAFKA" },
+                { text: "一架观测星体运行逻辑的望远镜", target: "BORGES" },
+                { text: "一瓶装满了晚霞残影的墨水", target: "WOOLF" },
+                { text: "一张永远折叠不完的灵魂地图", target: "CAMUS" }
             ] }
         ];
 
@@ -597,6 +575,7 @@
                 setDynamicStats({ q: qP, l: lP, r: rP, a: awk });
                 setResult(res);
                 setStep('result');
+                window.scrollTo(0, 0);
             };
 
             const handleBack = () => {
@@ -632,38 +611,38 @@
             }, [step, result]);
 
             return (
-                <div className="max-w-xl mx-auto px-5 py-8 min-h-screen">
+                <div className="max-w-xl mx-auto px-4 py-8 min-h-screen">
                     {step === 'welcome' && (
-                        <div className="animate-fade-in space-y-16 pt-10 text-center">
+                        <div className="animate-fade-in space-y-12 pt-10 text-center text-center">
                             <div className="text-left">
-                                <h1 className="text-6xl font-black tracking-tight text-[#000000] leading-tight">寻找你的<br /><span className="highlight-yellow">文学原型</span></h1>
-                                <p className="text-[10px] font-bold text-gray-400 mt-4 uppercase tracking-[0.3em]">Arché Narrative Lab // 2026 Archive</p>
+                                <h1 className="text-5xl font-black tracking-tight text-[#000000] leading-tight text-center md:text-left">寻找你的<br /><span className="highlight-yellow">文学原型</span></h1>
+                                <p className="text-[10px] font-bold text-gray-400 mt-4 uppercase tracking-[0.3em] text-center md:text-left">Arché Narrative Lab // 2026 Archive</p>
                             </div>
-                            <div className="w-full max-w-[280px] mx-auto opacity-90 grayscale contrast-125"><BrainJar /></div>
-                            <div className="space-y-12">
+                            <div className="w-full max-w-[240px] mx-auto opacity-90 grayscale contrast-125"><BrainJar /></div>
+                            <div className="space-y-12 text-center">
                                 <div className="text-left border-l-4 border-[#e8ed2a] pl-5 space-y-4 text-left">
-                                    <p className="text-xl font-bold leading-relaxed text-[#3a3833]">这是一个基于 20 位世界宗师的精神切片，关于“人性临界处”的行为测绘。</p>
-                                    <p className="text-sm text-gray-500 italic font-light">“文学并非点缀，而是你在精神废墟上，重建主体性的最后一次存证。”</p>
+                                    <p className="text-lg font-bold leading-relaxed text-[#3a3833]">基于 20 位世界宗师的精神切片，关于“人性临界处”的行为测绘。</p>
+                                    <p className="text-xs text-gray-500 font-medium text-left italic">“文学并非点缀，而是你在精神废墟上，重建主体性的最后一次存证。”</p>
                                 </div>
-                                <button onClick={() => setStep('quiz')} className="w-full py-8 bg-[#141312] text-white text-sm tracking-[1.5em] font-bold active:scale-95 transition-all uppercase rounded-sm">激活档案库 / START</button>
+                                <button onClick={() => setStep('quiz')} className="w-full py-6 bg-[#141312] text-white text-xs tracking-[1.2em] font-bold active:scale-95 transition-all uppercase rounded-sm">激活档案库 / START</button>
                             </div>
                         </div>
                     )}
 
                     {step === 'quiz' && (
-                        <div className="animate-fade-in space-y-12">
+                        <div className="animate-fade-in space-y-10">
                             <div className="flex justify-between items-center pb-5 border-b border-black/5">
                                 <button onClick={handleBack} className="text-[10px] font-bold text-gray-300 hover:text-black uppercase tracking-widest px-2 py-1 bg-black/5 rounded transition-all">← BACK</button>
                                 <span className="text-[10px] font-bold text-[#35afcb] uppercase font-mono tracking-tighter">Archive {String(currentQ + 1).padStart(2, '0')} / 30</span>
                                 <div className="w-1/3 h-1 bg-gray-200 rounded-full overflow-hidden"><div className="h-full bg-black transition-all" style={{ width: `${((currentQ + 1)/30)*100}%` }}></div></div>
                             </div>
-                            <h2 className="text-3xl md:text-4xl font-bold leading-[1.4] text-[#141312] tracking-tight pt-4 px-2 text-left">
+                            <h2 className="text-xl md:text-2xl font-semibold leading-[1.4] text-[#141312] tracking-tight pt-4 px-2 text-left">
                                 {QUESTIONS[currentQ].text}
                             </h2>
-                            <div className="space-y-5 pt-6 text-left">
+                            <div className="space-y-4 pt-4 text-left text-left">
                                 {QUESTIONS[currentQ].options.map((option, idx) => (
-                                    <div key={idx} onClick={() => handleAnswer(option.target)} className="option-card">
-                                        <span className="text-xl md:text-2xl font-light leading-relaxed text-[#2a2825]">{option.text}</span>
+                                    <div key={idx} onClick={() => handleAnswer(option.target)} className="option-card text-left">
+                                        <span className="text-sm md:text-base font-light leading-relaxed text-[#2a2825]">{option.text}</span>
                                     </div>
                                 ))}
                             </div>
@@ -671,90 +650,88 @@
                     )}
 
                     {step === 'result' && result && (
-                        <div className="animate-fade-in space-y-12 pb-20 text-center">
-                            <div ref={captureRef} className="p-4 space-y-12 bg-[#f2f0e9]">
-                                {/* 顶部页眉 */}
-                                <div className="text-center space-y-4 pt-16 bg-white border border-[#dcd8cf] rounded-sm relative overflow-hidden pb-12">
+                        <div className="animate-fade-in space-y-10 pb-20 text-center">
+                            <div ref={captureRef} className="p-4 space-y-10 bg-[#f2f0e9]">
+                                {/* 顶部还原 */}
+                                <div className="text-center space-y-4 pt-12 bg-white border border-[#dcd8cf] rounded-sm relative overflow-hidden pb-10">
                                     <span className="text-[8px] font-bold uppercase tracking-[0.5em] text-[#35afcb] block text-center">Literature Archetype Profile</span>
-                                    <h2 className="text-5xl font-bold text-[#3a3833] tracking-widest text-center">{result.name}</h2>
-                                    <p className="text-xs text-[#35afcb] italic tracking-[0.4em] font-medium uppercase text-center">{result.sub}</p>
+                                    <h2 className="text-4xl font-bold text-[#3a3833] tracking-widest text-center">{result.name}</h2>
+                                    <p className="text-[10px] text-[#35afcb] italic tracking-[0.3em] font-medium uppercase text-center">{result.sub}</p>
                                     <div className="flex justify-center gap-2 pt-4">
-                                        <span className="px-3 py-1 border border-gray-300 text-[8px] font-bold">思辨觉醒度 {dynamicStats.a}%</span>
-                                        <span className="px-3 py-1 bg-[#3a3833] text-white text-[8px] font-bold uppercase">Archived</span>
+                                        <span className="px-2 py-1 border border-gray-300 text-[8px] font-bold">思辨觉醒度 {dynamicStats.a}%</span>
+                                        <span className="px-2 py-1 bg-[#3a3833] text-white text-[8px] font-bold uppercase font-sans text-center">Validated</span>
                                     </div>
                                 </div>
 
-                                {/* 数据报告 */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white p-12 border border-[#dcd8cf] rounded-3xl shadow-sm relative text-left">
+                                {/* 数据卡片还原 */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white p-8 border border-[#dcd8cf] rounded-2xl shadow-sm relative text-left">
                                     <div className="tag-soul">NO. 2026-SOUL</div>
-                                    <div className="space-y-8">
-                                        <h4 className="text-[10px] font-black border-b pb-2 italic tracking-widest text-gray-400 uppercase">基因分析报告 / ARCHIVE</h4>
-                                        <div className="space-y-8">
+                                    <div className="space-y-6">
+                                        <h4 className="text-[9px] font-black border-b pb-2 italic tracking-widest text-gray-300 uppercase text-left">基因分析报告 / ARCHIVE</h4>
+                                        <div className="space-y-6 text-left">
                                             {[["感质驱动", dynamicStats.q, "#e8ed2a"], ["理式逻辑", dynamicStats.l, "#35afcb"], ["反叛意志", dynamicStats.r, "#000000"]].map(([lbl, val, clr]) => (
                                                 <div key={lbl} className="space-y-1">
-                                                    <div className="flex justify-between text-[9px] font-bold uppercase tracking-tight text-gray-400"><span>{lbl}</span></div>
+                                                    <div className="flex justify-between text-[8px] font-bold uppercase tracking-tight text-gray-400 text-left"><span>{lbl}</span></div>
                                                     <div className="progress-bar-thin"><div className="progress-fill-thin" style={{width: `${val}%`, backgroundColor: clr}}></div></div>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="aspect-square w-full max-w-[200px] mx-auto text-center"><canvas ref={radarCanvas}></canvas></div>
+                                    <div className="aspect-square w-full max-w-[160px] mx-auto text-center"><canvas ref={radarCanvas}></canvas></div>
                                 </div>
 
                                 {/* 金句 */}
-                                <div className="relative p-12 bg-white border border-[#dcd8cf] text-center shadow-sm">
-                                    <p className="text-2xl leading-relaxed mb-6 font-medium italic text-[#3a3833] text-center"><span className="highlight-yellow">“{result.quote}”</span></p>
+                                <div className="relative p-10 bg-white border border-[#dcd8cf] text-center shadow-sm text-center">
+                                    <p className="text-lg leading-relaxed mb-6 font-medium italic text-[#3a3833] text-center"><span className="highlight-yellow">“{result.quote}”</span></p>
                                     <div className="text-[10px] text-gray-400 tracking-widest uppercase font-bold text-center">— {result.name} —</div>
                                 </div>
 
                                 {/* 解剖详情 */}
-                                <div className="space-y-12 px-2 text-left">
-                                    <section className="space-y-4">
+                                <div className="space-y-10 px-2 text-left text-left">
+                                    <section className="space-y-4 text-left">
                                         <h4 className="text-[10px] font-black uppercase tracking-[0.4em] border-b border-[#dcd8cf] pb-2 text-gray-400 text-left">精神解剖报告 / THE SELF</h4>
-                                        <div className="bg-white p-8 border-l-[16px] border-[#35afcb] space-y-10 shadow-sm rounded-r-xl text-left">
+                                        <div className="bg-white p-6 border-l-[12px] border-[#35afcb] space-y-8 shadow-sm rounded-r-xl text-left text-left">
                                             <div>
-                                                <span className="text-[8px] font-bold text-gray-300 uppercase block mb-1">文学原型界定</span>
-                                                <p className="text-base leading-relaxed text-gray-500 font-bold italic text-left">“{result.identity}”</p>
+                                                <span className="text-[8px] font-bold text-gray-300 uppercase block mb-1 text-left">文学原型界定</span>
+                                                <p className="text-sm leading-relaxed text-gray-500 font-bold italic text-left">“{result.identity}”</p>
                                             </div>
                                             <div>
                                                 <span className="text-[8px] font-bold text-gray-300 uppercase block mb-1 uppercase font-sans text-left">写作偏好建议 (WRITING STYLE)</span>
-                                                <p className="text-sm leading-relaxed font-medium text-[#d14d42] bg-red-50/20 p-4 rounded-sm italic text-left">“{result.writing}”</p>
+                                                <p className="text-xs leading-relaxed font-medium text-[#d14d42] bg-red-50/20 p-3 rounded-sm italic text-left">“{result.writing}”</p>
                                             </div>
                                             <div>
                                                 <span className="text-[8px] font-bold text-gray-300 uppercase block mb-1 text-left">精神症候解剖 (SYMPTOM)</span>
-                                                <p className="text-sm leading-relaxed text-gray-500 text-left">{result.symptom}</p>
+                                                <p className="text-xs leading-relaxed text-gray-500 text-left">{result.symptom}</p>
                                             </div>
                                             <div>
                                                 <span className="text-[8px] font-bold text-gray-300 uppercase block mb-1 text-left">叙事建议 (COUNSEL)</span>
-                                                <p className="text-lg leading-relaxed font-bold text-[#35afcb] text-left">{result.counsel}</p>
+                                                <p className="text-base leading-relaxed font-bold text-[#35afcb] text-left">{result.counsel}</p>
                                             </div>
                                         </div>
                                     </section>
 
-                                    {/* 阴影与盲区 */}
-                                    <section className="space-y-4">
+                                    <section className="space-y-4 text-left text-left">
                                         <h4 className="text-[10px] font-black uppercase tracking-[0.4em] border-b border-[#dcd8cf] pb-2 text-red-200 text-left">阴影与盲区 / THE SHADOW</h4>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left text-left">
-                                            <div className="p-6 bg-red-50/40 border border-red-100 rounded-sm">
-                                                <span className="text-[9px] font-bold text-red-700 block mb-2 uppercase">主导焦虑</span>
-                                                <p className="text-sm text-red-900 font-medium">{result.anxiety || "暂时无法读取"}</p>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                                            <div className="p-6 bg-red-50/40 border border-red-100 rounded-sm text-left text-left">
+                                                <span className="text-[9px] font-bold text-red-700 block mb-2 uppercase text-left text-left">主导焦虑</span>
+                                                <p className="text-xs text-red-900 font-medium text-left">{result.anxiety || "暂时无法读取"}</p>
                                             </div>
-                                            <div className="p-6 bg-gray-50/50 border border-gray-100 rounded-sm">
-                                                <span className="text-[9px] font-bold text-gray-400 block mb-2 uppercase">阴影面</span>
-                                                <p className="text-sm text-gray-600">{result.shadow || "未被观测"}</p>
+                                            <div className="p-6 bg-gray-50/50 border border-gray-100 rounded-sm text-left text-left">
+                                                <span className="text-[9px] font-bold text-gray-400 block mb-2 uppercase text-left text-left">阴影面</span>
+                                                <p className="text-xs text-gray-600 text-left">{result.shadow || "未被观测"}</p>
                                             </div>
                                         </div>
                                     </section>
 
-                                    {/* 思想进阶书单推荐 - 每人 3 本 */}
-                                    <section className="space-y-6">
+                                    <section className="space-y-6 text-left text-left">
                                         <h4 className="text-[10px] font-black uppercase tracking-[0.4em] border-b border-gray-200 pb-2 text-gray-300 text-left text-left">思想进阶书单推荐 / READINGS</h4>
-                                        <div className="grid gap-4">
+                                        <div className="grid gap-4 text-left">
                                             {result.books && result.books.map((book, i) => (
-                                                <div key={i} className="book-card shadow-sm hover:shadow-md transition-shadow text-left">
-                                                    <h5 className="text-lg font-black mb-1 text-[#3a3833]">{book.title}</h5>
-                                                    <p className="text-[10px] font-bold text-[#a4c29b] mb-3 uppercase">作者: {book.author}</p>
-                                                    <p className="text-xs text-gray-500 italic leading-relaxed text-left">{book.desc}</p>
+                                                <div key={i} className="book-card shadow-sm hover:shadow-md transition-shadow text-left text-left">
+                                                    <h5 className="text-sm font-bold mb-1 text-[#3a3833]">{book.title}</h5>
+                                                    <p className="text-[8px] font-bold text-[#a4c29b] mb-1 uppercase">作者: {book.author}</p>
+                                                    <p className="text-[9px] text-gray-500 italic leading-relaxed text-left">{book.desc}</p>
                                                 </div>
                                             ))}
                                         </div>
@@ -762,7 +739,7 @@
                                 </div>
                             </div>
 
-                            <div className="pt-10 space-y-4 px-10 text-center">
+                            <div className="pt-10 space-y-4 px-10 text-center text-center">
                                 <button onClick={() => {
                                     setIsSaving(true);
                                     html2canvas(captureRef.current, { scale: 2, useCORS: true }).then(canvas => {
@@ -771,13 +748,13 @@
                                         link.href = canvas.toDataURL(); link.click();
                                         setIsSaving(false);
                                     });
-                                }} className="w-full py-8 bg-[#141312] text-white text-xs font-black uppercase tracking-[1.5em] shadow-2xl rounded-sm transition-all active:scale-95 text-center">{isSaving ? "GENERATING..." : "保存灵魂手稿 / SAVE REPORT"}</button>
-                                <button onClick={() => { setStep('welcome'); setScores({}); setCurrentQ(0); }} className="w-full py-8 border-2 border-[#141312] text-xs font-black uppercase tracking-[1.5em] active:scale-95 transition-all text-center rounded-sm text-center">重新审视 / RESTART</button>
+                                }} className="w-full py-6 bg-[#141312] text-white text-xs font-black uppercase tracking-[1.2em] shadow-2xl rounded-sm transition-all active:scale-95 text-center">{isSaving ? "GENERATING..." : "保存灵魂手稿 / SAVE REPORT"}</button>
+                                <button onClick={() => { setStep('welcome'); setScores({}); setCurrentQ(0); }} className="w-full py-6 border-2 border-[#141312] text-xs font-black uppercase tracking-[1.2em] active:scale-95 transition-all text-center rounded-sm text-center text-center">重新审视 / RESTART</button>
                             </div>
                         </div>
                     )}
-                    <footer className="mt-16 py-10 text-center opacity-40 text-center">
-                        <div className="text-[8px] uppercase tracking-widest mb-1 font-bold text-center text-center">A Digital Narrative Lab</div>
+                    <footer className="mt-16 py-10 text-center opacity-40 text-center text-center">
+                        <div className="text-[8px] uppercase tracking-widest mb-1 font-bold text-center">A Digital Narrative Lab</div>
                         <div className="text-xs font-bold border-b border-black inline-block px-2 text-center text-center">Arché 思想铺子</div>
                     </footer>
                 </div>
